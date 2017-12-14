@@ -1,0 +1,30 @@
+{
+    "name": "geccomedia/weclapp",
+    "description": "Accounting made easy for Laravel",
+    "license": "MIT",
+    "keywords": ["laravel", "accounting"],
+    "authors": [
+        {
+            "name": "Gecco Media GmbH",
+            "email": "technik@geccomedia.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "5.1.x|5.2.x|5.3.x|5.4.x"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Geccomedia\\Weclapp\\": "src/"
+        }
+    },
+
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Geccomedia\\Accounting\\ServiceProvider"
+            ]
+        }
+    }
+}
