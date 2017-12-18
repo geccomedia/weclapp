@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 abstract class WeclappModel extends Model
 {
     /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'U';
+
+    /**
      * Always set this to false since DynamoDb does not support incremental Id.
      *
      * @var bool
@@ -67,5 +74,28 @@ abstract class WeclappModel extends Model
         // builder can easily access any information it may need from the model
         // while it is constructing and executing various queries against it.
         return $builder->setModel($this);
+    }
+
+    /**
+     * Return a timestamp as DateTime object.
+     *
+     * @param  mixed  $value
+     * @return \Carbon\Carbon
+     */
+    protected function asDateTime($value)
+    {
+        return parent::asDateTime(!is_numeric($value)?$value:round($value/1000));
+    }
+
+
+    /**
+     * Convert a DateTime to a storable string.
+     *
+     * @param  \DateTime|int  $value
+     * @return string
+     */
+    public function fromDateTime($value)
+    {
+        return $this instanceof WeclappModel?parent::fromDateTime($value)*1000:parent::fromDateTime($value);
     }
 }
