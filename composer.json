@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Geccomedia\\Accounting\\ServiceProvider"
+                "Geccomedia\\Weclapp\\ServiceProvider"
             ]
         }
     }
