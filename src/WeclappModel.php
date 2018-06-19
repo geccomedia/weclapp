@@ -66,7 +66,7 @@ abstract class WeclappModel extends Model
      *
      * @return \Geccomedia\Weclapp\WeclappQueryBuilder|static
      */
-    public function newQueryWithoutScopes()
+    public function newModelQuery()
     {
         $builder = new WeclappQueryBuilder(new WeclappBaseQueryBuilder());
 
