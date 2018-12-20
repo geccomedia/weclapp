@@ -373,7 +373,7 @@ class WeclappQueryBuilder extends Builder
 
         foreach ($items['result'] as $item) {
             $results[] = $this->model->newInstance([], true)
-                ->setRawAttributes($item);
+                ->setRawAttributes($item, true);
         }
         return $this->getModel()->newCollection($results);
     }
