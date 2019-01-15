@@ -456,7 +456,7 @@ class WeclappQueryBuilder extends Builder
         ]);
         $item = json_decode($response->getBody(), true);
 
-        $this->model->setRawAttributes($item);
+        $this->model->setRawAttributes($item, true);
 
         return $response->getStatusCode() == 201;
     }
@@ -513,7 +513,7 @@ class WeclappQueryBuilder extends Builder
         ]);
         $item = json_decode($response->getBody(), true);
 
-        $this->model->setRawAttributes($item);
+        $this->model->setRawAttributes($item, true);
 
         return $item[$this->model->getKeyName()];
     }
@@ -534,7 +534,7 @@ class WeclappQueryBuilder extends Builder
         ]);
         $item = json_decode($response->getBody(), true);
 
-        $this->model->setRawAttributes($item);
+        $this->model->setRawAttributes($item, true);
 
         return $item['version'] != $this->model->version;
     }
