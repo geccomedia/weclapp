@@ -538,4 +538,16 @@ class WeclappQueryBuilder extends Builder
 
         return $item['version'] != $this->model->version;
     }
+
+
+    /**
+     * Create a new instance of the model being queried.
+     *
+     * @param  array  $attributes
+     * @return WeclappModel|static
+     */
+    public function newModelInstance($attributes = [])
+    {
+        return $this->model->newInstance($attributes);
+    }
 }
