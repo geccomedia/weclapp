@@ -393,7 +393,9 @@ class WeclappQueryBuilder extends Builder
         }
 
         if($this->offset > 0){
-            $query[] = 'page='.$this->offset/($this->limit > 0?$this->limit:$this->model->getPerPage());
+            $limit = $this->limit ?: $this->model->getPerPage();
+            $page = $this->offset / $limit + 1;
+            $query[] = 'page='.$page;
         }
 
         if(count($this->orders) > 0){
