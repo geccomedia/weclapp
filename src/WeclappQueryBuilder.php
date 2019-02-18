@@ -7,7 +7,6 @@ use GuzzleHttp\RequestOptions;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use function in_array;
 
 class WeclappQueryBuilder extends Builder
 {
@@ -23,7 +22,7 @@ class WeclappQueryBuilder extends Builder
      *
      * @var int
      */
-    protected $offset;
+    protected $offset = null;
 
     /**
      * @var array
@@ -108,6 +107,18 @@ class WeclappQueryBuilder extends Builder
     public function skip($value)
     {
         return $this->offset($value);
+    }
+
+    /**
+     * Set the limit and offset for a given page.
+     *
+     * @param  int  $page
+     * @param  int  $perPage
+     * @return \Illuminate\Database\Query\Builder|static
+     */
+    public function forPage($page, $perPage = 15)
+    {
+        return $this->skip(($page - 1) * $perPage)->take($perPage);
     }
 
     /**
@@ -283,29 +294,6 @@ class WeclappQueryBuilder extends Builder
         return new static($this->getModel());
     }
 
-    /**
-     * Implements the Query Chunk method
-     *
-     * @param int $chunk_size
-     * @param callable $callback
-     */
-    public function chunk($chunk_size, callable $callback)
-    {
-        $page = 1;
-        while (true) {
-            try{
-                $results = $this->skip($page*$chunk_size)
-                    ->getAll([], $chunk_size);
-                $page++;
-
-                call_user_func($callback, $results);
-            }
-            catch (ModelNotFoundException $e){
-                break;
-            }
-        }
-    }
-
     public function find($id, $columns = [])
     {
         if (is_array($id)) {
@@ -358,11 +346,8 @@ class WeclappQueryBuilder extends Builder
         if(count($columns) > 0){
             $this->select($columns);
         }
-        $query = $this->buildQuery();
 
-        $queryString = $this->model->getTable().'?'.$query;
-
-        $response = $this->client->get($queryString);
+        $response = $this->client->get($this->model->getTable(), ['query' => $this->buildQuery()]);
         $items = json_decode($response->getBody(), true);
 
         if(!isset($items['result']) || count($items['result']) == 0){
@@ -394,7 +379,7 @@ class WeclappQueryBuilder extends Builder
             $query['pageSize'] = (int)$this->limit;
         }
 
-        if($this->offset > 0){
+        if(!is_null($this->offset)){
             $limit = $this->limit ?: $this->model->getPerPage();
             $page = $this->offset / $limit + 1;
             $query['page'] = (int)$page;
@@ -412,14 +397,12 @@ class WeclappQueryBuilder extends Builder
             $query['properties'] = implode(',', $this->selects);
         }
 
-        return http_build_query($query, null, '&', PHP_QUERY_RFC3986);
+        return $query;
     }
 
     public function delete()
     {
-        $queryString = $this->model->getTable().'/id/'.$this->model->{$this->model->getKeyName()};
-
-        $response = $this->client->delete($queryString);
+        $response = $this->client->delete($this->model->getTable().'/id/'.$this->model->{$this->model->getKeyName()});
 
         return $response->getStatusCode() == 204;
     }
@@ -453,9 +436,7 @@ class WeclappQueryBuilder extends Builder
 
         $values = (object) $values;
 
-        $queryString = $this->model->getTable();
-
-        $response = $this->client->post($queryString, [
+        $response = $this->client->post($this->model->getTable(), [
             RequestOptions::JSON => $values
         ]);
         $item = json_decode($response->getBody(), true);
@@ -472,11 +453,7 @@ class WeclappQueryBuilder extends Builder
 
     public function count($columns = [])
     {
-        $query = $this->buildQuery();
-
-        $queryString = $this->model->getTable().'/count?'.$query;
-
-        $response = $this->client->get($queryString);
+        $response = $this->client->get($this->model->getTable().'/count', ['query' => $this->buildQuery()]);
         $items = json_decode($response->getBody(), true);
 
         return (int) $items['result'];
@@ -510,9 +487,7 @@ class WeclappQueryBuilder extends Builder
     {
         $values = (object) $values;
 
-        $queryString = $this->model->getTable();
-
-        $response = $this->client->post($queryString, [
+        $response = $this->client->post($this->model->getTable(), [
             RequestOptions::JSON => $values
         ]);
         $item = json_decode($response->getBody(), true);
@@ -531,16 +506,26 @@ class WeclappQueryBuilder extends Builder
      */
     public function update(array $values)
     {
-        $queryString = $this->model->getTable().'/id/'.$this->model->{$this->model->getKeyName()};
+        $affected = 0;
 
-        $response = $this->client->put($queryString, [
-            RequestOptions::JSON => $this->model->getAttributes()
-        ]);
-        $item = json_decode($response->getBody(), true);
+        $this->chunk(100, function($models) use ($values, &$affected) {
+            foreach ($models as $model) {
+                $model->forceFill($values);
 
-        $this->model->setRawAttributes($item, true);
+                if($model->isDirty(array_keys($values))) {
+                    $response = $this->client->put($model->getTable().'/id/'.$model->{$model->getKeyName()}, [
+                        RequestOptions::JSON => $model->getAttributes()
+                    ]);
+                    $item = json_decode($response->getBody(), true);
 
-        return $item['version'] != $this->model->version;
+                    if($item['version'] != $model->version) {
+                        $affected++;
+                    }
+                }
+            }
+        });
+
+        return $affected;
     }
 
 
