@@ -360,7 +360,7 @@ class WeclappQueryBuilder extends Builder
         }
         $query = $this->buildQuery();
 
-        $queryString = $this->model->getTable().'?'.implode('&', $query);
+        $queryString = $this->model->getTable().'?'.$query;
 
         $response = $this->client->get($queryString);
         $items = json_decode($response->getBody(), true);
@@ -384,18 +384,20 @@ class WeclappQueryBuilder extends Builder
 
         if(count($this->wheres) > 0){
             foreach ($this->wheres as $where){
-                $query[] = $where['column'].'-'.$where['type'].'='.(isset($where['value'])?(is_array($where['value'])?json_encode($where['value']):$where['value']):null);
+                $value = is_array($where['value']) ? json_encode($where['value']) : $where['value'];
+                $key = $where['column'] . '-' . $where['type'];
+                $query[$key] = $value;
             }
         }
 
         if($this->limit > 0){
-            $query[] = 'pageSize='.$this->limit;
+            $query['pageSize'] = (int)$this->limit;
         }
 
         if($this->offset > 0){
             $limit = $this->limit ?: $this->model->getPerPage();
             $page = $this->offset / $limit + 1;
-            $query[] = 'page='.$page;
+            $query['page'] = (int)$page;
         }
 
         if(count($this->orders) > 0){
@@ -403,14 +405,14 @@ class WeclappQueryBuilder extends Builder
             foreach ($this->orders as $order){
                 $orders[] = ($order['direction'] == 'desc'?'-':'').$order['column'];
             }
-            $query[] = 'sort='.implode(',', $orders);
+            $query['sort'] = implode(',', $orders);
         }
 
         if(count($this->selects) > 0 && !(count($this->selects) == 1 && in_array('*', $this->selects))){
-            $query[] = 'properties='.implode(',', $this->selects);
+            $query['properties'] = implode(',', $this->selects);
         }
 
-        return $query;
+        return http_build_query($query, null, '&', PHP_QUERY_RFC3986);
     }
 
     public function delete()
@@ -472,7 +474,7 @@ class WeclappQueryBuilder extends Builder
     {
         $query = $this->buildQuery();
 
-        $queryString = $this->model->getTable().'/count?'.implode('&', $query);
+        $queryString = $this->model->getTable().'/count?'.$query;
 
         $response = $this->client->get($queryString);
         $items = json_decode($response->getBody(), true);
