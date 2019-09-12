@@ -10,8 +10,8 @@ class Client extends BaseClient
             'base_uri' => config('accounting.weclapp.base_url'),
             'headers' => [
                 'AuthenticationToken' => config('accounting.weclapp.api_key'),
-                'Content-Type' => 'application/vnd.api+json',
-                'Accept' => 'application/vnd.api+json',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ]
         ];
         $config = array_merge($config, $weclapp_config);

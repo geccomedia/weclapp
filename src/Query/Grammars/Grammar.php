@@ -339,7 +339,7 @@ class Grammar extends BaseGrammar
      * @param  array $values
      * @return string
      */
-    public function compileUpdate(Builder $query, array $values)
+    public function compileUpdate(Builder $query, $values)
     {
         if (count($query->wheres) != 1 || $query->wheres[0]['column'] != 'id' || $query->wheres[0]['type'] != 'Basic') {
             throw new NotSupportedException('Only single update by id is supported by weclapp.');

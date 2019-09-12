@@ -80,6 +80,18 @@ class ModelFunctionTest extends TestCase
         $this->assertEquals(1, $units->first()->id);
     }
 
+    public function testNotFound()
+    {
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(404));
+
+        $unit = Unit::find(1);
+
+        $this->assertNull($unit);
+    }
+
     public function testApiGetAll()
     {
         $this->mock(Client::class)
