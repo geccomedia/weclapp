@@ -346,7 +346,7 @@ class Grammar extends BaseGrammar
         }
         $key = array_shift($query->wheres);
 
-        return new Request('PUT', $query->from . '/' . $key['column'] . '/' . $key['value'], $values);
+        return new Request('PUT', $query->from . '/' . $key['column'] . '/' . $key['value'], [], json_encode($values));
     }
 
     /**
