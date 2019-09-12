@@ -2,12 +2,14 @@
 
 namespace Geccomedia\Weclapp;
 
-use Illuminate\Database\Eloquent\Model;
+use Geccomedia\Weclapp\Builder as EloquentBuilder;
+use Geccomedia\Weclapp\Query\Builder;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 
 /**
  * Class DynamoDbModel.
  */
-abstract class WeclappModel extends Model
+abstract class Model extends BaseModel
 {
     /**
      * The storage format of the model's date columns.
@@ -62,40 +64,59 @@ abstract class WeclappModel extends Model
     }
 
     /**
-     * Get a new query builder that doesn't have any global scopes.
+     * Create a new Eloquent query builder for the model.
      *
-     * @return \Geccomedia\Weclapp\WeclappQueryBuilder|static
+     * @param  Builder  $query
+     * @return EloquentBuilder|static
      */
-    public function newModelQuery()
+    public function newEloquentBuilder($query)
     {
-        $builder = new WeclappQueryBuilder(new WeclappBaseQueryBuilder());
+        return new EloquentBuilder($query);
+    }
 
-        // Once we have the query builders, we will set the model instances so the
-        // builder can easily access any information it may need from the model
-        // while it is constructing and executing various queries against it.
-        return $builder->setModel($this);
+    /**
+     * Get the database connection for the model.
+     *
+     * @return Connection
+     */
+    public function getConnection()
+    {
+        return new Connection(app(Client::class));
+    }
+
+    /**
+     * Set the connection associated with the model.
+     *
+     * @param  string|null  $name
+     * @return $this
+     */
+    public function setConnection($name)
+    {
+        return $this;
     }
 
     /**
      * Return a timestamp as DateTime object.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return \Carbon\Carbon
      */
     protected function asDateTime($value)
     {
-        return parent::asDateTime(!is_numeric($value)?$value:round($value/1000));
+        if (is_numeric($value)) {
+            $value = round($value / 1000);
+        }
+        return parent::asDateTime($value);
     }
-
 
     /**
      * Convert a DateTime to a storable string.
      *
-     * @param  \DateTime|int  $value
+     * @param  \DateTime|int $value
      * @return string
      */
     public function fromDateTime($value)
     {
-        return $this instanceof WeclappModel?parent::fromDateTime($value)*1000:parent::fromDateTime($value);
+        return $value instanceof \DateTime?parent::fromDateTime($value)*1000:parent::fromDateTime($value);
     }
 }

@@ -1,8 +1,8 @@
 <?php namespace Geccomedia\Weclapp\Models;
 
-use Geccomedia\Weclapp\WeclappModel;
+use Geccomedia\Weclapp\Model;
 
-class Comment extends WeclappModel
+class Comment extends Model
 {
     /**
      * The table associated with the model.

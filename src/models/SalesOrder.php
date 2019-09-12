@@ -1,8 +1,8 @@
 <?php namespace Geccomedia\Weclapp\Models;
 
-use Geccomedia\Weclapp\WeclappModel;
+use Geccomedia\Weclapp\Model;
 
-class SalesOrder extends WeclappModel
+class SalesOrder extends Model
 {
     /**
      * The table associated with the model.

@@ -1,8 +1,8 @@
 <?php namespace Geccomedia\Weclapp\Models;
 
-use Geccomedia\Weclapp\WeclappModel;
+use Geccomedia\Weclapp\Model;
 
-class Customer extends WeclappModel
+class Customer extends Model
 {
     /**
      * The table associated with the model.
@@ -11,6 +11,11 @@ class Customer extends WeclappModel
      */
     protected $table = 'customer';
 
+    /**
+     * Customer constructor.
+     * @param array $attributes
+     * @codeCoverageIgnore
+     */
     function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

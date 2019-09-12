@@ -1,8 +1,8 @@
 <?php namespace Geccomedia\Weclapp\Models;
 
-use Geccomedia\Weclapp\WeclappModel;
+use Geccomedia\Weclapp\Model;
 
-class CustomerCategory extends WeclappModel
+class CustomerCategory extends Model
 {
     /**
      * The table associated with the model.

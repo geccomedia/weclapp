@@ -43,9 +43,9 @@ Example:
 ```
 <?php namespace Your\Custom\Namespace;
 
-use Geccomedia\Weclapp\WeclappModel;
+use Geccomedia\Weclapp\Model;
 
-class CustomModel extends WeclappModel
+class CustomModel extends Model
 {
     /**
      * The table associated with the model.

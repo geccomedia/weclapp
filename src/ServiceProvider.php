@@ -5,7 +5,6 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -28,15 +27,4 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->publishes([__DIR__.'/../config/accounting.php' => config_path('accounting.php')], 'config');
     }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('accounting', 'accounting.options', 'accounting.wrapper');
-    }
-
 }
