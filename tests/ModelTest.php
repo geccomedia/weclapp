@@ -170,7 +170,7 @@ class ModelFunctionTest extends TestCase
             ->andReturn(new Response(
                 201,
                 [],
-                '{"id": 1}'
+                '{"id": 1, "test": "bla", "remote": "test"}'
             ));
 
         $unit = new Unit();
@@ -179,6 +179,8 @@ class ModelFunctionTest extends TestCase
 
         $this->assertTrue($unit->exists);
         $this->assertEquals(1, $unit->id);
+        $this->assertEquals('bla', $unit->test);
+        $this->assertEquals('test', $unit->remote);
 
         Unit::insert(['test' => 1]);
     }

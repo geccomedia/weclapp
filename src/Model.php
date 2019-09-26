@@ -119,4 +119,21 @@ abstract class Model extends BaseModel
     {
         return $value instanceof \DateTime?parent::fromDateTime($value)*1000:parent::fromDateTime($value);
     }
+
+    /**
+     * Insert the given attributes and set the ID on the model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array  $attributes
+     * @return void
+     */
+    protected function insertAndSetId(\Illuminate\Database\Eloquent\Builder $query, $attributes)
+    {
+        $remoteAttributes = $query->insertGetId($attributes);
+        if(!is_array($remoteAttributes))
+        {
+            $remoteAttributes = [$this->getKeyName() => $remoteAttributes];
+        }
+        $this->setRawAttributes($remoteAttributes, true);
+    }
 }

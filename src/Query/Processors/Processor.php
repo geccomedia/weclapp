@@ -14,14 +14,12 @@ class Processor extends BaseProcessor
      * @param  string  $sql
      * @param  array   $values
      * @param  string|null  $sequence
-     * @return int
+     * @return array
      */
     public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
     {
         $results = $query->getConnection()->insert($sql, $values);
 
-        $id = json_decode($results->getBody(), true)['id'];
-
-        return is_numeric($id) ? (int) $id : $id;
+        return json_decode($results->getBody(), true);
     }
 }
