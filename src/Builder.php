@@ -52,4 +52,15 @@ class Builder extends BaseBuilder
 
         return $this->where($this->model->getQualifiedKeyName(), '=', $id);
     }
+
+    /**
+     * Update a record in the database.
+     *
+     * @param  array  $values
+     * @return int
+     */
+    public function update(array $values)
+    {
+        return parent::update($this->model->getAttributes());
+    }
 }

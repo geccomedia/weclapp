@@ -103,7 +103,10 @@ class ModelFunctionTest extends TestCase
                 '{"result": [{"id": 1},{"id": 2}]}'
             ));
 
-        $units = Unit::whereNotIn('test', [1, 2])->get();
+        $units = Unit::whereNotIn('test', [1, 2])
+            ->whereNull('test2')
+            ->whereNotNull('test3')
+            ->get();
 
         $this->assertEquals(2, $units->count());
     }

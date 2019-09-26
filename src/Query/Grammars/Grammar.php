@@ -195,7 +195,7 @@ class Grammar extends BaseGrammar
     protected function compileWheresToArray($query)
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
-            if (!in_array($where['type'], ['In', 'NotIn'])) {
+            if (!in_array($where['type'], ['In', 'NotIn', 'Null', 'NotNull'])) {
                 $where['type'] = 'Basic';
             }
             return $this->{"where{$where['type']}"}($query, $where);
@@ -212,6 +212,34 @@ class Grammar extends BaseGrammar
     protected function whereBasic(Builder $query, $where)
     {
         return $where['column'] . '-' . $this->getOperator($where['operator']) . '=' . $where['value'];
+    }
+
+    /**
+     * Compile a "where null" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereNull(Builder $query, $where)
+    {
+        $where['value'] = '';
+        $where['operator'] = 'null';
+        return $this->whereBasic($query, $where);
+    }
+
+    /**
+     * Compile a "where not null" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereNotNull(Builder $query, $where)
+    {
+        $where['value'] = '';
+        $where['operator'] = 'not_null';
+        return $this->whereBasic($query, $where);
     }
 
     /**
