@@ -9,6 +9,8 @@ use Illuminate\Database\Query\Grammars\Grammar as BaseGrammar;
 
 class Grammar extends BaseGrammar
 {
+    protected const QUERY_SEPARATORS_REPLACEMENT = ['=' => '%3D', '&' => '%26'];
+
     /**
      * Mapping table from normal eloquent operators to weclapp
      * @var array
@@ -211,7 +213,11 @@ class Grammar extends BaseGrammar
      */
     protected function whereBasic(Builder $query, $where)
     {
-        return $where['column'] . '-' . $this->getOperator($where['operator']) . '=' . $where['value'];
+        return $where['column'] .
+            '-' .
+            $this->getOperator($where['operator']) .
+            '=' .
+            $this->encodeWhereValue($where['value']);
     }
 
     /**
@@ -251,7 +257,9 @@ class Grammar extends BaseGrammar
      */
     protected function whereIn(Builder $query, $where)
     {
-        $where['value'] = json_encode($where['values']);
+        $where['value'] = json_encode(
+            array_map([$this, 'encodeWhereValue'], $where['values'])
+        );
         $where['operator'] = 'in';
         return $this->whereBasic($query, $where);
     }
@@ -265,7 +273,9 @@ class Grammar extends BaseGrammar
      */
     protected function whereNotIn(Builder $query, $where)
     {
-        $where['value'] = json_encode($where['values']);
+        $where['value'] = json_encode(
+            array_map([$this, 'encodeWhereValue'], $where['values'])
+        );
         $where['operator'] = 'not_in';
         return $this->whereBasic($query, $where);
     }
@@ -389,6 +399,17 @@ class Grammar extends BaseGrammar
         return implode($glue, array_filter($segments, function ($value) {
             return (string)$value !== '';
         }));
+    }
+
+    /**
+     * Encodes special values in wheres.
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function encodeWhereValue($value)
+    {
+        return strtr($value, self::QUERY_SEPARATORS_REPLACEMENT);
     }
 
     /**
