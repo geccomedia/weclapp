@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Query\Grammars;
 
 use Geccomedia\Weclapp\NotSupportedException;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar as BaseGrammar;
 
@@ -87,17 +88,16 @@ class Grammar extends BaseGrammar
         // see if that component exists. If it does we'll just call the compiler
         // function for the component which is responsible for making the SQL.
         $components = $this->compileComponents($query);
-        $sql = $components['from'];
+        $baseUri = $components['from'];
         unset($components['from']);
         if (isset($components['aggregate'])) {
-            $sql .= $components['aggregate'];
+            $baseUri .= $components['aggregate'];
             unset($components['aggregate']);
         }
-        $sql .= trim($this->concatenate($components, '&'));
 
         $query->columns = $original;
 
-        return new Request('GET', $sql);
+        return new Request('GET', Uri::withQueryValues(new Uri($baseUri), $components));
     }
 
     /**
