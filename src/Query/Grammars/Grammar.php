@@ -95,9 +95,18 @@ class Grammar extends BaseGrammar
             unset($components['aggregate']);
         }
 
+        $queryColumns = $components['wheres'];
+        unset($components['wheres']);
+
+        foreach($components as $component => $columns) {
+          $queryColumns[] = $columns;
+        }
+
+        $queryParams = array_column($queryColumns, 1, 0);
+
         $query->columns = $original;
 
-        return new Request('GET', Uri::withQueryValues(new Uri($baseUri), $components));
+        return new Request('GET', Uri::withQueryValues(new Uri($baseUri), $queryParams));
     }
 
     /**
@@ -154,8 +163,7 @@ class Grammar extends BaseGrammar
         if (!is_null($query->aggregate) || in_array('*', $columns)) {
             return;
         }
-
-        return 'properties=' . $this->columnize($columns);
+        return ['properties', $this->columnize($columns)];
     }
 
     /**
@@ -174,25 +182,9 @@ class Grammar extends BaseGrammar
      * Compile the "where" portions of the query.
      *
      * @param  \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
-    protected function compileWheres(Builder $query)
-    {
-        // If we actually have some where clauses, we will strip off the first boolean
-        // operator, which is added by the query builders for convenience so we can
-        // avoid checking for the first clauses in each of the compilers methods.
-        if (count($sql = $this->compileWheresToArray($query)) > 0) {
-            return $this->concatenate($sql, '&');
-        }
-    }
-
-    /**
-     * Get an array of all the where clauses for the query.
-     *
-     * @param  \Illuminate\Database\Query\Builder $query
      * @return array
      */
-    protected function compileWheresToArray($query)
+    protected function compileWheres(Builder $query)
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
             if (!in_array($where['type'], ['In', 'NotIn', 'Null', 'NotNull'])) {
@@ -211,7 +203,10 @@ class Grammar extends BaseGrammar
      */
     protected function whereBasic(Builder $query, $where)
     {
-        return $where['column'] . '-' . $this->getOperator($where['operator']) . '=' . $where['value'];
+        return [
+            $where['column'] . '-' . $this->getOperator($where['operator']),
+            $where['value']
+        ];
     }
 
     /**
@@ -279,7 +274,10 @@ class Grammar extends BaseGrammar
      */
     protected function compileOrders(Builder $query, $orders)
     {
-        return 'sort=' . implode(',', $this->compileOrdersToArray($query, $orders));
+        return [
+            'sort',
+            implode(',', $this->compileOrdersToArray($query, $orders))
+        ];
     }
 
     /**
@@ -305,7 +303,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileLimit(Builder $query, $limit)
     {
-        return 'pageSize=' . (int)$limit;
+        return ['pageSize', (int)$limit];
     }
 
     /**
@@ -317,7 +315,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileOffset(Builder $query, $offset)
     {
-        return 'page=' . (int)($offset / $query->limit + 1);
+        return ['page', (int)($offset / $query->limit + 1)];
     }
 
     /**
