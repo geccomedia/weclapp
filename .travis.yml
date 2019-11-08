@@ -1,15 +1,8 @@
-sudo: false
-
 language: php
-
-stages:
-  - test
-
+install:
+    composer install
 php:
-  - '7.3'
+  - 7.3
 
-before_script:
-  - composer self-update
-  - composer install
-
-script: phpunit
+script:
+  - php vendor/bin/phpunit -c phpunit.xml
