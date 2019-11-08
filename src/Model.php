@@ -129,11 +129,6 @@ abstract class Model extends BaseModel
      */
     protected function insertAndSetId(\Illuminate\Database\Eloquent\Builder $query, $attributes)
     {
-        $remoteAttributes = $query->insertGetId($attributes);
-        if(!is_array($remoteAttributes))
-        {
-            $remoteAttributes = [$this->getKeyName() => $remoteAttributes];
-        }
-        $this->setRawAttributes($remoteAttributes, true);
+        $this->setRawAttributes($query->insertGetId($attributes), true);
     }
 }

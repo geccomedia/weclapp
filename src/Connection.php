@@ -8,7 +8,7 @@ use Geccomedia\Weclapp\Query\Grammars\Grammar;
 use Geccomedia\Weclapp\Query\Processors\Processor;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Events\QueryExecuted;
 
 class Connection implements ConnectionInterface
 {
@@ -214,7 +214,12 @@ class Connection implements ConnectionInterface
      */
     protected function run($query, $bindings, Closure $callback)
     {
-        return $callback($query, $bindings);
+        $result = $callback($query, $bindings);
+
+        // dispatch event for query being executed
+        app('events')->dispatch(new QueryExecuted($query, $bindings, null, $this));
+
+        return $result;
     }
 
     /**

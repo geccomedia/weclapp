@@ -2,6 +2,7 @@
 
 use Geccomedia\Weclapp\NotSupportedException;
 use Illuminate\Database\Query\Builder as BaseBuilder;
+use Illuminate\Support\Arr;
 
 class Builder extends BaseBuilder
 {
@@ -9,10 +10,17 @@ class Builder extends BaseBuilder
 
     public function insert(array $values)
     {
-        if (is_array(reset($values))) {
-            throw new NotSupportedException('Multiple inserts are not supported by weclapp');
+        if (! is_array(reset($values))) {
+            $values = [$values];
         }
-        return parent::insert($values);
+
+        foreach ($values as $item)
+        {
+            $this->connection->insert(
+                $this->grammar->compileInsert($this, $item),
+                $this->cleanBindings(Arr::flatten($item, 1))
+            );
+        }
     }
 
     // @codeCoverageIgnoreStart

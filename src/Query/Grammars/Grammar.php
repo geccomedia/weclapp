@@ -145,7 +145,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileAggregate(Builder $query, $aggregate)
     {
-        return '/count?';
+        return '/count';
     }
 
     /**
@@ -175,7 +175,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileFrom(Builder $query, $table)
     {
-        return ($table . (is_null($query->aggregate) ? '?' : ''));
+        return $table;
     }
 
     /**
@@ -373,20 +373,6 @@ class Grammar extends BaseGrammar
         $key = array_shift($query->wheres);
 
         return new Request('PUT', $query->from . '/' . $key['column'] . '/' . $key['value'], [], json_encode($values));
-    }
-
-    /**
-     * Concatenate an array of segments, removing empties.
-     *
-     * @param  array $segments
-     * @param  string $glue
-     * @return string
-     */
-    protected function concatenate($segments, $glue = '')
-    {
-        return implode($glue, array_filter($segments, function ($value) {
-            return (string)$value !== '';
-        }));
     }
 
     /**
