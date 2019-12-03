@@ -214,12 +214,7 @@ class Connection implements ConnectionInterface
      */
     protected function run($query, $bindings, Closure $callback)
     {
-        $result = $callback($query, $bindings);
-
-        // dispatch event for query being executed
-        app('events')->dispatch(new QueryExecuted($query, $bindings, null, $this));
-
-        return $result;
+        return $callback($query, $bindings);
     }
 
     /**
