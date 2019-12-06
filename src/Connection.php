@@ -159,7 +159,7 @@ class Connection implements ConnectionInterface
      */
     public function insert($query, $bindings = [])
     {
-        return $this->run($query, [], function ($query) {
+        return $this->run($query, $bindings, function ($query) {
             return $this->client->send($query);
         });
     }
@@ -173,7 +173,7 @@ class Connection implements ConnectionInterface
      */
     public function update($query, $bindings = [])
     {
-        return $this->run($query, [], function ($query) {
+        return $this->run($query, $bindings, function ($query) {
             return $this->client->send($query)->getStatusCode() == 201;
         });
     }
@@ -214,7 +214,12 @@ class Connection implements ConnectionInterface
      */
     protected function run($query, $bindings, Closure $callback)
     {
-        return $callback($query, $bindings);
+        $result = $callback($query, $bindings);
+
+        // dispatch event for query being executed
+        app('events')->dispatch(new QueryExecuted($query->getMethod().':'.$query->getUri(), $bindings, null, $this));
+
+        return $result;
     }
 
     /**

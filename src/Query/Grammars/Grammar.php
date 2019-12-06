@@ -376,6 +376,18 @@ class Grammar extends BaseGrammar
     }
 
     /**
+     * Prepare the bindings for an update statement.
+     *
+     * @param  array  $bindings
+     * @param  array  $values
+     * @return array
+     */
+    public function prepareBindingsForUpdate(array $bindings, array $values)
+    {
+        return $values;
+    }
+
+    /**
      * Get the grammar specific operators.
      *
      * @return array

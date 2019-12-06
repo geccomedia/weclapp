@@ -59,8 +59,7 @@ class ModelFunctionTest extends TestCase
         $invoice = SalesInvoice::find(1);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'salesInvoice?id-eq=1&pageSize=1' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:salesInvoice?id-eq=1&pageSize=1';
         });
 
         $this->assertEquals($now->timestamp, $invoice->invoiceDate->timestamp);
@@ -87,8 +86,7 @@ class ModelFunctionTest extends TestCase
             ->get();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit?2-eq=3&properties=1&sort=-4&page=1&pageSize=5' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:unit?2-eq=3&properties=1&sort=-4&page=1&pageSize=5';
         });
 
         $this->assertEquals(2, $units->count());
@@ -108,8 +106,7 @@ class ModelFunctionTest extends TestCase
         $unit = Unit::find(1);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit?id-eq=1&pageSize=1' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:unit?id-eq=1&pageSize=1';
         });
 
         $this->assertNull($unit);
@@ -134,8 +131,7 @@ class ModelFunctionTest extends TestCase
             ->get();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit?test-notin=%5B1,2%5D&test2-null=&test3-notnull=&pageSize=100' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:unit?test-notin=%5B1,2%5D&test2-null=&test3-notnull=&pageSize=100';
         });
 
         $this->assertEquals(2, $units->count());
@@ -157,8 +153,7 @@ class ModelFunctionTest extends TestCase
         $count = Unit::where('1', 2)->count();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit/count?1-eq=2&pageSize=100' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:unit/count?1-eq=2&pageSize=100';
         });
 
         $this->assertEquals(55, $count);
@@ -180,8 +175,7 @@ class ModelFunctionTest extends TestCase
         $units = Unit::findMany([1, 2]);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit?id-in=%5B1,2%5D&pageSize=100' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:unit?id-in=%5B1,2%5D&pageSize=100';
         });
 
         $this->assertEquals(2, $units->count());
@@ -202,8 +196,7 @@ class ModelFunctionTest extends TestCase
             ->delete();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit/id/1' &&
-                $event->sql->getMethod() == 'DELETE';
+            return (string) $event->sql == 'DELETE:unit/id/1';
         });
 
         $this->assertTrue($deleted);
@@ -231,9 +224,8 @@ class ModelFunctionTest extends TestCase
         $unit->save();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit' &&
-                $event->sql->getMethod() == 'POST' &&
-                $event->sql->getBody()->getContents() == '{"test":"bla"}';
+            return (string) $event->sql == 'POST:unit' &&
+                $event->bindings == ["test" => "bla"];
         });
 
         $this->assertTrue($unit->exists);
@@ -244,10 +236,8 @@ class ModelFunctionTest extends TestCase
         Unit::insert(['test' => 1]);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            $event->sql->getBody()->rewind();
-            return (string) $event->sql->getUri() == 'unit' &&
-                $event->sql->getMethod() == 'POST' &&
-                $event->sql->getBody()->getContents() == '{"test":1}';
+            return (string) $event->sql == 'POST:unit' &&
+                $event->bindings == ["test" => 1];
         });
     }
 
@@ -278,17 +268,13 @@ class ModelFunctionTest extends TestCase
         Event::assertDispatched(QueryExecuted::class, 2);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            $event->sql->getBody()->rewind();
-            return (string) $event->sql->getUri() == 'unit' &&
-                $event->sql->getMethod() == 'POST' &&
-                $event->sql->getBody()->getContents() == '{"test":1}';
+            return (string) $event->sql == 'POST:unit' &&
+                $event->bindings == ["test" => 1];
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            $event->sql->getBody()->rewind();
-            return (string) $event->sql->getUri() == 'unit' &&
-                $event->sql->getMethod() == 'POST' &&
-                $event->sql->getBody()->getContents() == '{"test":2}';
+            return (string) $event->sql == 'POST:unit' &&
+                $event->bindings == ["test" => 2];
         });
     }
 
@@ -308,8 +294,7 @@ class ModelFunctionTest extends TestCase
         $unit = Unit::find(1);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'unit?id-eq=1&pageSize=1' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:unit?id-eq=1&pageSize=1';
         });
 
         $this->assertTrue($unit->exists);
@@ -331,10 +316,8 @@ class ModelFunctionTest extends TestCase
         $unit->save();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) use ($unit) {
-            $event->sql->getBody()->rewind();
-            return (string) $event->sql->getUri() == 'unit/id/1' &&
-                $event->sql->getMethod() == 'PUT' &&
-                $event->sql->getBody()->getContents() == json_encode($unit->getAttributes());
+            return (string) $event->sql == 'PUT:unit/id/1' &&
+                $event->bindings == $unit->getAttributes();
         });
 
         $this->assertTrue($unit->isClean());
@@ -415,18 +398,15 @@ class ModelFunctionTest extends TestCase
         Event::assertDispatched(QueryExecuted::class, 3);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'customer?test-eq=this&sort=id&page=1&pageSize=2' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=1&pageSize=2';
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'customer?test-eq=this&sort=id&page=2&pageSize=2' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=2&pageSize=2';
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql->getUri() == 'customer?test-eq=this&sort=id&page=3&pageSize=2' &&
-                $event->sql->getMethod() == 'GET';
+            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=3&pageSize=2';
         });
 
         // assert that we returned from the loop

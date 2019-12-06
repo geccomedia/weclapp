@@ -2,7 +2,7 @@
 
 use Geccomedia\Weclapp\NotSupportedException;
 use Illuminate\Database\Query\Builder as BaseBuilder;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Query\Expression;
 
 class Builder extends BaseBuilder
 {
@@ -18,9 +18,22 @@ class Builder extends BaseBuilder
         {
             $this->connection->insert(
                 $this->grammar->compileInsert($this, $item),
-                $this->cleanBindings(Arr::flatten($item, 1))
+                $this->cleanBindings($item)
             );
         }
+    }
+
+    /**
+     * Remove all of the expressions from a list of bindings.
+     *
+     * @param  array  $bindings
+     * @return array
+     */
+    protected function cleanBindings(array $bindings)
+    {
+        return array_filter($bindings, function ($binding) {
+            return ! $binding instanceof Expression;
+        });
     }
 
     // @codeCoverageIgnoreStart
