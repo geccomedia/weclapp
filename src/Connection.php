@@ -214,12 +214,43 @@ class Connection implements ConnectionInterface
      */
     protected function run($query, $bindings, Closure $callback)
     {
+        $start = microtime(true);
+
         $result = $callback($query, $bindings);
 
-        // dispatch event for query being executed
-        app('events')->dispatch(new QueryExecuted($query->getMethod().':'.$query->getUri(), $bindings, null, $this));
+        // Once we have run the query we will calculate the time that it took to run and
+        // then log the query, bindings, and execution time so we will report them on
+        // the event that the developer needs them. We'll log time in milliseconds.
+        $this->logQuery(
+            $query->getMethod().':'.$query->getUri(), $bindings, $this->getElapsedTime($start)
+        );
 
         return $result;
+    }
+
+    /**
+     * Log a query in the connection's query log.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @param  float|null  $time
+     * @return void
+     */
+    public function logQuery($query, $bindings, $time = null)
+    {
+        app('events')
+            ->dispatch(new QueryExecuted($query, $bindings, $time, $this));
+    }
+
+    /**
+     * Get the elapsed time since a given starting point.
+     *
+     * @param  int  $start
+     * @return float
+     */
+    protected function getElapsedTime($start)
+    {
+        return round((microtime(true) - $start) * 1000, 2);
     }
 
     /**
