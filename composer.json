@@ -16,7 +16,7 @@
     },
 
     "require-dev": {
-        "orchestra/testbench": "^4.0"
+        "orchestra/testbench": "^5.0"
     },
 
     "autoload": {
