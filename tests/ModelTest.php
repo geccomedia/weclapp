@@ -6,13 +6,25 @@ use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\NotSupportedException;
+use Geccomedia\Weclapp\ServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelFunctionTest extends TestCase
+class ModelFunctionTest extends OrchestraTestCase
 {
+    /**
+     * Load package service provider
+     * @param  \Illuminate\Foundation\Application $app
+     * @return array
+     */
+    protected function getPackageProviders($app)
+    {
+        return [ServiceProvider::class];
+    }
+
     /**
      * @var Model
      */
@@ -135,6 +147,31 @@ class ModelFunctionTest extends TestCase
         });
 
         $this->assertEquals(2, $units->count());
+    }
+
+    public function testApiGetEmpty()
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": []}'
+            ));
+
+        $units = Unit::whereNotIn('test', [1, 2])
+            ->whereNull('test2')
+            ->whereNotNull('test3')
+            ->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql == 'GET:unit?test-notin=%5B1,2%5D&test2-null=&test3-notnull=&pageSize=100';
+        });
+
+        $this->assertEquals(0, $units->count());
     }
 
     public function testApiCount()
