@@ -140,11 +140,14 @@ class Connection implements ConnectionInterface
             $response = $this->client->send($query);
             $items = json_decode($response->getBody(), true);
 
+            if (!isset($items['result'])) {
+                return null;
+            }
+            if (is_array($items['result']) && count($items['result']) == 0) {
+                return null;
+            }
             if (is_numeric($items['result'])) {
                 return [['aggregate' => $items['result']]];
-            }
-            if (!isset($items['result']) || count($items['result']) == 0) {
-                return null;
             }
             return $items['result'];
         });
