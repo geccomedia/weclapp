@@ -56,6 +56,19 @@ class CustomModel extends Model
 }
 ```
 
+## Mass assignments
+
+If you want to do mass assignment please use [unguard](https://laravel.com/api/6.x/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.html#method_unguard) and [reguard](https://laravel.com/api/6.x/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.html#method_reguard)
+
+Example:
+
+```
+$customer = new \Geccomedia\Weclapp\Models\Customer();
+\Geccomedia\Weclapp\Models\Customer::unguard();
+$customer->fill(['partyType' => 'ORGANIZATION']);
+\Geccomedia\Weclapp\Models\Customer::reguard();
+```
+
 ## License & Copyright
 
 Copyright (c) 2017 Gecco Media GmbH
