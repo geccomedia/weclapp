@@ -184,7 +184,7 @@ class Grammar extends BaseGrammar
      * @param  \Illuminate\Database\Query\Builder $query
      * @return array
      */
-    protected function compileWheres(Builder $query)
+    public function compileWheres(Builder $query)
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
             if (!in_array($where['type'], ['In', 'NotIn', 'Null', 'NotNull'])) {

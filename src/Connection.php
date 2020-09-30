@@ -268,6 +268,16 @@ class Connection implements ConnectionInterface
 
     public function getName()
     {
+        return $this->getDatabaseName();
+    }
+
+    /**
+     * Get the name of the connected database.
+     *
+     * @return string
+     */
+    public function getDatabaseName()
+    {
         return 'weclapp_api';
     }
 
