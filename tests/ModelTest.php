@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelFunctionTest extends OrchestraTestCase
+class ModelTest extends OrchestraTestCase
 {
     /**
      * Load package service provider
@@ -38,7 +38,7 @@ class ModelFunctionTest extends OrchestraTestCase
 
     public function testDateFormatOnBaseModel()
     {
-        $this->assertTrue($this->model->getDateFormat() == 'U');
+        $this->assertTrue($this->model->getDateFormat() == 'Uv');
     }
 
     public function testCreatedAtConst()
@@ -57,7 +57,8 @@ class ModelFunctionTest extends OrchestraTestCase
 
         $now = now();
 
-        $this->assertEquals($now->timestamp * 1000, $this->model->fromDateTime($now));
+        $this->assertEquals($now->format('Uv'), $this->model->fromDateTime($now->format('Uv')));
+        $this->assertEquals($now->format('Uv'), $this->model->fromDateTime($now));
 
         $this->mock(Client::class)
             ->shouldReceive('send')
@@ -65,7 +66,7 @@ class ModelFunctionTest extends OrchestraTestCase
             ->andReturn(new Response(
                 200,
                 [],
-                '{"result": [{"id": 1, "invoiceDate": '.($now->timestamp * 1000).'}]}'
+                '{"result": [{"id": 1, "invoiceDate": ' . $now->format('Uv') . '}]}'
             ));
 
         $invoice = SalesInvoice::find(1);
@@ -74,7 +75,11 @@ class ModelFunctionTest extends OrchestraTestCase
             return (string) $event->sql == 'GET:salesInvoice?id-eq=1&pageSize=1';
         });
 
-        $this->assertEquals($now->timestamp, $invoice->invoiceDate->timestamp);
+        $this->assertEquals($now->format('Uv'), $invoice->invoiceDate->format('Uv'));
+
+        $new_invoice = new SalesInvoice();
+        $new_invoice->invoiceDate = $now->toDateString();
+        $this->assertEquals($now->startOfDay(), $new_invoice->invoiceDate);
     }
 
     public function testApiGet()

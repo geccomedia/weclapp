@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp;
 use Geccomedia\Weclapp\Builder as EloquentBuilder;
 use Geccomedia\Weclapp\Query\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Support\Facades\Date;
 
 /**
  * Class DynamoDbModel.
@@ -16,7 +17,7 @@ abstract class Model extends BaseModel
      *
      * @var string
      */
-    protected $dateFormat = 'U';
+    protected $dateFormat = 'Uv';
 
     /**
      * Always set this to false since DynamoDb does not support incremental Id.
@@ -103,21 +104,14 @@ abstract class Model extends BaseModel
      */
     protected function asDateTime($value)
     {
-        if (is_numeric($value)) {
-            $value = round($value / 1000);
+        if (
+            $this->getDateFormat() == 'Uv' &&
+            is_numeric($value) &&
+            Date::hasFormat(substr($value, 0, -3), 'U')
+        ) {
+            return Date::createFromFormat('U', substr($value, 0, -3))->milli(substr($value, -3));
         }
         return parent::asDateTime($value);
-    }
-
-    /**
-     * Convert a DateTime to a storable string.
-     *
-     * @param  \DateTime|int $value
-     * @return string
-     */
-    public function fromDateTime($value)
-    {
-        return $value instanceof \DateTime?parent::fromDateTime($value)*1000:parent::fromDateTime($value);
     }
 
     /**
