@@ -32,6 +32,27 @@ class Connection implements ConnectionInterface
     protected $postProcessor;
 
     /**
+     * The event dispatcher instance.
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher
+     */
+    protected $events;
+
+    /**
+     * All of the queries run against the connection.
+     *
+     * @var array
+     */
+    protected $queryLog = [];
+
+    /**
+     * Indicates whether queries are being logged.
+     *
+     * @var bool
+     */
+    protected $loggingQueries = false;
+
+    /**
      * Create a new database connection instance.
      *
      * @param  Client $client
@@ -47,6 +68,10 @@ class Connection implements ConnectionInterface
         $this->useDefaultQueryGrammar();
 
         $this->useDefaultPostProcessor();
+
+        if (app()->bound('events')) {
+            $this->events = app()['events'];
+        }
     }
 
     /**
@@ -241,8 +266,11 @@ class Connection implements ConnectionInterface
      */
     public function logQuery($query, $bindings, $time = null)
     {
-        app('events')
-            ->dispatch(new QueryExecuted($query, $bindings, $time, $this));
+        $this->event(new QueryExecuted($query, $bindings, $time, $this));
+
+        if ($this->loggingQueries) {
+            $this->queryLog[] = compact('query', 'bindings', 'time');
+        }
     }
 
     /**
@@ -254,6 +282,69 @@ class Connection implements ConnectionInterface
     protected function getElapsedTime($start)
     {
         return round((microtime(true) - $start) * 1000, 2);
+    }
+
+    /**
+     * Fire the given event if possible.
+     *
+     * @param  mixed  $event
+     * @return void
+     */
+    protected function event($event)
+    {
+        if (isset($this->events)) {
+            $this->events->dispatch($event);
+        }
+    }
+
+    /**
+     * Get the connection query log.
+     *
+     * @return array
+     */
+    public function getQueryLog()
+    {
+        return $this->queryLog;
+    }
+
+    /**
+     * Clear the query log.
+     *
+     * @return void
+     */
+    public function flushQueryLog()
+    {
+        $this->queryLog = [];
+    }
+
+    /**
+     * Enable the query log on the connection.
+     *
+     * @return void
+     */
+    public function enableQueryLog()
+    {
+        $this->loggingQueries = true;
+    }
+
+    /**
+     * Disable the query log on the connection.
+     *
+     * @return void
+     */
+    public function disableQueryLog()
+    {
+        $this->loggingQueries = false;
+    }
+
+    /**
+     * Determine whether we're logging queries.
+     *
+     * @return bool
+     */
+    public function logging()
+    {
+        return $this->loggingQueries;
     }
 
     /**

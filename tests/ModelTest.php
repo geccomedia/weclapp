@@ -1,5 +1,6 @@
 <?php namespace Geccomedia\Weclapp\Tests;
 
+use Geccomedia\Weclapp\Connection;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\SalesInvoice;
 use Geccomedia\Weclapp\Models\Unit;
@@ -324,14 +325,23 @@ class ModelTest extends OrchestraTestCase
     {
         Event::fake();
 
+        $name = Str::random();
+
         $this->mock(Client::class)
             ->shouldReceive('send')
-            ->once()
-            ->andReturn(new Response(
-                200,
-                [],
-                '{"result": [{"id": 1}]}'
-            ));
+            ->twice()
+            ->andReturn(
+                new Response(
+                    200,
+                    [],
+                    '{"result": [{"id": 1}]}'
+                ),
+                new Response(
+                    200,
+                    [],
+                    '{"result": [{"id": 1, "name": ' . $name . '}]}'
+                )
+            );
 
         $unit = Unit::find(1);
 
@@ -342,16 +352,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertTrue($unit->exists);
         $this->assertEquals(1, $unit->id);
 
-        $unit->name = Str::random();
-
-        $this->mock(Client::class)
-            ->shouldReceive('send')
-            ->once()
-            ->andReturn(new Response(
-                200,
-                [],
-                '{"result": [{"id": 1, "name": ' . $unit->name . '}]}'
-            ));
+        $unit->name = $name;
 
         $this->assertTrue($unit->isDirty());
 
@@ -453,5 +454,41 @@ class ModelTest extends OrchestraTestCase
 
         // assert that we returned from the loop
         $this->assertTrue(true);
+    }
+
+    public function testLogging()
+    {
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": [{"id": 1},{"id": 2}]}'
+            ));
+
+        app(Connection::class)->enableQueryLog();
+        $this->assertTrue(app(Connection::class)->logging());
+
+        $this->assertTrue((new Customer())->getConnection()->logging());
+
+        $this->assertEmpty(app(Connection::class)->getQueryLog());
+
+        Unit::findMany([1, 2]);
+
+        $this->assertNotEmpty(app(Connection::class)->getQueryLog());
+
+        $this->assertEquals('GET:unit?id-in=%5B1,2%5D&pageSize=100', app(Connection::class)->getQueryLog()[0]['query']);
+
+        app(Connection::class)->flushQueryLog();
+
+        $this->assertEmpty(app(Connection::class)->getQueryLog());
+
+        app(Connection::class)->disableQueryLog();
+
+        $this->assertFalse(app(Connection::class)->logging());
+
+        Unit::findMany([1, 2]);
+
+        $this->assertEmpty(app(Connection::class)->getQueryLog());
     }
 }

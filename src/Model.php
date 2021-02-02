@@ -82,7 +82,7 @@ abstract class Model extends BaseModel
      */
     public function getConnection()
     {
-        return new Connection(app(Client::class));
+        return app(Connection::class);
     }
 
     /**

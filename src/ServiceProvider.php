@@ -1,5 +1,4 @@
-<?php
-namespace Geccomedia\Weclapp;
+<?php namespace Geccomedia\Weclapp;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
@@ -21,6 +20,10 @@ class ServiceProvider extends IlluminateServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/accounting.php', 'accounting');
+
+        $this->app->singleton(Connection::class, function ($app) {
+            return new Connection($app->make(Client::class));
+        });
     }
 
     public function boot()
