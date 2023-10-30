@@ -16,15 +16,15 @@ class SalesInvoice extends Model
      *
      * @var array
      */
-    protected $dates = [
-        'createdDate',
-        'deliveryDate',
-        'dueDate',
-        'invoiceDate',
-        'lastModifiedDate',
-        'pricingDate',
-        'servicePeriodFrom',
-        'servicePeriodTo',
-        'shippingDate'
+    protected $casts = [
+        'createdDate' => 'datetime',
+        'deliveryDate' => 'datetime',
+        'dueDate' => 'datetime',
+        'invoiceDate' => 'datetime',
+        'lastModifiedDate' => 'datetime',
+        'pricingDate' => 'datetime',
+        'servicePeriodFrom' => 'datetime',
+        'servicePeriodTo' => 'datetime',
+        'shippingDate' => 'datetime'
     ];
 }
