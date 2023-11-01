@@ -57,7 +57,7 @@ class Builder extends BaseBuilder
         throw new NotSupportedException('raw wheres are not supported by weclapp');
     }
 
-    protected function whereSub($column, $operator, \Closure $callback, $boolean)
+    protected function whereSub($column, $operator, $callback, $boolean)
     {
         throw new NotSupportedException('whereSub wheres are not supported by weclapp');
     }
