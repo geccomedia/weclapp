@@ -6,3 +6,4 @@ composer.lock
 weclapp.iml
 .phpunit.result.cache
 report/
+.phpunit.cache

@@ -1,9 +1,0 @@
-language: php
-install:
-    composer install
-php:
-  - 7.3
-  - 7.4
-
-script:
-  - php vendor/bin/phpunit -c phpunit.xml

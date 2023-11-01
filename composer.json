@@ -16,7 +16,7 @@
     },
 
     "require-dev": {
-        "orchestra/testbench": "^4.0|^5.0|^6.2"
+        "orchestra/testbench": "^4.0|^5.0|^6.2|7.*|8.*"
     },
 
     "autoload": {
@@ -37,5 +37,9 @@
                 "Geccomedia\\Weclapp\\ServiceProvider"
             ]
         }
+    },
+
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }
