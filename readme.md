@@ -69,6 +69,22 @@ $customer->fill(['partyType' => 'ORGANIZATION']);
 \Geccomedia\Weclapp\Models\Customer::reguard();
 ```
 
+## Logging
+
+If you want to see the requests being made, you can use the Connections log
+
+Example:
+
+```
+use Geccomedia\Weclapp\Connection;
+
+app(Connection::class)->enableQueryLog();
+
+\Geccomedia\Weclapp\Models\Customer::create(['name' => 'Test'])
+
+app(Connection::class)->getQueryLog();
+```
+
 ## License & Copyright
 
 Copyright (c) 2017 Gecco Media GmbH
