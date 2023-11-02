@@ -14,7 +14,7 @@ class Grammar extends BaseGrammar
      * Mapping table from normal eloquent operators to weclapp
      * @var array
      */
-    protected $operatorMappingTable = [
+    protected array $operatorMappingTable = [
         '=' => 'eq',
         '!=' => 'ne',
         '>' => 'gt',
@@ -62,7 +62,7 @@ class Grammar extends BaseGrammar
      * @param  array $columns
      * @return string
      */
-    public function columnize(array $columns)
+    public function columnize(array $columns): string
     {
         return implode(',', $columns);
     }
@@ -70,10 +70,10 @@ class Grammar extends BaseGrammar
     /**
      * Compile a select query into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @return string
+     * @param Builder $query
+     * @return Request
      */
-    public function compileSelect(Builder $query)
+    public function compileSelect(Builder $query): Request
     {
         // If the query does not have any columns set, we'll set the columns to the
         // * character to just get all of the columns from the database. Then we
@@ -98,7 +98,7 @@ class Grammar extends BaseGrammar
         $queryColumns = $components['wheres'];
         unset($components['wheres']);
 
-        foreach($components as $component => $columns) {
+        foreach($components as $columns) {
           $queryColumns[] = $columns;
         }
 
@@ -112,10 +112,10 @@ class Grammar extends BaseGrammar
     /**
      * Compile the components necessary for a select clause.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @return array
      */
-    protected function compileComponents(Builder $query)
+    protected function compileComponents(Builder $query): array
     {
         $sql = [];
 
@@ -139,11 +139,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile an aggregated select clause.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $aggregate
      * @return string
      */
-    protected function compileAggregate(Builder $query, $aggregate)
+    protected function compileAggregate(Builder $query, $aggregate): string
     {
         return '/count';
     }
@@ -151,9 +151,9 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "select *" portion of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $columns
-     * @return string|null
+     * @return array|void
      */
     protected function compileColumns(Builder $query, $columns)
     {
@@ -169,11 +169,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "from" portion of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  string $table
      * @return string
      */
-    protected function compileFrom(Builder $query, $table)
+    protected function compileFrom(Builder $query, $table): string
     {
         return $table;
     }
@@ -181,13 +181,13 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "where" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @return array
      */
-    public function compileWheres(Builder $query)
+    public function compileWheres(Builder $query): array
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
-            if (!in_array($where['type'], ['In', 'NotIn', 'Null', 'NotNull'])) {
+            if (!in_array($where['type'], ['In', 'NotIn', 'Null', 'NotNull', 'Entity'])) {
                 $where['type'] = 'Basic';
             }
             return $this->{"where{$where['type']}"}($query, $where);
@@ -197,11 +197,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile a basic where clause.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $where
-     * @return string
+     * @return array
      */
-    protected function whereBasic(Builder $query, $where)
+    protected function whereBasic(Builder $query, $where): array
     {
         return [
             $where['column'] . '-' . $this->getOperator($where['operator']),
@@ -210,13 +210,29 @@ class Grammar extends BaseGrammar
     }
 
     /**
+     * Compile a "where entity" clause.
+     * See https://github.com/geccomedia/weclapp/issues/22
+     *
+     * @param Builder $query
+     * @param array $where
+     * @return array
+     */
+    protected function whereEntity(Builder $query, array $where): array
+    {
+        return [
+            $where['column'],
+            $where['value']
+        ];
+    }
+
+    /**
      * Compile a "where null" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param Builder $query
      * @param  array  $where
-     * @return string
+     * @return array
      */
-    protected function whereNull(Builder $query, $where)
+    protected function whereNull(Builder $query, $where): array
     {
         $where['value'] = '';
         $where['operator'] = 'null';
@@ -226,11 +242,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where not null" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param Builder $query
      * @param  array  $where
-     * @return string
+     * @return array
      */
-    protected function whereNotNull(Builder $query, $where)
+    protected function whereNotNull(Builder $query, $where): array
     {
         $where['value'] = '';
         $where['operator'] = 'not_null';
@@ -240,11 +256,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where in" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $where
-     * @return string
+     * @return array
      */
-    protected function whereIn(Builder $query, $where)
+    protected function whereIn(Builder $query, $where): array
     {
         $where['value'] = json_encode($where['values']);
         $where['operator'] = 'in';
@@ -254,11 +270,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where not in" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $where
-     * @return string
+     * @return array
      */
-    protected function whereNotIn(Builder $query, $where)
+    protected function whereNotIn(Builder $query, $where): array
     {
         $where['value'] = json_encode($where['values']);
         $where['operator'] = 'not_in';
@@ -268,11 +284,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "order by" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $orders
-     * @return string
+     * @return array
      */
-    protected function compileOrders(Builder $query, $orders)
+    protected function compileOrders(Builder $query, $orders): array
     {
         return [
             'sort',
@@ -283,11 +299,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile the query orders to an array.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $orders
      * @return array
      */
-    protected function compileOrdersToArray(Builder $query, $orders)
+    protected function compileOrdersToArray(Builder $query, $orders): array
     {
         return array_map(function ($order) {
             return ($order['direction'] == 'desc' ? '-' : '') . $order['column'];
@@ -297,11 +313,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "limit" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  int $limit
-     * @return string
+     * @return array
      */
-    protected function compileLimit(Builder $query, $limit)
+    protected function compileLimit(Builder $query, $limit): array
     {
         return ['pageSize', (int)$limit];
     }
@@ -309,11 +325,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "offset" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  int $offset
-     * @return string
+     * @return array
      */
-    protected function compileOffset(Builder $query, $offset)
+    protected function compileOffset(Builder $query, $offset): array
     {
         return ['page', (int)($offset / $query->limit + 1)];
     }
@@ -321,11 +337,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $values
-     * @return string
+     * @return Request
      */
-    public function compileInsert(Builder $query, array $values)
+    public function compileInsert(Builder $query, array $values): Request
     {
         return new Request('POST', $query->from, [], json_encode($values));
     }
@@ -333,12 +349,12 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert and get ID statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
+     * @param Builder $query
      * @param  array $values
      * @param  string $sequence
-     * @return string
+     * @return Request
      */
-    public function compileInsertGetId(Builder $query, $values, $sequence)
+    public function compileInsertGetId(Builder $query, $values, $sequence): Request
     {
         return $this->compileInsert($query, $values);
     }
@@ -346,10 +362,11 @@ class Grammar extends BaseGrammar
     /**
      * Compile a delete statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @return string
+     * @param Builder $query
+     * @return Request
+     * @throws NotSupportedException
      */
-    public function compileDelete(Builder $query)
+    public function compileDelete(Builder $query): Request
     {
         if (count($query->wheres) != 1 || $query->wheres[0]['column'] != 'id' || $query->wheres[0]['type'] != 'Basic') {
             throw new NotSupportedException('Only single delete by id is supported by weclapp.');
@@ -361,11 +378,12 @@ class Grammar extends BaseGrammar
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @param  array $values
-     * @return string
+     * @param Builder $query
+     * @param array $values
+     * @return Request
+     * @throws NotSupportedException
      */
-    public function compileUpdate(Builder $query, $values)
+    public function compileUpdate(Builder $query, array $values): Request
     {
         if (count($query->wheres) != 1 || $query->wheres[0]['column'] != 'id' || $query->wheres[0]['type'] != 'Basic') {
             throw new NotSupportedException('Only single update by id is supported by weclapp.');
@@ -382,7 +400,7 @@ class Grammar extends BaseGrammar
      * @param  array  $values
      * @return array
      */
-    public function prepareBindingsForUpdate(array $bindings, array $values)
+    public function prepareBindingsForUpdate(array $bindings, array $values): array
     {
         return $values;
     }
@@ -392,27 +410,36 @@ class Grammar extends BaseGrammar
      *
      * @return array
      */
-    public function getOperators()
+    public function getOperators(): array
     {
         return $this->operators;
     }
 
     // @codeCoverageIgnoreStart
-    public function supportsSavepoints()
+    public function supportsSavepoints(): bool
     {
         return false;
     }
 
+    /**
+     * @throws NotSupportedException
+     */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
     {
         throw new NotSupportedException('Inserting using sub queries is not supported by weclapp.');
     }
 
+    /**
+     * @throws NotSupportedException
+     */
     public function compileInsertOrIgnore(Builder $query, array $values)
     {
         throw new NotSupportedException('Inserting while ignoring errors is not supported by weclapp.');
     }
 
+    /**
+     * @throws NotSupportedException
+     */
     protected function compileJoins(Builder $query, $joins)
     {
         throw new NotSupportedException('Joins not supported by weclapp.');

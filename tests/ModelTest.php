@@ -1,6 +1,7 @@
 <?php namespace Geccomedia\Weclapp\Tests;
 
 use Geccomedia\Weclapp\Connection;
+use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\SalesInvoice;
 use Geccomedia\Weclapp\Models\Unit;
@@ -33,7 +34,7 @@ class ModelTest extends OrchestraTestCase
 
     public function setUp(): void
     {
-        $this->model = $this->getMockForAbstractClass('Geccomedia\Weclapp\Model');
+        $this->model = new Unit();
         parent::setUp();
     }
 
@@ -110,6 +111,44 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(2, $units->count());
 
         $this->assertEquals(1, $units->first()->id);
+    }
+
+    public function testApiGetEntity()
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": [{"id": 1},{"id": 2}]}'
+            ));
+
+        $comments = Comment::select('1')
+            ->whereEntity('customer', 3)
+            ->orderBy(4, 'DESC')
+            ->limit(5)
+            ->skip(4)
+            ->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql == 'GET:comment?entityName=customer&entityId=3&properties=1&sort=-4&page=1&pageSize=5';
+        });
+
+        $this->assertEquals(2, $comments->count());
+
+        $this->assertEquals(1, $comments->first()->id);
+
+        $this->expectException(NotSupportedException::class);
+
+        $units = Unit::select('1')
+            ->whereEntity('customer', 3)
+            ->orderBy(4, 'DESC')
+            ->limit(5)
+            ->skip(4)
+            ->get();
     }
 
     public function testNotFound()

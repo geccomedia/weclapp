@@ -7,9 +7,6 @@ use Geccomedia\Weclapp\Query\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Facades\Date;
 
-/**
- * Class DynamoDbModel.
- */
 abstract class Model extends BaseModel
 {
     /**
