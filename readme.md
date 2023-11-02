@@ -69,6 +69,19 @@ $customer->fill(['partyType' => 'ORGANIZATION']);
 \Geccomedia\Weclapp\Models\Customer::reguard();
 ```
 
+## Sub Entities
+
+Weclapp api has some models it views as sub entities to other entities.
+For those cases we need to supply the main entity for the query with whereEntity($name, $id)
+
+Example:
+
+```
+$comments = Comment::whereEntity('customer', 123)->orderByDesc()->get();
+```
+Without the call to "whereEntity" the api would complain that we are missing fields.
+See #22 for more information.
+
 ## Logging
 
 If you want to see the requests being made, you can use the Connections log
