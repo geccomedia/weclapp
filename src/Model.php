@@ -106,7 +106,7 @@ abstract class Model extends BaseModel
             is_numeric($value) &&
             Date::hasFormat(substr($value, 0, -3), 'U')
         ) {
-            return Date::createFromFormat('U', substr($value, 0, -3))->milli(substr($value, -3));
+            return Date::createFromFormat('U', substr($value, 0, -3))->milli((int) substr($value, -3));
         }
         return parent::asDateTime($value);
     }
