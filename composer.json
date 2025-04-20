@@ -11,12 +11,11 @@
     ],
     "require": {
         "php": ">=8.2",
-        "illuminate/support": "11.*",
-        "guzzlehttp/guzzle": "^6.2.1|^7.1.0"
+        "illuminate/support": "12.*"
     },
 
     "require-dev": {
-        "orchestra/testbench": "^9.0"
+        "orchestra/testbench": "^10.0"
     },
 
     "autoload": {
