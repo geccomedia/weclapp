@@ -430,7 +430,7 @@ class Connection implements ConnectionInterface
 
     public function prepareBindings(array $bindings)
     {
-        throw new NotSupportedException('prepareBindings not supported by weclapp');
+        return $bindings;
     }
 
     public function scalar($query, $bindings = [], $useReadPdo = true)
