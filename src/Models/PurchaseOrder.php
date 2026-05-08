@@ -1,4 +1,6 @@
-<?php namespace Geccomedia\Weclapp\Models;
+<?php
+
+namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 

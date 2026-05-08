@@ -1,16 +1,19 @@
-<?php namespace Geccomedia\Weclapp\Tests;
+<?php
 
+namespace Geccomedia\Weclapp\Tests;
+
+use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Connection;
+use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\SalesInvoice;
 use Geccomedia\Weclapp\Models\Unit;
-use Geccomedia\Weclapp\Client;
-use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\NotSupportedException;
 use Geccomedia\Weclapp\ServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -19,7 +22,8 @@ class ModelTest extends OrchestraTestCase
 {
     /**
      * Load package service provider
-     * @param  \Illuminate\Foundation\Application $app
+     *
+     * @param  Application  $app
      * @return array
      */
     protected function getPackageProviders($app)
@@ -32,28 +36,28 @@ class ModelTest extends OrchestraTestCase
      */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->model = new Unit();
+        $this->model = new Unit;
         parent::setUp();
     }
 
-    public function testDateFormatOnBaseModel()
+    public function test_date_format_on_base_model()
     {
         $this->assertTrue($this->model->getDateFormat() == 'Uv');
     }
 
-    public function testCreatedAtConst()
+    public function test_created_at_const()
     {
         $this->assertTrue(Model::CREATED_AT == 'createdDate');
     }
 
-    public function testUpdatedAtConst()
+    public function test_updated_at_const()
     {
         $this->assertTrue(Model::UPDATED_AT == 'lastModifiedDate');
     }
 
-    public function testDateConversion()
+    public function test_date_conversion()
     {
         Event::fake();
 
@@ -68,7 +72,7 @@ class ModelTest extends OrchestraTestCase
             ->andReturn(new Response(
                 200,
                 [],
-                '{"result": [{"id": 1, "invoiceDate": ' . $now->format('Uv') . '}]}'
+                '{"result": [{"id": 1, "invoiceDate": '.$now->format('Uv').'}]}'
             ));
 
         $invoice = SalesInvoice::find(1);
@@ -79,12 +83,12 @@ class ModelTest extends OrchestraTestCase
 
         $this->assertEquals($now->format('Uv'), $invoice->invoiceDate->format('Uv'));
 
-        $new_invoice = new SalesInvoice();
+        $new_invoice = new SalesInvoice;
         $new_invoice->invoiceDate = $now->toDateString();
         $this->assertEquals($now->startOfDay(), $new_invoice->invoiceDate);
     }
 
-    public function testApiGet()
+    public function test_api_get()
     {
         Event::fake();
 
@@ -113,7 +117,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(1, $units->first()->id);
     }
 
-    public function testApiGetEntity()
+    public function test_api_get_entity()
     {
         Event::fake();
 
@@ -151,7 +155,7 @@ class ModelTest extends OrchestraTestCase
             ->get();
     }
 
-    public function testNotFound()
+    public function test_not_found()
     {
         Event::fake();
 
@@ -169,7 +173,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertNull($unit);
     }
 
-    public function testApiGetAll()
+    public function test_api_get_all()
     {
         Event::fake();
 
@@ -194,7 +198,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(2, $units->count());
     }
 
-    public function testApiGetEmpty()
+    public function test_api_get_empty()
     {
         Event::fake();
 
@@ -219,7 +223,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(0, $units->count());
     }
 
-    public function testApiCount()
+    public function test_api_count()
     {
         Event::fake();
 
@@ -241,7 +245,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(55, $count);
     }
 
-    public function testFindMany()
+    public function test_find_many()
     {
         Event::fake();
 
@@ -265,7 +269,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(1, $units->first()->id);
     }
 
-    public function testApiDelete()
+    public function test_api_delete()
     {
         Event::fake();
 
@@ -289,7 +293,7 @@ class ModelTest extends OrchestraTestCase
             ->delete();
     }
 
-    public function testApiInsert()
+    public function test_api_insert()
     {
         Event::fake();
 
@@ -301,13 +305,13 @@ class ModelTest extends OrchestraTestCase
                 '{"id": 1, "test": "bla", "remote": "test"}'
             ));
 
-        $unit = new Unit();
+        $unit = new Unit;
         $unit->test = 'bla';
         $unit->save();
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
             return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ["test" => "bla"];
+                $event->bindings == ['test' => 'bla'];
         });
 
         $this->assertTrue($unit->exists);
@@ -319,11 +323,11 @@ class ModelTest extends OrchestraTestCase
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
             return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ["test" => 1];
+                $event->bindings == ['test' => 1];
         });
     }
 
-    public function testApiMultiInsert()
+    public function test_api_multi_insert()
     {
         Event::fake();
 
@@ -351,16 +355,16 @@ class ModelTest extends OrchestraTestCase
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
             return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ["test" => 1];
+                $event->bindings == ['test' => 1];
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
             return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ["test" => 2];
+                $event->bindings == ['test' => 2];
         });
     }
 
-    public function testApiUpdate()
+    public function test_api_update()
     {
         Event::fake();
 
@@ -378,7 +382,7 @@ class ModelTest extends OrchestraTestCase
                 new Response(
                     200,
                     [],
-                    '{"result": [{"id": 1, "name": ' . $name . '}]}'
+                    '{"result": [{"id": 1, "name": '.$name.'}]}'
                 )
             );
 
@@ -405,7 +409,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertTrue($unit->isClean());
     }
 
-    public function testApiUpdateNotSupported()
+    public function test_api_update_not_supported()
     {
         $this->expectException(NotSupportedException::class);
 
@@ -413,7 +417,7 @@ class ModelTest extends OrchestraTestCase
             ->update(['this' => 'that']);
     }
 
-    public function testConnection()
+    public function test_connection()
     {
         $this->mock(Client::class)
             ->shouldReceive('send')
@@ -436,14 +440,14 @@ class ModelTest extends OrchestraTestCase
         $this->assertArrayHasKey('id', $unit);
     }
 
-    public function testCustomerPartyType()
+    public function test_customer_party_type()
     {
-        $customer = new Customer();
+        $customer = new Customer;
 
         $this->assertEquals('ORGANIZATION', $customer->partyType);
     }
 
-    public function testPagination()
+    public function test_pagination()
     {
         Event::fake();
 
@@ -468,11 +472,10 @@ class ModelTest extends OrchestraTestCase
             );
 
         Customer::where('test', 'this')
-            ->chunk(2, function($customers, $page){
-                if($page < 3){
+            ->chunk(2, function ($customers, $page) {
+                if ($page < 3) {
                     $this->assertCount(2, $customers);
-                }
-                else{
+                } else {
                     $this->assertCount(1, $customers);
                 }
             });
@@ -495,7 +498,7 @@ class ModelTest extends OrchestraTestCase
         $this->assertTrue(true);
     }
 
-    public function testLogging()
+    public function test_logging()
     {
         $this->mock(Client::class)
             ->shouldReceive('send')
@@ -508,7 +511,7 @@ class ModelTest extends OrchestraTestCase
         app(Connection::class)->enableQueryLog();
         $this->assertTrue(app(Connection::class)->logging());
 
-        $this->assertTrue((new Customer())->getConnection()->logging());
+        $this->assertTrue((new Customer)->getConnection()->logging());
 
         $this->assertEmpty(app(Connection::class)->getQueryLog());
 

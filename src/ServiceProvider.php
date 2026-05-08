@@ -1,4 +1,6 @@
-<?php namespace Geccomedia\Weclapp;
+<?php
+
+namespace Geccomedia\Weclapp;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
@@ -14,8 +16,9 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register the service provider.
      *
-     * @throws \Exception
      * @return void
+     *
+     * @throws \Exception
      */
     public function register()
     {

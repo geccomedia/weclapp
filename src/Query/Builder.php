@@ -1,4 +1,6 @@
-<?php namespace Geccomedia\Weclapp\Query;
+<?php
+
+namespace Geccomedia\Weclapp\Query;
 
 use Geccomedia\Weclapp\NotSupportedException;
 use Illuminate\Database\Query\Builder as BaseBuilder;
@@ -8,26 +10,24 @@ class Builder extends BaseBuilder
 {
     public $operators = [];
 
-    public function insert(array $values)
+    public function insert(array $values): bool
     {
         if (! is_array(reset($values))) {
             $values = [$values];
         }
 
-        foreach ($values as $item)
-        {
+        foreach ($values as $item) {
             $this->connection->insert(
                 $this->grammar->compileInsert($this, $item),
                 $this->cleanBindings($item)
             );
         }
+
+        return true;
     }
 
     /**
      * Remove all of the expressions from a list of bindings.
-     *
-     * @param  array  $bindings
-     * @return array
      */
     public function cleanBindings(array $bindings): array
     {

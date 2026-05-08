@@ -10,12 +10,14 @@
         }
     ],
     "require": {
-        "php": ">=8.2",
-        "illuminate/support": "12.*"
+        "php": ">=8.3",
+        "illuminate/support": "^12|^13"
     },
 
     "require-dev": {
-        "orchestra/testbench": "^10.0"
+        "orchestra/testbench": "^10|^11",
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.0"
     },
 
     "autoload": {
@@ -38,7 +40,16 @@
         }
     },
 
+    "config": {
+        "platform": {
+            "php": "8.3.0"
+        }
+    },
+
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "analyse": "vendor/bin/phpstan analyse",
+        "lint": "vendor/bin/pint",
+        "lint:check": "vendor/bin/pint --test"
     }
 }
