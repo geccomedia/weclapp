@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.2",
         "illuminate/support": "^11|^12|^13"
     },
 
