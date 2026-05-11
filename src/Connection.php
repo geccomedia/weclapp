@@ -161,7 +161,6 @@ class Connection implements ConnectionInterface
      * @param  Request  $query
      * @param  array  $bindings
      * @param  bool  $useReadPdo
-     * @param  array  $fetchUsing
      * @return array|bool
      */
     // @phpstan-ignore-next-line method.childParameterType
