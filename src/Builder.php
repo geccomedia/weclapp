@@ -15,8 +15,6 @@ class Builder extends BaseBuilder
     /**
      * List of models that the weclapp api does handle in a special way.
      * See https://github.com/geccomedia/weclapp/issues/22
-     *
-     * @var array
      */
     protected array $entityModels = [
         ArchivedEmail::class,
@@ -34,9 +32,6 @@ class Builder extends BaseBuilder
      */
     protected $client;
 
-    /**
-     * @param QueryBuilder $builder
-     */
     public function __construct(QueryBuilder $builder)
     {
         parent::__construct($builder);
@@ -48,14 +43,15 @@ class Builder extends BaseBuilder
     {
         $return = parent::setModel($model);
         $this->query->limit = $this->model->getPerPage();
+
         return $return;
     }
 
     /**
      * Add a where clause on the primary key to the query.
      *
-     * @param  mixed $id
-     * @return $this
+     * @param  mixed  $id
+     * @return static
      */
     public function whereKey($id)
     {
@@ -72,14 +68,12 @@ class Builder extends BaseBuilder
      * Used to query for special models that belong to entities and are handled different on weclapp api.
      * See https://github.com/geccomedia/weclapp/issues/22
      *
-     * @param string $name
-     * @param int $id
      * @throws NotSupportedException
      */
     public function whereEntity(string $name, int $id)
     {
-        if (!in_array(get_class($this->model), $this->entityModels)) {
-            throw new NotSupportedException('whereEntity are only not supported on ' . get_class($this->model) . ' by weclapp');
+        if (! in_array(get_class($this->model), $this->entityModels)) {
+            throw new NotSupportedException('whereEntity are only not supported on '.get_class($this->model).' by weclapp');
         }
 
         $this->query->wheres[] = ['type' => 'Entity', 'column' => 'entityName', 'value' => $name];
@@ -91,7 +85,6 @@ class Builder extends BaseBuilder
     /**
      * Update a record in the database.
      *
-     * @param  array  $values
      * @return int
      */
     public function update(array $values)

@@ -1,7 +1,12 @@
-<?php namespace Geccomedia\Weclapp\Models;
+<?php
+
+namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 
+/**
+ * @property string $partyType
+ */
 class Customer extends Model
 {
     /**
@@ -13,15 +18,14 @@ class Customer extends Model
 
     /**
      * Customer constructor.
-     * @param array $attributes
+     *
      * @codeCoverageIgnore
      */
-    function __construct(array $attributes = [])
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        if(!in_array('partyType', array_keys($attributes)))
-        {
-            $this->partyType = "ORGANIZATION";
+        if (! in_array('partyType', array_keys($attributes))) {
+            $this->partyType = 'ORGANIZATION';
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Geccomedia\Weclapp;
 
+use Carbon\Carbon;
 use Geccomedia\Weclapp\Builder as EloquentBuilder;
 use Geccomedia\Weclapp\Query\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
@@ -47,9 +48,9 @@ abstract class Model extends BaseModel
     /**
      * The page limit of the weclapp resource.
      *
-     * @var string
+     * @var int
      */
-    protected $perPage = '100';
+    protected $perPage = 100;
 
     /**
      * Get the table qualified key name.
@@ -65,7 +66,7 @@ abstract class Model extends BaseModel
      * Create a new Eloquent query builder for the model.
      *
      * @param  Builder  $query
-     * @return EloquentBuilder|static
+     * @return EloquentBuilder
      */
     public function newEloquentBuilder($query)
     {
@@ -77,6 +78,7 @@ abstract class Model extends BaseModel
      *
      * @return Connection
      */
+    // @phpstan-ignore-next-line method.childReturnType
     public function getConnection()
     {
         return app(Connection::class);
@@ -96,8 +98,8 @@ abstract class Model extends BaseModel
     /**
      * Return a timestamp as DateTime object.
      *
-     * @param  mixed $value
-     * @return \Carbon\Carbon
+     * @param  mixed  $value
+     * @return Carbon
      */
     protected function asDateTime($value)
     {
@@ -108,18 +110,18 @@ abstract class Model extends BaseModel
         ) {
             return Date::createFromFormat('U', substr($value, 0, -3))->milli((int) substr($value, -3));
         }
+
         return parent::asDateTime($value);
     }
 
     /**
      * Insert the given attributes and set the ID on the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  array  $attributes
      * @return void
      */
     protected function insertAndSetId(\Illuminate\Database\Eloquent\Builder $query, $attributes)
     {
-        $this->setRawAttributes($query->insertGetId($attributes), true);
+        $this->setRawAttributes((array) $query->insertGetId($attributes), true);
     }
 }

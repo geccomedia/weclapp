@@ -7,8 +7,11 @@ use Geccomedia\Weclapp\Query\Builder as QueryBuilder;
 use Geccomedia\Weclapp\Query\Grammars\Grammar;
 use Geccomedia\Weclapp\Query\Processors\Processor;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\QueryException;
 
 class Connection implements ConnectionInterface
 {
@@ -34,7 +37,7 @@ class Connection implements ConnectionInterface
     /**
      * The event dispatcher instance.
      *
-     * @var \Illuminate\Contracts\Events\Dispatcher
+     * @var Dispatcher|null
      */
     protected $events;
 
@@ -55,7 +58,7 @@ class Connection implements ConnectionInterface
     /**
      * Create a new database connection instance.
      *
-     * @param  Client $client
+     * @param  Client  $client
      * @return void
      */
     public function __construct($client)
@@ -117,9 +120,9 @@ class Connection implements ConnectionInterface
     /**
      * Begin a fluent query against a database table.
      *
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string $table
-     * @param  string|null $as
-     * @return \Illuminate\Database\Query\Builder
+     * @param  Closure|Builder|string  $table
+     * @param  string|null  $as
+     * @return Builder
      */
     public function table($table, $as = null)
     {
@@ -141,11 +144,12 @@ class Connection implements ConnectionInterface
     /**
      * Run a select statement and return a single result.
      *
-     * @param  Request $query
-     * @param  array $bindings
-     * @param  bool $useReadPdo
+     * @param  Request  $query
+     * @param  array  $bindings
+     * @param  bool  $useReadPdo
      * @return mixed
      */
+    // @phpstan-ignore-next-line method.childParameterType
     public function selectOne($query, $bindings = [], $useReadPdo = true)
     {
         $records = $this->select($query, $bindings, $useReadPdo);
@@ -154,18 +158,19 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * @param Request $query
-     * @param array $bindings
-     * @param bool $useReadPdo
+     * @param  Request  $query
+     * @param  array  $bindings
+     * @param  bool  $useReadPdo
      * @return array|bool
      */
-    public function select($query, $bindings = [], $useReadPdo = true)
+    // @phpstan-ignore-next-line method.childParameterType
+    public function select($query, $bindings = [], $useReadPdo = true, array $fetchUsing = [])
     {
         return $this->run($query, [], function ($query) {
             $response = $this->client->send($query);
             $items = json_decode($response->getBody(), true);
 
-            if (!isset($items['result'])) {
+            if (! isset($items['result'])) {
                 return null;
             }
             if (is_array($items['result']) && count($items['result']) == 0) {
@@ -174,6 +179,7 @@ class Connection implements ConnectionInterface
             if (is_numeric($items['result'])) {
                 return [['aggregate' => $items['result']]];
             }
+
             return $items['result'];
         });
     }
@@ -181,10 +187,11 @@ class Connection implements ConnectionInterface
     /**
      * Run an insert statement against the database.
      *
-     * @param  Request $query
-     * @param  array $bindings
+     * @param  Request  $query
+     * @param  array  $bindings
      * @return bool
      */
+    // @phpstan-ignore-next-line method.childParameterType
     public function insert($query, $bindings = [])
     {
         return $this->run($query, $bindings, function ($query) {
@@ -195,10 +202,11 @@ class Connection implements ConnectionInterface
     /**
      * Run an update statement against the database.
      *
-     * @param  Request $query
-     * @param  array $bindings
+     * @param  Request  $query
+     * @param  array  $bindings
      * @return int
      */
+    // @phpstan-ignore-next-line method.childParameterType
     public function update($query, $bindings = [])
     {
         return $this->run($query, $bindings, function ($query) {
@@ -209,10 +217,11 @@ class Connection implements ConnectionInterface
     /**
      * Run a delete statement against the database.
      *
-     * @param  Request $query
-     * @param  array $bindings
+     * @param  Request  $query
+     * @param  array  $bindings
      * @return int
      */
+    // @phpstan-ignore-next-line method.childParameterType
     public function delete($query, $bindings = [])
     {
         return $this->run($query, [], function ($query) {
@@ -233,14 +242,12 @@ class Connection implements ConnectionInterface
     /**
      * Run a SQL statement and log its execution context.
      *
-     * @param  Request $query
-     * @param  array $bindings
-     * @param  \Closure $callback
+     * @param  array  $bindings
      * @return mixed
      *
-     * @throws \Illuminate\Database\QueryException
+     * @throws QueryException
      */
-    protected function run($query, $bindings, Closure $callback)
+    protected function run(Request $query, $bindings, Closure $callback)
     {
         $start = microtime(true);
 
@@ -266,6 +273,7 @@ class Connection implements ConnectionInterface
      */
     public function logQuery($query, $bindings, $time = null)
     {
+        /** @phpstan-ignore argument.type */
         $this->event(new QueryExecuted($query, $bindings, $time, $this));
 
         if ($this->loggingQueries) {
@@ -276,7 +284,7 @@ class Connection implements ConnectionInterface
     /**
      * Get the elapsed time since a given starting point.
      *
-     * @param  int  $start
+     * @param  float  $start
      * @return float
      */
     protected function getElapsedTime($start)
@@ -388,7 +396,7 @@ class Connection implements ConnectionInterface
         throw new NotSupportedException('unprepared is not supported by weclapp');
     }
 
-    public function cursor($query, $bindings = [], $useReadPdo = true)
+    public function cursor($query, $bindings = [], $useReadPdo = true, array $fetchUsing = [])
     {
         throw new NotSupportedException('Cursor is not supported by weclapp');
     }

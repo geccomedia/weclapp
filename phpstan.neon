@@ -1,0 +1,11 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - src
+
+    # See https://phpstan.org/user-guide/rule-levels
+    level: 5
+
+    excludePaths:

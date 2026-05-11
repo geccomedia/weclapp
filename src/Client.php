@@ -1,7 +1,10 @@
-<?php namespace Geccomedia\Weclapp;
+<?php
+
+namespace Geccomedia\Weclapp;
 
 use GuzzleHttp\Client as BaseClient;
 
+/** @phpstan-ignore class.extendsFinalByPhpDoc */
 class Client extends BaseClient
 {
     public function __construct(array $config = [])
@@ -12,7 +15,7 @@ class Client extends BaseClient
                 'AuthenticationToken' => config('accounting.weclapp.api_key'),
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-            ]
+            ],
         ];
         $config = array_merge($config, $weclapp_config);
         parent::__construct($config);
