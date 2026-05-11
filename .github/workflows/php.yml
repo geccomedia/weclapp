@@ -38,11 +38,8 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      - name: Require illuminate/support version
-        run: composer require "illuminate/support:${{ matrix.illuminate }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-
       - name: Install dependencies
-        run: composer update --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress
 
       - name: Run test suite
         run: composer run-script test

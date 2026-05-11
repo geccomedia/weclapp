@@ -40,12 +40,6 @@
         }
     },
 
-    "config": {
-        "platform": {
-            "php": "8.3.0"
-        }
-    },
-
     "scripts": {
         "test": "vendor/bin/phpunit",
         "analyse": "vendor/bin/phpstan analyse",
