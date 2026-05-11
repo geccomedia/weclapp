@@ -11,11 +11,11 @@
     ],
     "require": {
         "php": ">=8.3",
-        "illuminate/support": "^12|^13"
+        "illuminate/support": "^11|^12|^13"
     },
 
     "require-dev": {
-        "orchestra/testbench": "^10|^11",
+        "orchestra/testbench": "^9|^10|^11",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.0"
     },
