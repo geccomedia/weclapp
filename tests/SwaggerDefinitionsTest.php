@@ -5,9 +5,13 @@ namespace Geccomedia\Weclapp\Tests;
 use Geccomedia\Weclapp\Models\AccountingTransaction;
 use Geccomedia\Weclapp\Models\ArchivedEmail;
 use Geccomedia\Weclapp\Models\Article;
+use Geccomedia\Weclapp\Models\ArticleAccountingCode;
 use Geccomedia\Weclapp\Models\ArticleCategory;
+use Geccomedia\Weclapp\Models\ArticleCategoryClassification;
 use Geccomedia\Weclapp\Models\ArticleItemGroup;
 use Geccomedia\Weclapp\Models\ArticlePrice;
+use Geccomedia\Weclapp\Models\ArticleRating;
+use Geccomedia\Weclapp\Models\ArticleStatus;
 use Geccomedia\Weclapp\Models\ArticleSupplySource;
 use Geccomedia\Weclapp\Models\Attendance;
 use Geccomedia\Weclapp\Models\BankAccount;
@@ -28,10 +32,15 @@ use Geccomedia\Weclapp\Models\CompanySize;
 use Geccomedia\Weclapp\Models\Contact;
 use Geccomedia\Weclapp\Models\Contract;
 use Geccomedia\Weclapp\Models\ContractAuthorizationUnit;
+use Geccomedia\Weclapp\Models\ContractBillingGroup;
+use Geccomedia\Weclapp\Models\ContractTerminationReason;
 use Geccomedia\Weclapp\Models\ContractType;
 use Geccomedia\Weclapp\Models\CostCenter;
+use Geccomedia\Weclapp\Models\CostCenterGroup;
 use Geccomedia\Weclapp\Models\CostType;
+use Geccomedia\Weclapp\Models\CrmCallCategory;
 use Geccomedia\Weclapp\Models\CrmEvent;
+use Geccomedia\Weclapp\Models\CrmEventCategory;
 use Geccomedia\Weclapp\Models\Currency;
 use Geccomedia\Weclapp\Models\CustomAttributeDefinition;
 use Geccomedia\Weclapp\Models\Customer;
@@ -50,8 +59,10 @@ use Geccomedia\Weclapp\Models\InventoryGroup;
 use Geccomedia\Weclapp\Models\InventoryItem;
 use Geccomedia\Weclapp\Models\InventoryTransportReference;
 use Geccomedia\Weclapp\Models\Lead;
+use Geccomedia\Weclapp\Models\LeadRating;
 use Geccomedia\Weclapp\Models\LeadSource;
 use Geccomedia\Weclapp\Models\LedgerAccount;
+use Geccomedia\Weclapp\Models\LegalForm;
 use Geccomedia\Weclapp\Models\LoadingEquipmentIdentifier;
 use Geccomedia\Weclapp\Models\MailTemplate;
 use Geccomedia\Weclapp\Models\Manufacturer;
@@ -59,18 +70,26 @@ use Geccomedia\Weclapp\Models\Notification;
 use Geccomedia\Weclapp\Models\NumberRange;
 use Geccomedia\Weclapp\Models\NumberRangeValue;
 use Geccomedia\Weclapp\Models\Opportunity;
+use Geccomedia\Weclapp\Models\OpportunityTopic;
 use Geccomedia\Weclapp\Models\OpportunityWinLossReason;
 use Geccomedia\Weclapp\Models\Party;
+use Geccomedia\Weclapp\Models\PartyRating;
 use Geccomedia\Weclapp\Models\PaymentMethod;
 use Geccomedia\Weclapp\Models\PaymentRun;
 use Geccomedia\Weclapp\Models\PaymentRunItem;
 use Geccomedia\Weclapp\Models\PerformanceRecord;
+use Geccomedia\Weclapp\Models\PersonalAccountingCode;
+use Geccomedia\Weclapp\Models\PersonDepartment;
+use Geccomedia\Weclapp\Models\PersonRole;
 use Geccomedia\Weclapp\Models\Pick;
+use Geccomedia\Weclapp\Models\PickCheckReason;
+use Geccomedia\Weclapp\Models\PlaceOfService;
 use Geccomedia\Weclapp\Models\PriceCalculationParameter;
 use Geccomedia\Weclapp\Models\ProductionOrder;
 use Geccomedia\Weclapp\Models\ProductionWorkSchedule;
 use Geccomedia\Weclapp\Models\ProductionWorkScheduleAssignment;
 use Geccomedia\Weclapp\Models\ProjectOrderStatusPage;
+use Geccomedia\Weclapp\Models\PropertyTranslation;
 use Geccomedia\Weclapp\Models\PurchaseInvoice;
 use Geccomedia\Weclapp\Models\PurchaseOpenItem;
 use Geccomedia\Weclapp\Models\PurchaseOrder;
@@ -102,6 +121,7 @@ use Geccomedia\Weclapp\Models\ShipmentReturnRectification;
 use Geccomedia\Weclapp\Models\ShippingCarrier;
 use Geccomedia\Weclapp\Models\StorageLocation;
 use Geccomedia\Weclapp\Models\StoragePlace;
+use Geccomedia\Weclapp\Models\StoragePlaceBlockingReason;
 use Geccomedia\Weclapp\Models\StoragePlaceSize;
 use Geccomedia\Weclapp\Models\Supplier;
 use Geccomedia\Weclapp\Models\Tag;
@@ -114,12 +134,14 @@ use Geccomedia\Weclapp\Models\TermOfPayment;
 use Geccomedia\Weclapp\Models\Ticket;
 use Geccomedia\Weclapp\Models\TicketAssignmentRule;
 use Geccomedia\Weclapp\Models\TicketCategory;
+use Geccomedia\Weclapp\Models\TicketChannel;
 use Geccomedia\Weclapp\Models\TicketFaq;
 use Geccomedia\Weclapp\Models\TicketPoolingGroup;
 use Geccomedia\Weclapp\Models\TicketServiceLevelAgreement;
 use Geccomedia\Weclapp\Models\TicketStatus;
 use Geccomedia\Weclapp\Models\TicketType;
 use Geccomedia\Weclapp\Models\TimeRecord;
+use Geccomedia\Weclapp\Models\Title;
 use Geccomedia\Weclapp\Models\Translation;
 use Geccomedia\Weclapp\Models\TransportationOrder;
 use Geccomedia\Weclapp\Models\Unit;
@@ -211,7 +233,6 @@ use Geccomedia\Weclapp\SubModels\ProductionOrderStatusHistory;
 use Geccomedia\Weclapp\SubModels\ProductionOrderWorkItem;
 use Geccomedia\Weclapp\SubModels\ProductionWorkScheduleItem;
 use Geccomedia\Weclapp\SubModels\ProjectMembers;
-use Geccomedia\Weclapp\SubModels\PropertyTranslation;
 use Geccomedia\Weclapp\SubModels\PropertyTranslationValue;
 use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItem;
 use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItemRelationship;
@@ -371,6 +392,7 @@ class SwaggerDefinitionsTest extends TestCase
         'performanceRecord' => [PerformanceRecord::class],
         'pick' => [Pick::class],
         'priceCalculationParameter' => [PriceCalculationParameter::class],
+        'propertyTranslation' => [PropertyTranslation::class],
         'productionWorkSchedule' => [ProductionWorkSchedule::class],
         'productionWorkScheduleAssignment' => [ProductionWorkScheduleAssignment::class],
         'projectOrderStatusPage' => [ProjectOrderStatusPage::class],
@@ -428,14 +450,35 @@ class SwaggerDefinitionsTest extends TestCase
         ],
         // Simple lookup-table models all share the "customValue" swagger definition.
         'customValue' => [
+            ArticleAccountingCode::class,
+            ArticleCategoryClassification::class,
+            ArticleRating::class,
+            ArticleStatus::class,
             CompanySize::class,
+            ContractBillingGroup::class,
+            ContractTerminationReason::class,
+            CostCenterGroup::class,
+            CrmCallCategory::class,
+            CrmEventCategory::class,
             CustomerCategory::class,
             CustomerLeadLossReason::class,
             CustomerTopic::class,
             CustomsTariffNumber::class,
+            LeadRating::class,
             LeadSource::class,
+            LegalForm::class,
+            OpportunityTopic::class,
             OpportunityWinLossReason::class,
+            PartyRating::class,
+            PersonDepartment::class,
+            PersonRole::class,
+            PersonalAccountingCode::class,
+            PickCheckReason::class,
+            PlaceOfService::class,
             Sector::class,
+            StoragePlaceBlockingReason::class,
+            TicketChannel::class,
+            Title::class,
         ],
     ];
 
@@ -581,7 +624,6 @@ class SwaggerDefinitionsTest extends TestCase
         'priceData' => PriceData::class,
         'problem' => Problem::class,
         'processPurchaseOrderItem' => ProcessPurchaseOrderItem::class,
-        'propertyTranslation' => PropertyTranslation::class,
         'purchaseOrderRequestOfferItemInformation' => PurchaseOrderRequestOfferItemInformation::class,
         'salesChannelUsage' => SalesChannelUsage::class,
         'successResponse' => SuccessResponse::class,

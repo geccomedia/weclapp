@@ -176,4 +176,42 @@ abstract class Model extends BaseModel
     {
         $this->setRawAttributes((array) $query->insertGetId($attributes), true);
     }
+
+    /**
+     * Convert the model's attributes to an array.
+     *
+     * Extends the Eloquent default to recursively flatten any SubModel
+     * instances that remain in list-type cast attributes.  This ensures that
+     * `$model->toArray()` and `$model->toJson()` always return plain nested
+     * arrays, matching the pre-SubModel behaviour.
+     *
+     * @return array<string, mixed>
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        foreach ($attributes as $key => $value) {
+            $attributes[$key] = $this->flattenSubModels($value);
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Recursively convert any SubModel instances (or arrays containing them)
+     * into plain arrays.
+     */
+    private function flattenSubModels(mixed $value): mixed
+    {
+        if ($value instanceof SubModel) {
+            return $value->toArray();
+        }
+
+        if (is_array($value)) {
+            return array_map(fn (mixed $item) => $this->flattenSubModels($item), $value);
+        }
+
+        return $value;
+    }
 }

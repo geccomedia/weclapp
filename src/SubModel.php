@@ -3,20 +3,43 @@
 namespace Geccomedia\Weclapp;
 
 use ArrayAccess;
+use ArrayIterator;
+use Countable;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
+use IteratorAggregate;
+use JsonSerializable;
+use Traversable;
 
 /**
  * Base class for all Weclapp sub-model value objects.
  *
- * Implements ArrayAccess so that all existing code that treats embedded
- * API objects as plain PHP arrays (e.g. $order->orderItems[0]['articleId'])
- * continues to work without any changes.
+ * Backwards compatibility guarantee
+ * ----------------------------------
+ * Code that treated embedded API objects as plain PHP arrays continues to work
+ * without any changes:
+ *
+ *   // All of the following work exactly as before:
+ *   $order->orderItems[0]['articleId']          // bracket read   (ArrayAccess)
+ *   $order->orderItems[0]['articleId'] = 'X'   // bracket write  (ArrayAccess)
+ *   isset($order->orderItems[0]['articleId'])   // isset          (ArrayAccess)
+ *   unset($order->orderItems[0]['articleId'])   // unset          (ArrayAccess)
+ *   foreach ($order->orderItems[0] as $k => $v) // iteration     (IteratorAggregate)
+ *   count($order->orderItems[0])               // count          (Countable)
+ *   json_encode($order->orderItems[0])         // JSON encoding  (JsonSerializable)
+ *   $order->toArray()                          // parent toArray (Arrayable)
+ *   $order->toJson()                           // parent toJson  (Arrayable → Eloquent)
+ *
+ * Known limitations (impossible to transparently replicate for objects):
+ *   - `is_array($item)` will return false  — use `$item instanceof SubModel` instead
+ *   - `array_key_exists('k', $item)` throws TypeError in PHP 8+ — use `isset($item['k'])`
+ *   - `array_merge([...], $item)` throws TypeError in PHP 8+    — use `array_merge([...], $item->toArray())`
  *
  * @implements ArrayAccess<string, mixed>
  * @implements Arrayable<string, mixed>
+ * @implements IteratorAggregate<string, mixed>
  */
-class SubModel implements Arrayable, ArrayAccess, Castable
+class SubModel implements Arrayable, ArrayAccess, Castable, Countable, IteratorAggregate, JsonSerializable
 {
     /**
      * The raw attribute data from the API response.
@@ -97,6 +120,50 @@ class SubModel implements Arrayable, ArrayAccess, Castable
     public function offsetUnset(mixed $offset): void
     {
         unset($this->attributes[$offset]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Countable — backwards compat with count($obj)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the number of attributes, matching the behaviour of count() on
+     * the plain array that this object replaces.
+     */
+    public function count(): int
+    {
+        return count($this->attributes);
+    }
+
+    // -------------------------------------------------------------------------
+    // IteratorAggregate — backwards compat with foreach ($obj as $k => $v)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Allow `foreach` iteration over the attributes, exactly as iterating over
+     * the plain array that this object replaces.
+     *
+     * @return ArrayIterator<string, mixed>
+     */
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->attributes);
+    }
+
+    // -------------------------------------------------------------------------
+    // JsonSerializable — backwards compat with json_encode($obj)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Return the raw attributes so that `json_encode($subModel)` produces the
+     * same JSON as `json_encode($plainArray)` would have before SubModel was
+     * introduced.
+     *
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): mixed
+    {
+        return $this->attributes;
     }
 
     // -------------------------------------------------------------------------
