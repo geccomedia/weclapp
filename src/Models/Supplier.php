@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Scopes\SupplierScope;
 use Geccomedia\Weclapp\SubModels\Address;
 use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
@@ -158,7 +159,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Supplier extends Model
 {
-    protected string $table = 'party';
+    protected $table = 'party';
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new SupplierScope);
+    }
 
     /**
      * @var array<string, class-string|string>

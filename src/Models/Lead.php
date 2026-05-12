@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Scopes\LeadScope;
 use Geccomedia\Weclapp\SubModels\Address;
 use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
@@ -158,7 +159,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Lead extends Model
 {
-    protected string $table = 'party';
+    protected $table = 'party';
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new LeadScope);
+    }
 
     /**
      * @var array<string, class-string|string>

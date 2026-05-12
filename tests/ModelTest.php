@@ -7,11 +7,14 @@ use Geccomedia\Weclapp\Connection;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\Models\CashAccount;
 use Geccomedia\Weclapp\Models\Comment;
+use Geccomedia\Weclapp\Models\Contact;
 use Geccomedia\Weclapp\Models\Currency;
 use Geccomedia\Weclapp\Models\Customer;
+use Geccomedia\Weclapp\Models\Lead;
 use Geccomedia\Weclapp\Models\SalesInvoice;
 use Geccomedia\Weclapp\Models\SalesOrder;
 use Geccomedia\Weclapp\Models\Shipment;
+use Geccomedia\Weclapp\Models\Supplier;
 use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\Models\WarehouseStock;
 use Geccomedia\Weclapp\NotSupportedException;
@@ -491,15 +494,15 @@ class ModelTest extends OrchestraTestCase
         Event::assertDispatched(QueryExecuted::class, 3);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=1&pageSize=2';
+            return (string) $event->sql == 'GET:party?test-eq=this&customer-eq=true&sort=id&page=1&pageSize=2';
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=2&pageSize=2';
+            return (string) $event->sql == 'GET:party?test-eq=this&customer-eq=true&sort=id&page=2&pageSize=2';
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=3&pageSize=2';
+            return (string) $event->sql == 'GET:party?test-eq=this&customer-eq=true&sort=id&page=3&pageSize=2';
         });
 
         // assert that we returned from the loop
@@ -1141,8 +1144,8 @@ class ModelTest extends OrchestraTestCase
         Event::assertDispatched(QueryExecuted::class, function ($event) {
             $sql = (string) $event->sql;
 
-            // BelongsTo uses getQualifiedOwnerKeyName() → 'customer.id'
-            return str_contains($sql, 'GET:customer') && str_contains($sql, 'id-eq=99');
+            // Customer/$table = 'party', so BelongsTo routes to 'party'
+            return str_contains($sql, 'GET:party') && str_contains($sql, 'id-eq=99');
         });
 
         $this->assertEquals('Acme', $customer->company);
@@ -1191,5 +1194,142 @@ class ModelTest extends OrchestraTestCase
         });
 
         $this->assertCount(2, $orders);
+    }
+
+    // -------------------------------------------------------------------------
+    // Boolean grammar serialization
+    // -------------------------------------------------------------------------
+
+    public function test_boolean_true_serializes_to_string_true(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Customer::where('customer', true)->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return str_contains((string) $event->sql, 'customer-eq=true');
+        });
+    }
+
+    public function test_boolean_false_serializes_to_string_false(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Customer::where('customerBlocked', false)->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return str_contains((string) $event->sql, 'customerBlocked-eq=false');
+        });
+    }
+
+    public function test_boolean_in_wherein_values_serializes_correctly(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Customer::whereIn('customerBlocked', [true, false])->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            // JSON-encoded array of the string-ified booleans
+            return str_contains($sql, 'customerBlocked-in=') && str_contains($sql, 'true') && str_contains($sql, 'false');
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // Party-type global scopes
+    // -------------------------------------------------------------------------
+
+    public function test_customer_scope_appends_customer_filter(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Customer::get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return str_contains((string) $event->sql, 'customer-eq=true');
+        });
+    }
+
+    public function test_supplier_scope_appends_supplier_filter(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Supplier::get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return str_contains((string) $event->sql, 'supplier-eq=true');
+        });
+    }
+
+    public function test_lead_scope_appends_leadstatus_filters(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Lead::get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            return str_contains($sql, 'leadStatus-notnull=')
+                && str_contains($sql, 'leadStatus-ne=CONVERTED');
+        });
+    }
+
+    public function test_contact_scope_appends_partytype_filter(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Contact::get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return str_contains((string) $event->sql, 'partyType-eq=PERSON');
+        });
+    }
+
+    public function test_scope_stacks_with_additional_where(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        Customer::where('company', 'Acme')->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            return str_contains($sql, 'customer-eq=true')
+                && str_contains($sql, 'company-eq=Acme');
+        });
     }
 }

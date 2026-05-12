@@ -44,7 +44,7 @@ for IDE autocompletion.
 ## Custom Models
 
 The API route is derived automatically from the class name using `lcfirst(ClassName)`,
-so `SalesOrder` maps to `salesOrder`, `Customer` to `customer`, etc. You only need to
+so `SalesOrder` maps to `salesOrder`, `Article` maps to `article`, etc. You only need to
 declare `$table` when your class name does not match the API route:
 
 ```php
@@ -182,11 +182,17 @@ Some Weclapp endpoints are read-only (no create or delete). Attempting to
 `save()` a new instance or `delete()` an existing one on these models will
 throw a `NotSupportedException` immediately, without making an HTTP request.
 
-Examples of non-creatable models: `WarehouseStock`, `AccountingTransaction`,
-`ArchivedEmail`, `BankTransaction`, `Pick`, `PaymentRun`, `SalesOpenItem`.
+Non-creatable models (no `POST`):
+`AccountingTransaction`, `ArchivedEmail`, `BankTransaction`, `BlanketSalesOrder`,
+`CommercialLanguage`, `ContractAuthorizationUnit`, `Document`, `ExternalConnection`,
+`FulfillmentProvider`, `InventoryGroup`, `Notification`, `NumberRange`,
+`NumberRangeValue`, `PaymentRun`, `Pick`, `PurchaseOpenItem`, `PurchaseRequisition`,
+`SalesOpenItem`, `ServiceQuota`, `VariantArticleVariant`, `WarehouseStock`,
+`WarehouseStockMovement`.
 
-Examples of non-deletable models: `CashAccount`, `User`, `SerialNumber`,
-`InventoryTransportReference`.
+Non-deletable models (no `DELETE`):
+`CashAccount`, `InventoryTransportReference`, `SerialNumber`,
+`User`, `WarehouseStock`, `WarehouseStockMovement`.
 
 ## Embedded Sub-Objects
 
@@ -234,8 +240,203 @@ app(Connection::class)->enableQueryLog();
 app(Connection::class)->getQueryLog();
 ```
 
+## Party-type Models
+
+Weclapp stores customers, suppliers, leads, and contacts all as records in the
+single `/party` endpoint, differentiated by boolean role flags and a `leadStatus`
+field. The four convenience model classes each apply a global query scope so
+they automatically filter to the right subset:
+
+| Class | Route | Filter applied |
+|---|---|---|
+| `Customer` | `/party` | `customer = true` |
+| `Supplier` | `/party` | `supplier = true` |
+| `Lead` | `/party` | `leadStatus` is set and not `CONVERTED` |
+| `Contact` | `/party` | `partyType = PERSON` |
+
+The scopes are transparent — any extra `where()` clauses stack alongside them:
+
+```php
+// GET /party?customer-eq=true&company-eq=Acme&pageSize=100
+$customers = Customer::where('company', 'Acme')->get();
+
+// GET /party?supplier-eq=true&pageSize=100
+$suppliers = Supplier::all();
+
+// GET /party?leadStatus-notnull=&leadStatus-ne=CONVERTED&pageSize=100
+$leads = Lead::all();
+
+// GET /party?partyType-eq=PERSON&pageSize=100
+$contacts = Contact::all();
+```
+
+A single weclapp party can carry multiple roles simultaneously (e.g.
+`customer = true` and `supplier = true`). `Party::all()` returns every party
+record unfiltered when you need to query across roles.
+
+### leadStatus values
+
+| Value | Meaning |
+|---|---|
+| `NEW` | Just entered the funnel |
+| `PREQUALIFIED` | Initial screening done |
+| `QUALIFIED` | Sales-ready |
+| `CONVERTED` | Graduated to a customer — excluded from `Lead`, appears under `Customer` |
+| `DISQUALIFIED` | Rejected from funnel |
+
+## Boolean Filters
+
+PHP `true` and `false` values passed to `where()` or `whereIn()` are
+automatically serialised to the strings `"true"` and `"false"` that the
+weclapp API expects:
+
+```php
+// GET /party?customer-eq=true&...
+Customer::where('customer', true)->get();
+
+// GET /party?customerBlocked-eq=false&...
+Customer::where('customerBlocked', false)->get();
+
+// GET /article?active-in=["true","false"]&...
+Article::whereIn('active', [true, false])->get();
+```
+
 ## License & Copyright
 
 Copyright © 2017–2026 Gecco Media GmbH
 
 [License](LICENSE)
+
+---
+
+## Known Gaps / Future Work
+
+This section documents remaining coverage gaps for future contributors.
+
+### 1. Named action helpers (184 action endpoints)
+
+The generic `callAction()` / `action()` API works for every endpoint, but none
+of the model classes define named convenience wrappers. High-value candidates:
+
+| Model | Actions worth wrapping |
+|---|---|
+| `SalesOrder` | `createShipment`, `createSalesInvoice`, `createPurchaseOrder`, `cancelOrManuallyClose`, `createAdvancePaymentRequest` |
+| `Quotation` | `accept`, `createQuotationPdf`, `downloadLatestQuotationPdf`, `calculateSalesPrices` |
+| `Shipment` | `createShippingLabels`, `createSalesInvoice`, `createReturnLabels`, `downloadLatestDeliveryNotePdf` |
+| `PurchaseOrder` | `createIncomingGoods`, `createPurchaseInvoice`, `createSupplierReturn` |
+| `SalesInvoice` | `cancel`, `createCreditNote`, `downloadLatestSalesInvoicePdf` |
+| `Document` | `download`, `upload`, `downloadDocumentVersion` |
+| `User` | `invite`, `softDelete` |
+| `Inventory` | `bookInventory` |
+| `Article` | `uploadArticleImage`, `downloadArticleImage` |
+| `Party` | `uploadImage`, `downloadImage` |
+
+All 184 action endpoints across 37 resources currently require raw
+`callAction('name', [...])` calls. See the Custom Actions section above for usage.
+
+### 2. Collection-level (non-id) action endpoints
+
+Some resources expose actions at the collection root (no `/id/{id}/`) rather
+than on a specific instance. These use `Builder::action()` (class-level), not
+`callAction()`. Notable ones:
+
+| Endpoint | Method |
+|---|---|
+| `POST /warehouseStockMovement/bookDirectStockTransfer` | `WarehouseStockMovement::action('bookDirectStockTransfer', [...])` |
+| `POST /warehouseStockMovement/bookIncomingMovement` | `WarehouseStockMovement::action('bookIncomingMovement', [...])` |
+| `POST /warehouseStockMovement/bookOutgoingMovement` | `WarehouseStockMovement::action('bookOutgoingMovement', [...])` |
+| `POST /warehouseStockMovement/bookOntoInternalTransportReference` | `WarehouseStockMovement::action('bookOntoInternalTransportReference', [...])` |
+| `POST /warehouseStockMovement/bookFromLoadingEquipmentPlace` | `WarehouseStockMovement::action(...)` |
+| `POST /warehouseStockMovement/bookToLoadingEquipmentPlace` | `WarehouseStockMovement::action(...)` |
+| `POST /purchaseRequisition/deleteAllRequisitions` | `PurchaseRequisition::action('deleteAllRequisitions')` |
+| `POST /purchaseRequisition/startMaterialPlanningRun` | `PurchaseRequisition::action('startMaterialPlanningRun', [...])` |
+| `POST /accountingTransaction/batchBooking` | `AccountingTransaction::action('batchBooking', [...])` |
+| `POST /document/upload` | `Document::action('upload', [...])` |
+| `POST /document/copy` | `Document::action('copy', [...])` |
+
+### 3. Utility path roots without model classes
+
+Two swagger path roots have no dedicated model class because they expose
+only utility/action endpoints (no CRUD). Both use `GET`, which the `Builder`
+`action()` helper does not support (it always uses `POST`). Call them directly
+through the `Connection`, which is available via the service container.
+
+#### `system` endpoints
+
+```php
+use GuzzleHttp\Psr7\Request;
+use Geccomedia\Weclapp\Connection;
+
+$connection = app(Connection::class);
+
+// GET /system/permissions → string[]
+// Returns the list of permission slugs granted to the current API key.
+$permissions = $connection->select(new Request('GET', 'system/permissions'));
+// e.g. ['party:read', 'salesOrder:read', 'salesOrder:write', ...]
+
+// GET /system/licenses → array of {name: string, permissions: string[]}
+// Returns the active licence modules and their included permissions.
+$licenses = $connection->select(new Request('GET', 'system/licenses'));
+// e.g. [['name' => 'SALES', 'permissions' => ['salesOrder:read', ...]], ...]
+
+// GET /system/demoTestSystemInfo → {createPossible, creationInProgress, demoInstanceUrl, mainInstanceUrl}
+// Check whether a demo instance can be created from this tenant.
+$info = $connection->action(new Request('GET', 'system/demoTestSystemInfo'));
+$demoInfo = $info['result'] ?? null;
+// e.g. ['createPossible' => true, 'creationInProgress' => false, 'demoInstanceUrl' => null, ...]
+
+// POST /system/createDemoTestSystem  — creates a demo copy of this tenant
+$connection->action(new Request(
+    'POST',
+    'system/createDemoTestSystem',
+    [],
+    json_encode(['label' => 'My Test System', 'preset' => 'PROD_SYSTEM'])
+));
+```
+
+#### `job` endpoints
+
+Weclapp runs long-running background jobs (imports, mass-operations, syncs,
+etc.) asynchronously. You can poll or abort them by `type`.
+
+```php
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
+use Geccomedia\Weclapp\Connection;
+
+$connection = app(Connection::class);
+
+// GET /job/status?type=INVENTORY_BOOKING
+// Returns the current status and progress of the named background job.
+$statusResult = $connection->action(
+    new Request('GET', (string) Uri::withQueryValues(
+        new Uri('job/status'),
+        ['type' => 'INVENTORY_BOOKING']
+    ))
+);
+$status = $statusResult['result'] ?? null;
+// e.g. ['status' => 'EXECUTING', 'progress' => ['current' => 42, 'total' => 100], 'type' => 'INVENTORY_BOOKING']
+
+// GET /job/abort?type=INVENTORY_BOOKING
+// Requests cancellation of a running job.
+$connection->action(
+    new Request('GET', (string) Uri::withQueryValues(
+        new Uri('job/abort'),
+        ['type' => 'INVENTORY_BOOKING']
+    ))
+);
+```
+
+All valid `type` values are the `SCREAMING_SNAKE_CASE` job names listed in the
+swagger `jobResult` definition (e.g. `INVENTORY_BOOKING`, `MATERIAL_PLANNING_RUN`,
+`MASS_SHIPMENT_CREATION`, `ACCOUNTING_EXPORT`, …).
+
+### 4. Plain `string[]` fields not in `$casts`
+
+The following fields are plain arrays of strings (not SubModel objects), so
+they have no cast and arrive as raw `array|null`. This is correct behaviour;
+they are documented here for clarity:
+
+- `tags` — present on `SalesOrder`, `Quotation`, `Shipment`, `PurchaseOrder`,
+  `SalesInvoice`, `Party`, `Customer`, `Contact`, `Lead`, `Supplier`, and others
+- `availableForSalesChannels` — present on `Article`

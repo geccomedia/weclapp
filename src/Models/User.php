@@ -27,4 +27,7 @@ use Geccomedia\Weclapp\SubModels\OnlyId;
  * @property string|null $title
  * @property list<OnlyId>|null $userRoles
  */
-class User extends Model {}
+class User extends Model
+{
+    protected bool $deletable = false;
+}

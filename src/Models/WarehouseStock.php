@@ -84,6 +84,6 @@ class WarehouseStock extends Model
 
     public function warehouseLevel(): BelongsTo
     {
-        return $this->belongsTo(WarehouseLevel::class, 'warehouseLevelId');
+        return $this->belongsTo(StorageLocation::class, 'warehouseLevelId');
     }
 }

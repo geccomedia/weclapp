@@ -189,6 +189,19 @@ class Grammar extends BaseGrammar
     public function compileWheres(Builder $query): array
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
+            // Normalise PHP booleans to their string equivalents before any
+            // handler serialises them into the query string. This covers every
+            // where type (Basic, In, NotIn, Entity, …) in one place.
+            if (isset($where['value']) && is_bool($where['value'])) {
+                $where['value'] = var_export($where['value'], true);
+            }
+            if (isset($where['values'])) {
+                $where['values'] = array_map(
+                    fn ($v) => is_bool($v) ? var_export($v, true) : $v,
+                    $where['values']
+                );
+            }
+
             if (! in_array($where['type'], ['In', 'NotIn', 'InRaw', 'NotInRaw', 'Null', 'NotNull', 'Entity'])) {
                 $where['type'] = 'Basic';
             }

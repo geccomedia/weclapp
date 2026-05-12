@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Scopes\ContactScope;
 use Geccomedia\Weclapp\SubModels\Address;
 use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
@@ -156,7 +157,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Contact extends Model
 {
-    protected string $table = 'party';
+    protected $table = 'party';
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ContactScope);
+    }
 
     /**
      * @var array<string, class-string|string>
