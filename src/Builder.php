@@ -11,6 +11,11 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder as BaseBuilder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ *
+ * @extends BaseBuilder<TModel>
+ */
 class Builder extends BaseBuilder
 {
     /**
@@ -22,11 +27,6 @@ class Builder extends BaseBuilder
         Comment::class,
         Document::class,
     ];
-
-    /**
-     * @var Model
-     */
-    protected $model;
 
     /**
      * @var Client
