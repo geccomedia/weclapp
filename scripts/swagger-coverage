@@ -24,7 +24,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Geccomedia\Weclapp\Tests\SwaggerSpec;
+use Geccomedia\Weclapp\Tests\Swagger\Spec as SwaggerSpec;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

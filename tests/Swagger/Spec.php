@@ -159,7 +159,7 @@ final class Spec
     public static function modelShortNames(): array
     {
         $names = [];
-        foreach (glob(__DIR__.'/../src/Models/*.php') ?: [] as $file) {
+        foreach (glob(__DIR__.'/../../src/Models/*.php') ?: [] as $file) {
             $short = basename($file, '.php');
             $fqcn = self::MODEL_NS.$short;
             if (class_exists($fqcn) && ! (new ReflectionClass($fqcn))->isAbstract()) {
