@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleNumber
@@ -15,4 +16,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $variantArticleName
  * @property string|null $variantArticleNumber
  */
-class VariantArticle extends Model {}
+class VariantArticle extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function primaryArticle()
+    {
+        return $this->belongsTo(Article::class, 'primaryArticleId');
+    }
+}

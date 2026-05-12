@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property float|null $amountDiscount
@@ -32,4 +33,28 @@ class PaymentRunItem extends Model
         'createdDate' => 'datetime',
         'lastModifiedDate' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function bankAccount()
+    {
+        return $this->belongsTo(BankAccount::class, 'bankAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paymentRun()
+    {
+        return $this->belongsTo(PaymentRun::class, 'paymentRunId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function purchaseOpenItem()
+    {
+        return $this->belongsTo(PurchaseOpenItem::class, 'purchaseOpenItemId');
+    }
 }

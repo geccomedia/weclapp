@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property array|null $additionalAddresses
@@ -81,4 +82,101 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $types
  * @property bool|null $unlimited
  */
-class Contract extends Model {}
+class Contract extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function authorizationUnit()
+    {
+        return $this->belongsTo(ContractAuthorizationUnit::class, 'authorizationUnitId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function invoiceRecipient()
+    {
+        return $this->belongsTo(Party::class, 'invoiceRecipientId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function nonStandardInputTax()
+    {
+        return $this->belongsTo(Tax::class, 'nonStandardInputTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function nonStandardTax()
+    {
+        return $this->belongsTo(Tax::class, 'nonStandardTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function party()
+    {
+        return $this->belongsTo(Party::class, 'partyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'paymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function recordCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'recordCurrencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function technicalContactPerson()
+    {
+        return $this->belongsTo(User::class, 'technicalContactPersonId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function termOfPayment()
+    {
+        return $this->belongsTo(TermOfPayment::class, 'termOfPaymentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticketServiceLevelAgreement()
+    {
+        return $this->belongsTo(TicketServiceLevelAgreement::class, 'ticketServiceLevelAgreementId');
+    }
+}

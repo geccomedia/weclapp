@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property array|null $additionalRecipients
@@ -18,4 +19,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $subject
  * @property string|null $userId
  */
-class Reminder extends Model {}
+class Reminder extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+}

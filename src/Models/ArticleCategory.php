@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $name
@@ -18,4 +19,37 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $purchaseCostCenterId
  * @property string|null $salesCostCenterId
  */
-class ArticleCategory extends Model {}
+class ArticleCategory extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function costType()
+    {
+        return $this->belongsTo(CostType::class, 'costTypeId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentCategory()
+    {
+        return $this->belongsTo(ArticleCategory::class, 'parentCategoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function purchaseCostCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'purchaseCostCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesCostCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'salesCostCenterId');
+    }
+}

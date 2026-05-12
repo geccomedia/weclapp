@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property Carbon|null $paymentRunDate
@@ -24,4 +25,12 @@ class PaymentRun extends Model
         'lastModifiedDate' => 'datetime',
         'paymentRunDate' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function runByUser()
+    {
+        return $this->belongsTo(User::class, 'runByUserId');
+    }
 }

@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $caldavAccountId
@@ -16,4 +17,13 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $sharePrivateEvents
  * @property bool|null $synchronize
  */
-class Calendar extends Model {}
+class Calendar extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'ownerId');
+    }
+}

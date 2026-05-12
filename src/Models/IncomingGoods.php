@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $incomingGoodsNumber
@@ -49,4 +50,77 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $statusHistory
  * @property array|null $tags
  */
-class IncomingGoods extends Model {}
+class IncomingGoods extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function dropshippingShipment()
+    {
+        return $this->belongsTo(Shipment::class, 'dropshippingShipmentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function invoiceRecipient()
+    {
+        return $this->belongsTo(Party::class, 'invoiceRecipientId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function relatedShipment()
+    {
+        return $this->belongsTo(Shipment::class, 'relatedShipmentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function senderParty()
+    {
+        return $this->belongsTo(Party::class, 'senderPartyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shippingReturnCarrier()
+    {
+        return $this->belongsTo(ShippingCarrier::class, 'shippingReturnCarrierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function sourceWarehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'sourceWarehouseId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

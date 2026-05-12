@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $commentsVisible
@@ -19,4 +20,13 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $ticketsVisible
  * @property bool|null $uploadDocument
  */
-class ProjectOrderStatusPage extends Model {}
+class ProjectOrderStatusPage extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function projectOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'projectOrderId');
+    }
+}

@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $assignedPoolingGroupId
@@ -54,4 +55,101 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $ticketTypeId
  * @property array|null $watchers
  */
-class Ticket extends Model {}
+class Ticket extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function assignedPoolingGroup()
+    {
+        return $this->belongsTo(TicketPoolingGroup::class, 'assignedPoolingGroupId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assignedUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function contact()
+    {
+        return $this->belongsTo(Party::class, 'contactId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function contract()
+    {
+        return $this->belongsTo(Contract::class, 'contractId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function legacyArticle()
+    {
+        return $this->belongsTo(Article::class, 'legacyArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function party()
+    {
+        return $this->belongsTo(Party::class, 'partyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'salesOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticketCategory()
+    {
+        return $this->belongsTo(TicketCategory::class, 'ticketCategoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticketServiceLevelAgreement()
+    {
+        return $this->belongsTo(TicketServiceLevelAgreement::class, 'ticketServiceLevelAgreementId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticketStatus()
+    {
+        return $this->belongsTo(TicketStatus::class, 'ticketStatusId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticketType()
+    {
+        return $this->belongsTo(TicketType::class, 'ticketTypeId');
+    }
+}

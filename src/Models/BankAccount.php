@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $accountHolder
@@ -32,4 +33,37 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $qrIdentifier
  * @property string|null $swiftBic
  */
-class BankAccount extends Model {}
+class BankAccount extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function account()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'accountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function incidentalCostsOfMonetaryTrafficAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'incidentalCostsOfMonetaryTrafficAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function incidentalCostsOfMonetaryTrafficTax()
+    {
+        return $this->belongsTo(Tax::class, 'incidentalCostsOfMonetaryTrafficTaxId');
+    }
+}

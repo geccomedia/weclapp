@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $name
@@ -21,4 +22,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userId
  * @property array|null $versions
  */
-class Document extends Model {}
+class Document extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+}

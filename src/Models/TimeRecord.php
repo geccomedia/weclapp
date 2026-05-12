@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -31,4 +32,77 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $timeRecordSource
  * @property string|null $userId
  */
-class TimeRecord extends Model {}
+class TimeRecord extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesInvoice()
+    {
+        return $this->belongsTo(SalesInvoice::class, 'salesInvoiceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'salesOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesOrderTicket()
+    {
+        return $this->belongsTo(Ticket::class, 'salesOrderTicketId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function serviceQuota()
+    {
+        return $this->belongsTo(ServiceQuota::class, 'serviceQuotaId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function task()
+    {
+        return $this->belongsTo(Task::class, 'taskId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticketId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+}

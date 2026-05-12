@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -22,4 +23,29 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taskVisibilityType
  * @property array|null $watchers
  */
-class TaskTemplate extends Model {}
+class TaskTemplate extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creatorUser()
+    {
+        return $this->belongsTo(User::class, 'creatorUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentTaskTemplate()
+    {
+        return $this->belongsTo(TaskTemplate::class, 'parentTaskTemplateId');
+    }
+}

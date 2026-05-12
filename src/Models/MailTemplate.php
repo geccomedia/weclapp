@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $bccEmailAddresses
@@ -15,4 +16,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $type
  * @property bool|null $useAsDefault
  */
-class MailTemplate extends Model {}
+class MailTemplate extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+}

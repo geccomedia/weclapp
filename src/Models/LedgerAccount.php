@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $accountNumber
@@ -12,4 +13,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $parentAccountId
  * @property string|null $type
  */
-class LedgerAccount extends Model {}
+class LedgerAccount extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function parentAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'parentAccountId');
+    }
+}

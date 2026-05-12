@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -20,4 +21,21 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $validFromDate
  * @property Carbon|null $validUntilDate
  */
-class ServiceQuota extends Model {}
+class ServiceQuota extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+}

@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -33,4 +34,21 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taxRateType
  * @property string|null $unitId
  */
-class ArticleSupplySource extends Model {}
+class ArticleSupplySource extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Party::class, 'supplierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unitId');
+    }
+}

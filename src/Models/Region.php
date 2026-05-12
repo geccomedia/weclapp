@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $countryCode
@@ -11,4 +12,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $name
  * @property string|null $responsibleUserId
  */
-class Region extends Model {}
+class Region extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+}

@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $active
@@ -22,4 +23,61 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $storagePlaceType
  * @property string|null $warehouseId
  */
-class StoragePlace extends Model {}
+class StoragePlace extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function currentInventory()
+    {
+        return $this->belongsTo(Inventory::class, 'currentInventoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shelf()
+    {
+        return $this->belongsTo(Shelf::class, 'shelfId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shelfStorageLocation()
+    {
+        return $this->belongsTo(StorageLocation::class, 'shelfStorageLocationId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function storageLocation()
+    {
+        return $this->belongsTo(StorageLocation::class, 'storageLocationId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function storagePlaceSize()
+    {
+        return $this->belongsTo(StoragePlaceSize::class, 'storagePlaceSizeId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

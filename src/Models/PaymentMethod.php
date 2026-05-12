@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $name
@@ -17,4 +18,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $reference
  * @property string|null $type
  */
-class PaymentMethod extends Model {}
+class PaymentMethod extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function clearingAccount()
+    {
+        return $this->belongsTo(BankAccount::class, 'clearingAccountId');
+    }
+}

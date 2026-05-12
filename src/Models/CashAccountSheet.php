@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $cashAccountId
@@ -15,4 +16,13 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $openingDate
  * @property string|null $sheetNumber
  */
-class CashAccountSheet extends Model {}
+class CashAccountSheet extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function cashAccount()
+    {
+        return $this->belongsTo(CashAccount::class, 'cashAccountId');
+    }
+}

@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $name
@@ -39,4 +40,53 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $topics
  * @property string|null $winLossDescription
  */
-class Opportunity extends Model {}
+class Opportunity extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function contact()
+    {
+        return $this->belongsTo(Party::class, 'contactId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesStage()
+    {
+        return $this->belongsTo(SalesStage::class, 'salesStageId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function winLossReason()
+    {
+        return $this->belongsTo(OpportunityWinLossReason::class, 'winLossReasonId');
+    }
+}

@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $active
@@ -16,4 +17,13 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $storagePlaceTypeSettingsStock
  * @property string|null $warehouseId
  */
-class StorageLocation extends Model {}
+class StorageLocation extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

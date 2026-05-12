@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $active
@@ -13,4 +14,13 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $published
  * @property bool|null $visibleInCustomerPortal
  */
-class TicketCategory extends Model {}
+class TicketCategory extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function parentTicketCategory()
+    {
+        return $this->belongsTo(TicketCategory::class, 'parentTicketCategoryId');
+    }
+}

@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property array|null $articleCategories
@@ -19,4 +20,13 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $validFromDate
  * @property Carbon|null $validToDate
  */
-class NumberRangeValue extends Model {}
+class NumberRangeValue extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function numberRange()
+    {
+        return $this->belongsTo(NumberRange::class, 'numberRangeId');
+    }
+}

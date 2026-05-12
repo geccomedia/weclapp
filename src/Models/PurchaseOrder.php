@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $purchaseOrderNumber
@@ -77,4 +78,109 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $supplierQuotationNumber
  * @property array|null $tags
  */
-class PurchaseOrder extends Model {}
+class PurchaseOrder extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mergedToPurchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'mergedToPurchaseOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function nonStandardTax()
+    {
+        return $this->belongsTo(Tax::class, 'nonStandardTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'paymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function purchaseOrderRequest()
+    {
+        return $this->belongsTo(PurchaseOrderRequest::class, 'purchaseOrderRequestId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function recordCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'recordCurrencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'salesOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shipmentMethod()
+    {
+        return $this->belongsTo(ShipmentMethod::class, 'shipmentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shippingCarrier()
+    {
+        return $this->belongsTo(ShippingCarrier::class, 'shippingCarrierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Party::class, 'supplierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function termOfPayment()
+    {
+        return $this->belongsTo(TermOfPayment::class, 'termOfPaymentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

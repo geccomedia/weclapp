@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property float|null $amount
@@ -29,4 +30,12 @@ class PurchaseOpenItem extends Model
         'createdDate' => 'datetime',
         'lastModifiedDate' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function purchaseInvoice()
+    {
+        return $this->belongsTo(PurchaseInvoice::class, 'purchaseInvoiceId');
+    }
 }

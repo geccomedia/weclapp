@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $commercialLanguage
@@ -56,4 +57,44 @@ class PerformanceRecord extends Model
         'servicePeriodTo' => 'datetime',
         'serviceProviderSignatureDate' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function invoiceRecipient()
+    {
+        return $this->belongsTo(Party::class, 'invoiceRecipientId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'salesOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function serviceProvider()
+    {
+        return $this->belongsTo(User::class, 'serviceProviderId');
+    }
 }

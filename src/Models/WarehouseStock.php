@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -24,4 +25,45 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $serialNumbers
  * @property string|null $storagePlaceId
  */
-class WarehouseStock extends Model {}
+class WarehouseStock extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function batchNumber()
+    {
+        return $this->belongsTo(BatchNumber::class, 'batchNumberId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function internalTransportReference()
+    {
+        return $this->belongsTo(InternalTransportReference::class, 'internalTransportReferenceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function storagePlace()
+    {
+        return $this->belongsTo(StoragePlace::class, 'storagePlaceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $partyType
@@ -165,5 +166,221 @@ class Customer extends Model
         if (! in_array('partyType', array_keys($attributes))) {
             $this->partyType = 'ORGANIZATION';
         }
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function commercialLanguage()
+    {
+        return $this->belongsTo(CommercialLanguage::class, 'commercialLanguageId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function companySize()
+    {
+        return $this->belongsTo(CompanySize::class, 'companySizeId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerCategory()
+    {
+        return $this->belongsTo(CustomerCategory::class, 'customerCategoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerCurrentSalesStage()
+    {
+        return $this->belongsTo(SalesStage::class, 'customerCurrentSalesStageId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerDebtorAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'customerDebtorAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerDefaultShippingCarrier()
+    {
+        return $this->belongsTo(ShippingCarrier::class, 'customerDefaultShippingCarrierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerDefaultWarehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'customerDefaultWarehouseId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerLossReason()
+    {
+        return $this->belongsTo(CustomerLeadLossReason::class, 'customerLossReasonId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerNonStandardTax()
+    {
+        return $this->belongsTo(Tax::class, 'customerNonStandardTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerPaymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'customerPaymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerShipmentMethod()
+    {
+        return $this->belongsTo(ShipmentMethod::class, 'customerShipmentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customerTermOfPayment()
+    {
+        return $this->belongsTo(TermOfPayment::class, 'customerTermOfPaymentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function invoiceRecipient()
+    {
+        return $this->belongsTo(Party::class, 'invoiceRecipientId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function leadSource()
+    {
+        return $this->belongsTo(LeadSource::class, 'leadSourceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentParty()
+    {
+        return $this->belongsTo(Party::class, 'parentPartyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function primaryContact()
+    {
+        return $this->belongsTo(Party::class, 'primaryContactId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'regionId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function sector()
+    {
+        return $this->belongsTo(Sector::class, 'sectorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplierCreditorAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'supplierCreditorAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplierDefaultShippingCarrier()
+    {
+        return $this->belongsTo(ShippingCarrier::class, 'supplierDefaultShippingCarrierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplierNonStandardTax()
+    {
+        return $this->belongsTo(Tax::class, 'supplierNonStandardTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplierPaymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'supplierPaymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplierShipmentMethod()
+    {
+        return $this->belongsTo(ShipmentMethod::class, 'supplierShipmentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplierTermOfPayment()
+    {
+        return $this->belongsTo(TermOfPayment::class, 'supplierTermOfPaymentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class, 'taxId');
     }
 }

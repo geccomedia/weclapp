@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -34,4 +35,69 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userId
  * @property float|null $valuationPrice
  */
-class WarehouseStockMovement extends Model {}
+class WarehouseStockMovement extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function batchNumber()
+    {
+        return $this->belongsTo(BatchNumber::class, 'batchNumberId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'costCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function internalTransportReference()
+    {
+        return $this->belongsTo(InternalTransportReference::class, 'internalTransportReferenceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function productionOrder()
+    {
+        return $this->belongsTo(ProductionOrder::class, 'productionOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function storagePlace()
+    {
+        return $this->belongsTo(StoragePlace::class, 'storagePlaceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function transportationOrder()
+    {
+        return $this->belongsTo(TransportationOrder::class, 'transportationOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+}

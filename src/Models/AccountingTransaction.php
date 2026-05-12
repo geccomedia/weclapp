@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property Carbon|null $accountingImportDate
@@ -21,4 +22,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $transactionNumber
  * @property string|null $type
  */
-class AccountingTransaction extends Model {}
+class AccountingTransaction extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
+}

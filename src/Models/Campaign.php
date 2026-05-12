@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $name
@@ -22,4 +23,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $campaignStartDate
  * @property array|null $customAttributes
  */
-class Campaign extends Model {}
+class Campaign extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+}

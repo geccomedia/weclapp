@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $name
@@ -18,4 +19,45 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taxKey
  * @property float|null $taxValue
  */
-class Tax extends Model {}
+class Tax extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function account()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'accountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function contraAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'contraAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function defaultDiscountAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'defaultDiscountAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function defaultNominalAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'defaultNominalAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function depositAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'depositAccountId');
+    }
+}

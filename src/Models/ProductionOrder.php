@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $productionOrderNumber
@@ -35,4 +36,29 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $targetStartDate
  * @property array|null $workItems
  */
-class ProductionOrder extends Model {}
+class ProductionOrder extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function assemblyStoragePlace()
+    {
+        return $this->belongsTo(StoragePlace::class, 'assemblyStoragePlaceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

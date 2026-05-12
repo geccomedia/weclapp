@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleNumber
@@ -108,4 +109,117 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $useSalesBillOfMaterialItemPricesForPurchase
  * @property bool|null $useSalesBillOfMaterialSubitemCosts
  */
-class Article extends Model {}
+class Article extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function account()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'accountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function articleCategory()
+    {
+        return $this->belongsTo(ArticleCategory::class, 'articleCategoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customsTariffNumber()
+    {
+        return $this->belongsTo(CustomsTariffNumber::class, 'customsTariffNumberId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function defaultLoadingEquipmentIdentifier()
+    {
+        return $this->belongsTo(LoadingEquipmentIdentifier::class, 'defaultLoadingEquipmentIdentifierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function expenseAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'expenseAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function loadingEquipmentArticle()
+    {
+        return $this->belongsTo(Article::class, 'loadingEquipmentArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturer::class, 'manufacturerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function packagingUnitBaseArticle()
+    {
+        return $this->belongsTo(Article::class, 'packagingUnitBaseArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function packagingUnitParentArticle()
+    {
+        return $this->belongsTo(Article::class, 'packagingUnitParentArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function primarySupplySource()
+    {
+        return $this->belongsTo(ArticleSupplySource::class, 'primarySupplySourceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function purchaseCostCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'purchaseCostCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesCostCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'salesCostCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function serviceArticleForServiceQuotaBooking()
+    {
+        return $this->belongsTo(Article::class, 'serviceArticleForServiceQuotaBookingId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unitId');
+    }
+}

@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -22,4 +23,37 @@ use Geccomedia\Weclapp\Model;
  * @property float|null $replacementValue
  * @property string|null $storagePlaceId
  */
-class InventoryItem extends Model {}
+class InventoryItem extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function inventory()
+    {
+        return $this->belongsTo(Inventory::class, 'inventoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function inventoryTransportReference()
+    {
+        return $this->belongsTo(InventoryTransportReference::class, 'inventoryTransportReferenceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function storagePlace()
+    {
+        return $this->belongsTo(StoragePlace::class, 'storagePlaceId');
+    }
+}

@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $accountId
@@ -20,4 +21,53 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $paymentType
  * @property string|null $taxId
  */
-class CashAccountTransaction extends Model {}
+class CashAccountTransaction extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function account()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'accountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function cashAccountSheet()
+    {
+        return $this->belongsTo(CashAccountSheet::class, 'cashAccountSheetId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'createdById');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'paymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class, 'taxId');
+    }
+}

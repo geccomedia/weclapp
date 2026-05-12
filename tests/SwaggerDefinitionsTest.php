@@ -141,8 +141,7 @@ use ReflectionClass;
 /**
  * Verifies that every property declared in a swagger definition at
  * https://www.weclapp.com/api/swagger.json is also declared as a
- *
- * @property annotation on the corresponding model class.
+ * "@property" annotation on the corresponding model class.
  */
 class SwaggerDefinitionsTest extends TestCase
 {
@@ -330,7 +329,7 @@ class SwaggerDefinitionsTest extends TestCase
     }
 
     /**
-     * Returns all @property names declared in the docblock of the given class
+     * Returns all "@property" names declared in the docblock of the given class
      * and every class in its inheritance chain.
      *
      * @return list<string>
@@ -415,7 +414,7 @@ class SwaggerDefinitionsTest extends TestCase
     }
 
     /**
-     * Every property of a swagger definition must be declared as @property on
+     * Every property of a swagger definition must be declared as "@property" on
      * the corresponding model class.
      */
     #[DataProvider('definitionModelPairs')]

@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $batchNumber
@@ -37,4 +38,60 @@ class Pick extends Model
         'createdDate' => 'datetime',
         'lastModifiedDate' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function confirmedByUser()
+    {
+        return $this->belongsTo(User::class, 'confirmedByUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function internalTransportReference()
+    {
+        return $this->belongsTo(InternalTransportReference::class, 'internalTransportReferenceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function packagingUnitBaseArticle()
+    {
+        return $this->belongsTo(Article::class, 'packagingUnitBaseArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function sourceInternalTransportReference()
+    {
+        return $this->belongsTo(InternalTransportReference::class, 'sourceInternalTransportReferenceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function sourceStoragePlace()
+    {
+        return $this->belongsTo(StoragePlace::class, 'sourceStoragePlaceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function storagePlace()
+    {
+        return $this->belongsTo(StoragePlace::class, 'storagePlaceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function transportationOrder()
+    {
+        return $this->belongsTo(TransportationOrder::class, 'transportationOrderId');
+    }
 }

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Geccomedia\Weclapp\Builder as EloquentBuilder;
 use Geccomedia\Weclapp\Query\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Date;
 
 /**
@@ -57,6 +58,34 @@ abstract class Model extends BaseModel
      * @var int
      */
     protected $perPage = 100;
+
+    /**
+     * Define a belongs-to relationship.
+     *
+     * Overrides the Eloquent default to use camelCase foreign keys (e.g. "customerId")
+     * instead of snake_case ("customer_id"), matching weclapp's naming convention.
+     *
+     * @param  class-string<BaseModel>  $related
+     * @return BelongsTo
+     */
+    public function belongsTo($related, $foreignKey = null, $ownerKey = null, $relation = null)
+    {
+        if (is_null($relation)) {
+            $relation = $this->guessBelongsToRelation();
+        }
+
+        $instance = $this->newRelatedInstance($related);
+
+        if (is_null($foreignKey)) {
+            $foreignKey = lcfirst(class_basename($related)).$instance->getKeyName();
+        }
+
+        $ownerKey = $ownerKey ?: $instance->getKeyName();
+
+        return $this->newBelongsTo(
+            $instance->newQuery(), $this, $foreignKey, $ownerKey, $relation
+        );
+    }
 
     /**
      * Derive the API resource name from the class name: lcfirst(ShortClassName).

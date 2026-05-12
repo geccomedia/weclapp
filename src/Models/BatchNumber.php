@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $batchNumber
@@ -17,4 +18,13 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $productionDate
  * @property array|null $customAttributes
  */
-class BatchNumber extends Model {}
+class BatchNumber extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+}

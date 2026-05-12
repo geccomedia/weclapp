@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $active
@@ -14,4 +15,13 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $ticketCategories
  * @property string|null $visibility
  */
-class TicketFaq extends Model {}
+class TicketFaq extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'createdById');
+    }
+}

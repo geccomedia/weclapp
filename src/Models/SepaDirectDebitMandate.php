@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $bankAccountId
@@ -16,4 +17,13 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $signatureDate
  * @property string|null $type
  */
-class SepaDirectDebitMandate extends Model {}
+class SepaDirectDebitMandate extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function bankAccount()
+    {
+        return $this->belongsTo(BankAccount::class, 'bankAccountId');
+    }
+}

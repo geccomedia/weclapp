@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int|null $autoChangeDays
@@ -14,4 +15,21 @@ use Geccomedia\Weclapp\Model;
  * @property int|null $positionNumber
  * @property string|null $targetStatusId
  */
-class TicketStatus extends Model {}
+class TicketStatus extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function autoChangeTicketStatus()
+    {
+        return $this->belongsTo(TicketStatus::class, 'autoChangeTicketStatusId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function targetStatus()
+    {
+        return $this->belongsTo(TicketStatus::class, 'targetStatusId');
+    }
+}

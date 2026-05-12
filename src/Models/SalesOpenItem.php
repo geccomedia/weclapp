@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property float|null $amount
@@ -17,4 +18,13 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $paymentApplications
  * @property string|null $salesInvoiceId
  */
-class SalesOpenItem extends Model {}
+class SalesOpenItem extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function salesInvoice()
+    {
+        return $this->belongsTo(SalesInvoice::class, 'salesInvoiceId');
+    }
+}

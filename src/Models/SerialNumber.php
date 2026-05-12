@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $serialNumber
@@ -16,4 +17,13 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $warrantyExpirationDate
  * @property array|null $customAttributes
  */
-class SerialNumber extends Model {}
+class SerialNumber extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+}

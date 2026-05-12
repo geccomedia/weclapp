@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $text
@@ -22,4 +23,21 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $recipientUsers
  * @property bool|null $solution
  */
-class Comment extends Model {}
+class Comment extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function authorUser()
+    {
+        return $this->belongsTo(User::class, 'authorUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentComment()
+    {
+        return $this->belongsTo(Comment::class, 'parentCommentId');
+    }
+}

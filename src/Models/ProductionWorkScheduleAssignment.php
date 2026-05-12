@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $alternative
@@ -26,4 +27,20 @@ class ProductionWorkScheduleAssignment extends Model
         'validFrom' => 'datetime',
         'validTo' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function productionWorkSchedule()
+    {
+        return $this->belongsTo(ProductionWorkSchedule::class, 'productionWorkScheduleId');
+    }
 }

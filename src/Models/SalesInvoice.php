@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $invoiceNumber
@@ -115,4 +116,116 @@ class SalesInvoice extends Model
         'servicePeriodTo' => 'datetime',
         'shippingDate' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'costCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function costType()
+    {
+        return $this->belongsTo(CostType::class, 'costTypeId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function nonStandardTax()
+    {
+        return $this->belongsTo(Tax::class, 'nonStandardTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'paymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function precedingSalesInvoice()
+    {
+        return $this->belongsTo(SalesInvoice::class, 'precedingSalesInvoiceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function quotation()
+    {
+        return $this->belongsTo(Quotation::class, 'quotationId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function recordCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'recordCurrencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'salesOrderId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function sepaDirectDebitMandate()
+    {
+        return $this->belongsTo(SepaDirectDebitMandate::class, 'sepaDirectDebitMandateId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shipmentMethod()
+    {
+        return $this->belongsTo(ShipmentMethod::class, 'shipmentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function termOfPayment()
+    {
+        return $this->belongsTo(TermOfPayment::class, 'termOfPaymentId');
+    }
 }

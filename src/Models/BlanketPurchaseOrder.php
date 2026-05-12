@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
@@ -56,4 +57,93 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $useManualUnitPrice
  * @property string|null $warehouseId
  */
-class BlanketPurchaseOrder extends Model {}
+class BlanketPurchaseOrder extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function nonStandardTax()
+    {
+        return $this->belongsTo(Tax::class, 'nonStandardTaxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'paymentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function recordCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'recordCurrencyId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shipmentMethod()
+    {
+        return $this->belongsTo(ShipmentMethod::class, 'shipmentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Party::class, 'supplierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class, 'taxId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function termOfPayment()
+    {
+        return $this->belongsTo(TermOfPayment::class, 'termOfPaymentId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+}

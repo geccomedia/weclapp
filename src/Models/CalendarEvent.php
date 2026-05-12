@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $allDayEvent
@@ -25,4 +26,37 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $subject
  * @property string|null $userId
  */
-class CalendarEvent extends Model {}
+class CalendarEvent extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function calendar()
+    {
+        return $this->belongsTo(Calendar::class, 'calendarId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function concerning()
+    {
+        return $this->belongsTo(Party::class, 'concerningId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function contact()
+    {
+        return $this->belongsTo(Party::class, 'contactId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+}

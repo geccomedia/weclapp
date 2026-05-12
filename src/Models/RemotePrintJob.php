@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $documentId
@@ -13,4 +14,21 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $weclappOsHardwareId
  * @property string|null $weclappOsId
  */
-class RemotePrintJob extends Model {}
+class RemotePrintJob extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function weclappOs()
+    {
+        return $this->belongsTo(WeclappOs::class, 'weclappOsId');
+    }
+}

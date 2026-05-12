@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $allowOverBooking
@@ -40,4 +41,69 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userOfLastStatusChangeId
  * @property array|null $watchers
  */
-class Task extends Model {}
+class Task extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function calendarEvent()
+    {
+        return $this->belongsTo(CalendarEvent::class, 'calendarEventId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creatorUser()
+    {
+        return $this->belongsTo(User::class, 'creatorUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Party::class, 'customerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentTask()
+    {
+        return $this->belongsTo(Task::class, 'parentTaskId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function previousTask()
+    {
+        return $this->belongsTo(Task::class, 'previousTaskId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticketId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function userOfLastStatusChange()
+    {
+        return $this->belongsTo(User::class, 'userOfLastStatusChangeId');
+    }
+}

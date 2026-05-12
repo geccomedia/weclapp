@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $accountingCodeId
@@ -18,4 +19,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taxRateType
  * @property bool|null $validVatId
  */
-class TaxDeterminationRule extends Model {}
+class TaxDeterminationRule extends Model
+{
+    /**
+     * @return BelongsTo
+     */
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class, 'taxId');
+    }
+}
