@@ -14,6 +14,150 @@ use Illuminate\Support\Facades\Date;
  * @property Carbon|null $createdDate
  * @property Carbon|null $lastModifiedDate
  * @property int $version
+ *
+ * -------------------------------------------------------------------------
+ * Weclapp-specific builder methods (forwarded via __callStatic / __call)
+ * -------------------------------------------------------------------------
+ *
+ * @method static \Geccomedia\Weclapp\Builder<static> whereEntity(string $name, int $id)
+ * @method static \Geccomedia\Weclapp\Builder<static> withProperties(string|array ...$properties)
+ * @method static array<mixed>|null action(string $action, array $params = [], string $method = 'POST')
+ *
+ * -------------------------------------------------------------------------
+ * Query entry points
+ * -------------------------------------------------------------------------
+ * @method static \Geccomedia\Weclapp\Builder<static> query()
+ * @method static \Geccomedia\Weclapp\Builder<static> on(string|null $connection = null)
+ * @method static \Geccomedia\Weclapp\Builder<static> onWriteConnection()
+ *
+ * -------------------------------------------------------------------------
+ * Constraints — WHERE clauses
+ * -------------------------------------------------------------------------
+ * @method static \Geccomedia\Weclapp\Builder<static> where(\Closure|string|array $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhere(\Closure|string|array $column, mixed $operator = null, mixed $value = null)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereNot(\Closure|string|array $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereNot(\Closure|string|array $column, mixed $operator = null, mixed $value = null)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereKey(mixed $id)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereKeyNot(mixed $id)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereIn(string $column, mixed $values, string $boolean = 'and', bool $not = false)
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereIn(string $column, mixed $values)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereNotIn(string $column, mixed $values, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereNotIn(string $column, mixed $values)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereNull(string|array $columns, string $boolean = 'and', bool $not = false)
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereNull(string $column)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereNotNull(string|array $columns, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereNotNull(string $column)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereBetween(string $column, iterable $values, string $boolean = 'and', bool $not = false)
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereBetween(string $column, iterable $values)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereNotBetween(string $column, iterable $values, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereNotBetween(string $column, iterable $values)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereDate(string $column, string $operator, \DateTimeInterface|string|null $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> whereMonth(string $column, string $operator, \DateTimeInterface|string|null $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> whereDay(string $column, string $operator, \DateTimeInterface|string|null $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> whereYear(string $column, string $operator, \DateTimeInterface|string|int|null $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> whereTime(string $column, string $operator, \DateTimeInterface|string|null $value = null, string $boolean = 'and')
+ * @method static \Geccomedia\Weclapp\Builder<static> whereLike(string $column, string $value, bool $caseSensitive = false, string $boolean = 'and', bool $not = false)
+ * @method static \Geccomedia\Weclapp\Builder<static> orWhereLike(string $column, string $value, bool $caseSensitive = false)
+ * @method static \Geccomedia\Weclapp\Builder<static> whereNotLike(string $column, string $value, bool $caseSensitive = false, string $boolean = 'and')
+ *
+ * -------------------------------------------------------------------------
+ * Ordering, grouping, limiting
+ * -------------------------------------------------------------------------
+ * @method static \Geccomedia\Weclapp\Builder<static> orderBy(string $column, string $direction = 'asc')
+ * @method static \Geccomedia\Weclapp\Builder<static> orderByDesc(string $column)
+ * @method static \Geccomedia\Weclapp\Builder<static> latest(string|null $column = null)
+ * @method static \Geccomedia\Weclapp\Builder<static> oldest(string|null $column = null)
+ * @method static \Geccomedia\Weclapp\Builder<static> skip(int $value)
+ * @method static \Geccomedia\Weclapp\Builder<static> offset(int $value)
+ * @method static \Geccomedia\Weclapp\Builder<static> take(int $value)
+ * @method static \Geccomedia\Weclapp\Builder<static> limit(int $value)
+ * @method static \Geccomedia\Weclapp\Builder<static> forPage(int $page, int $perPage = 15)
+ *
+ * -------------------------------------------------------------------------
+ * Column selection
+ * -------------------------------------------------------------------------
+ * @method static \Geccomedia\Weclapp\Builder<static> select(array|string $columns = ['*'])
+ * @method static \Geccomedia\Weclapp\Builder<static> addSelect(array|string $column)
+ *
+ * -------------------------------------------------------------------------
+ * Eager loading
+ * -------------------------------------------------------------------------
+ * @method static \Geccomedia\Weclapp\Builder<static> with(array|string $relations, \Closure|string|null $callback = null)
+ * @method static \Geccomedia\Weclapp\Builder<static> without(array|string $relations)
+ * @method static \Geccomedia\Weclapp\Builder<static> withOnly(array|string $relations)
+ *
+ * -------------------------------------------------------------------------
+ * Retrieval — single model
+ * -------------------------------------------------------------------------
+ * @method static static|null find(mixed $id, array $columns = ['*'])
+ * @method static static findOrFail(mixed $id, array $columns = ['*'])
+ * @method static static findOrNew(mixed $id, array $columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Collection<int,static> findMany(\Illuminate\Contracts\Support\Arrayable<array-key,mixed>|array $ids, array $columns = ['*'])
+ * @method static static|null first(array $columns = ['*'])
+ * @method static static firstOrFail(array $columns = ['*'])
+ * @method static static firstOrNew(array $attributes = [], array $values = [])
+ * @method static static firstOrCreate(array $attributes = [], array $values = [])
+ * @method static static|null firstWhere(\Closure|string|array $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @method static static updateOrCreate(array $attributes, array $values = [])
+ * @method static static sole(array $columns = ['*'])
+ *
+ * -------------------------------------------------------------------------
+ * Retrieval — collections
+ * -------------------------------------------------------------------------
+ * @method static \Illuminate\Database\Eloquent\Collection<int,static> get(array $columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Collection<int,static> all(array $columns = ['*'])
+ *
+ * -------------------------------------------------------------------------
+ * Aggregates
+ * -------------------------------------------------------------------------
+ * @method static int count(string $columns = '*')
+ * @method static float|int min(string $column)
+ * @method static float|int max(string $column)
+ * @method static float|int sum(string $column)
+ * @method static float|int avg(string $column)
+ * @method static float|int average(string $column)
+ * @method static bool exists()
+ * @method static bool doesntExist()
+ *
+ * -------------------------------------------------------------------------
+ * Chunking / lazy iteration
+ * -------------------------------------------------------------------------
+ * @method static bool chunk(int $count, callable $callback)
+ * @method static bool chunkById(int $count, callable $callback, string|null $column = null, string|null $alias = null)
+ * @method static \Illuminate\Support\LazyCollection<int,static> lazy(int $chunkSize = 1000)
+ * @method static \Illuminate\Support\LazyCollection<int,static> lazyById(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
+ * @method static \Illuminate\Support\LazyCollection<int,static> cursor()
+ *
+ * -------------------------------------------------------------------------
+ * Plucking / value extraction
+ * -------------------------------------------------------------------------
+ * @method static \Illuminate\Support\Collection<array-key,mixed> pluck(string $column, string|null $key = null)
+ * @method static mixed value(string $column)
+ *
+ * -------------------------------------------------------------------------
+ * Pagination
+ * -------------------------------------------------------------------------
+ * @method static \Illuminate\Pagination\LengthAwarePaginator<int,static> paginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+ * @method static \Illuminate\Pagination\Paginator<int,static> simplePaginate(int|null $perPage = null, array $columns = ['*'], string $pageName = 'page', int|null $page = null)
+ * @method static \Illuminate\Pagination\CursorPaginator<int,static> cursorPaginate(int|null $perPage = null, array $columns = ['*'], string $cursorName = 'cursor', \Illuminate\Pagination\Cursor|string|null $cursor = null)
+ *
+ * -------------------------------------------------------------------------
+ * Persistence
+ * -------------------------------------------------------------------------
+ * @method static static create(array $attributes = [])
+ * @method static static forceCreate(array $attributes)
+ * @method static int insert(array $values)
+ * @method static int delete()
+ * @method static int update(array $values)
+ * @method static int increment(string $column, float|int $amount = 1, array $extra = [])
+ * @method static int decrement(string $column, float|int $amount = 1, array $extra = [])
+ *
+ * -------------------------------------------------------------------------
+ * Scopes
+ * -------------------------------------------------------------------------
+ * @method static \Geccomedia\Weclapp\Builder<static> withGlobalScope(string $identifier, \Illuminate\Database\Eloquent\Scope|\Closure $scope)
+ * @method static \Geccomedia\Weclapp\Builder<static> withoutGlobalScope(\Illuminate\Database\Eloquent\Scope|string $scope)
+ * @method static \Geccomedia\Weclapp\Builder<static> withoutGlobalScopes(array|null $scopes = null)
  */
 abstract class Model extends BaseModel
 {
