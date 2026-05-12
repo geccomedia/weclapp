@@ -1,0 +1,15 @@
+<?php
+
+namespace Geccomedia\Weclapp\SubModels;
+
+/**
+ * @property int|null $position
+ * @property string|null $source
+ * @property bool|null $specialPriceReduction
+ * @property string|null $title
+ * @property string|null $type
+ * @property string|null $value
+ */
+class PriceDataReductionAdditionItem
+{
+}

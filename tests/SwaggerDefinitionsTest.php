@@ -133,6 +133,122 @@ use Geccomedia\Weclapp\Models\WarehouseStock;
 use Geccomedia\Weclapp\Models\WarehouseStockMovement;
 use Geccomedia\Weclapp\Models\Webhook;
 use Geccomedia\Weclapp\Models\WeclappOs;
+use Geccomedia\Weclapp\SubModels\AcceptQuotationItem;
+use Geccomedia\Weclapp\SubModels\AccountingTransactionDetail;
+use Geccomedia\Weclapp\SubModels\Address;
+use Geccomedia\Weclapp\SubModels\AggregatePackagingUnit;
+use Geccomedia\Weclapp\SubModels\ApiProblem;
+use Geccomedia\Weclapp\SubModels\ArticleAlternativeQuantity;
+use Geccomedia\Weclapp\SubModels\ArticleCalculationPrice;
+use Geccomedia\Weclapp\SubModels\ArticleImage;
+use Geccomedia\Weclapp\SubModels\ArticleItemGroupItem;
+use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutArticleReference;
+use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutSalesChannel;
+use Geccomedia\Weclapp\SubModels\BatchBookingRecord;
+use Geccomedia\Weclapp\SubModels\BatchSerialNumber;
+use Geccomedia\Weclapp\SubModels\BillOfMaterial;
+use Geccomedia\Weclapp\SubModels\BlanketPurchaseOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\BlanketSalesOrderItem;
+use Geccomedia\Weclapp\SubModels\BlanketSalesOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\CalendarEventAttendee;
+use Geccomedia\Weclapp\SubModels\CalendarSharingPermissions;
+use Geccomedia\Weclapp\SubModels\CashAccountCashCountItem;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\ConditionsForEntityType;
+use Geccomedia\Weclapp\SubModels\ContractAdditionalAddress;
+use Geccomedia\Weclapp\SubModels\ContractCostItem;
+use Geccomedia\Weclapp\SubModels\ContractItem;
+use Geccomedia\Weclapp\SubModels\CostCenterWithDistributionPercentage;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionConditions;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionListValue;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionPermission;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionPropertyCondition;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionTranslation;
+use Geccomedia\Weclapp\SubModels\CustomerSpecificArticleAttributes;
+use Geccomedia\Weclapp\SubModels\DocumentVersion;
+use Geccomedia\Weclapp\SubModels\DropshippingDeliveryNoteFormTextBlockData;
+use Geccomedia\Weclapp\SubModels\EcommerceOrder;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\EntityReference;
+use Geccomedia\Weclapp\SubModels\IncomingGoodsItem;
+use Geccomedia\Weclapp\SubModels\InventorySerialNumber;
+use Geccomedia\Weclapp\SubModels\InventoryStatusHistory;
+use Geccomedia\Weclapp\SubModels\ItemPick;
+use Geccomedia\Weclapp\SubModels\JobProgress;
+use Geccomedia\Weclapp\SubModels\MinimalStoragePlace;
+use Geccomedia\Weclapp\SubModels\NestedStoragePlace;
+use Geccomedia\Weclapp\SubModels\OnlineAccount;
+use Geccomedia\Weclapp\SubModels\PackagingUnit;
+use Geccomedia\Weclapp\SubModels\Parcel;
+use Geccomedia\Weclapp\SubModels\PartyBankAccount;
+use Geccomedia\Weclapp\SubModels\PartyEmailAddresses;
+use Geccomedia\Weclapp\SubModels\PartyHabitualExporterLetterOfIntent;
+use Geccomedia\Weclapp\SubModels\PaymentApplication;
+use Geccomedia\Weclapp\SubModels\PerformanceRecordItem;
+use Geccomedia\Weclapp\SubModels\PerformanceRecordStatusHistory;
+use Geccomedia\Weclapp\SubModels\Period;
+use Geccomedia\Weclapp\SubModels\PriceDataReductionAdditionItem;
+use Geccomedia\Weclapp\SubModels\ProductionOrderItem;
+use Geccomedia\Weclapp\SubModels\ProductionOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\ProductionOrderWorkItem;
+use Geccomedia\Weclapp\SubModels\ProductionWorkScheduleItem;
+use Geccomedia\Weclapp\SubModels\ProjectMembers;
+use Geccomedia\Weclapp\SubModels\PropertyTranslationValue;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItem;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItemRelationship;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceShippingCostItem;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceStatusHistory;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestItemScaleValue;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOffer;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOfferItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOfferItemScaleValue;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestStatusHistory;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderShippingCostItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\PurchaseRequisitionStatusHistory;
+use Geccomedia\Weclapp\SubModels\QuantityConversion;
+use Geccomedia\Weclapp\SubModels\QuotationItem;
+use Geccomedia\Weclapp\SubModels\QuotationItemRelationship;
+use Geccomedia\Weclapp\SubModels\QuotationItemScaleValue;
+use Geccomedia\Weclapp\SubModels\QuotationShippingCostItem;
+use Geccomedia\Weclapp\SubModels\QuotationStatusHistory;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\RecurringEvent;
+use Geccomedia\Weclapp\SubModels\ReductionAddition;
+use Geccomedia\Weclapp\SubModels\ReductionAdditionItem;
+use Geccomedia\Weclapp\SubModels\Releases;
+use Geccomedia\Weclapp\SubModels\ReminderRecurringEvent;
+use Geccomedia\Weclapp\SubModels\SalesBillOfMaterialArticleItem;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceItem;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceItemRelationship;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceShippingCostItem;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceStatusHistory;
+use Geccomedia\Weclapp\SubModels\SalesOrderItem;
+use Geccomedia\Weclapp\SubModels\SalesOrderPayment;
+use Geccomedia\Weclapp\SubModels\SalesOrderShippingCostItem;
+use Geccomedia\Weclapp\SubModels\SalesOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\SalesStageHistory;
+use Geccomedia\Weclapp\SubModels\ServiceQuotaRelationship;
+use Geccomedia\Weclapp\SubModels\ServiceQuotaStatusHistory;
+use Geccomedia\Weclapp\SubModels\ShipmentItem;
+use Geccomedia\Weclapp\SubModels\ShipmentStatus;
+use Geccomedia\Weclapp\SubModels\StoragePlaceTypeSettings;
+use Geccomedia\Weclapp\SubModels\SupplySource;
+use Geccomedia\Weclapp\SubModels\TaskAssignee;
+use Geccomedia\Weclapp\SubModels\TaskMailAccount;
+use Geccomedia\Weclapp\SubModels\TaskTemplateAssignee;
+use Geccomedia\Weclapp\SubModels\TermOfPaymentCondition;
+use Geccomedia\Weclapp\SubModels\TicketPoolingGroupMember;
+use Geccomedia\Weclapp\SubModels\TicketServiceLevelAgreementTarget;
+use Geccomedia\Weclapp\SubModels\TranslationValue;
+use Geccomedia\Weclapp\SubModels\TransportPick;
+use Geccomedia\Weclapp\SubModels\TransportationOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\ValidationError;
+use Geccomedia\Weclapp\SubModels\ValidationErrorCodeInfo;
+use Geccomedia\Weclapp\SubModels\VariantArticleAttributeOption;
+use Geccomedia\Weclapp\SubModels\VariantArticleVariantWithoutReference;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -297,6 +413,132 @@ class SwaggerDefinitionsTest extends TestCase
         ],
     ];
 
+    /**
+     * Maps swagger sub-definition name (not reachable via paths) -> sub-model FQCN.
+     *
+     * These are embedded objects/arrays within top-level model responses.
+     *
+     * @var array<string, string>
+     */
+    private const SUB_DEFINITION_TO_CLASS = [
+        'acceptQuotationItem' => AcceptQuotationItem::class,
+        'accountingTransactionDetail' => AccountingTransactionDetail::class,
+        'address' => Address::class,
+        'aggregatePackagingUnit' => AggregatePackagingUnit::class,
+        'apiProblem' => ApiProblem::class,
+        'articleAlternativeQuantity' => ArticleAlternativeQuantity::class,
+        'articleCalculationPrice' => ArticleCalculationPrice::class,
+        'articleImage' => ArticleImage::class,
+        'articleItemGroupItem' => ArticleItemGroupItem::class,
+        'articlePriceWithoutArticleReference' => ArticlePriceWithoutArticleReference::class,
+        'articlePriceWithoutSalesChannel' => ArticlePriceWithoutSalesChannel::class,
+        'batchBookingRecord' => BatchBookingRecord::class,
+        'batchSerialNumber' => BatchSerialNumber::class,
+        'billOfMaterial' => BillOfMaterial::class,
+        'blanketPurchaseOrderStatusHistory' => BlanketPurchaseOrderStatusHistory::class,
+        'blanketSalesOrderItem' => BlanketSalesOrderItem::class,
+        'blanketSalesOrderStatusHistory' => BlanketSalesOrderStatusHistory::class,
+        'calendarEventAttendee' => CalendarEventAttendee::class,
+        'calendarSharingPermissions' => CalendarSharingPermissions::class,
+        'cashAccountCashCountItem' => CashAccountCashCountItem::class,
+        'commissionSalesPartner' => CommissionSalesPartner::class,
+        'conditionsForEntityType' => ConditionsForEntityType::class,
+        'contractAdditionalAddress' => ContractAdditionalAddress::class,
+        'contractCostItem' => ContractCostItem::class,
+        'contractItem' => ContractItem::class,
+        'costCenterWithDistributionPercentage' => CostCenterWithDistributionPercentage::class,
+        'customAttributeDefinitionConditions' => CustomAttributeDefinitionConditions::class,
+        'customAttributeDefinitionListValue' => CustomAttributeDefinitionListValue::class,
+        'customAttributeDefinitionPermission' => CustomAttributeDefinitionPermission::class,
+        'customAttributeDefinitionPropertyCondition' => CustomAttributeDefinitionPropertyCondition::class,
+        'customAttributeDefinitionTranslation' => CustomAttributeDefinitionTranslation::class,
+        'customerSpecificArticleAttributes' => CustomerSpecificArticleAttributes::class,
+        'documentVersion' => DocumentVersion::class,
+        'dropshippingDeliveryNoteFormTextBlockData' => DropshippingDeliveryNoteFormTextBlockData::class,
+        'ecommerceOrder' => EcommerceOrder::class,
+        'emailAddresses' => EmailAddresses::class,
+        'entityReference' => EntityReference::class,
+        'incomingGoodsItem' => IncomingGoodsItem::class,
+        'inventorySerialNumber' => InventorySerialNumber::class,
+        'inventoryStatusHistory' => InventoryStatusHistory::class,
+        'itemPick' => ItemPick::class,
+        'jobProgress' => JobProgress::class,
+        'minimalStoragePlace' => MinimalStoragePlace::class,
+        'nestedStoragePlace' => NestedStoragePlace::class,
+        'onlineAccount' => OnlineAccount::class,
+        'packagingUnit' => PackagingUnit::class,
+        'parcel' => Parcel::class,
+        'partyBankAccount' => PartyBankAccount::class,
+        'partyEmailAddresses' => PartyEmailAddresses::class,
+        'partyHabitualExporterLetterOfIntent' => PartyHabitualExporterLetterOfIntent::class,
+        'paymentApplication' => PaymentApplication::class,
+        'performanceRecordItem' => PerformanceRecordItem::class,
+        'performanceRecordStatusHistory' => PerformanceRecordStatusHistory::class,
+        'period' => Period::class,
+        'priceDataReductionAdditionItem' => PriceDataReductionAdditionItem::class,
+        'productionOrderItem' => ProductionOrderItem::class,
+        'productionOrderStatusHistory' => ProductionOrderStatusHistory::class,
+        'productionOrderWorkItem' => ProductionOrderWorkItem::class,
+        'productionWorkScheduleItem' => ProductionWorkScheduleItem::class,
+        'projectMembers' => ProjectMembers::class,
+        'propertyTranslationValue' => PropertyTranslationValue::class,
+        'purchaseInvoiceItem' => PurchaseInvoiceItem::class,
+        'purchaseInvoiceItemRelationship' => PurchaseInvoiceItemRelationship::class,
+        'purchaseInvoiceShippingCostItem' => PurchaseInvoiceShippingCostItem::class,
+        'purchaseInvoiceStatusHistory' => PurchaseInvoiceStatusHistory::class,
+        'purchaseOrderItem' => PurchaseOrderItem::class,
+        'purchaseOrderRequestItem' => PurchaseOrderRequestItem::class,
+        'purchaseOrderRequestItemScaleValue' => PurchaseOrderRequestItemScaleValue::class,
+        'purchaseOrderRequestOffer' => PurchaseOrderRequestOffer::class,
+        'purchaseOrderRequestOfferItem' => PurchaseOrderRequestOfferItem::class,
+        'purchaseOrderRequestOfferItemScaleValue' => PurchaseOrderRequestOfferItemScaleValue::class,
+        'purchaseOrderRequestStatusHistory' => PurchaseOrderRequestStatusHistory::class,
+        'purchaseOrderShippingCostItem' => PurchaseOrderShippingCostItem::class,
+        'purchaseOrderStatusHistory' => PurchaseOrderStatusHistory::class,
+        'purchaseRequisitionStatusHistory' => PurchaseRequisitionStatusHistory::class,
+        'quantityConversion' => QuantityConversion::class,
+        'quotationItem' => QuotationItem::class,
+        'quotationItemRelationship' => QuotationItemRelationship::class,
+        'quotationItemScaleValue' => QuotationItemScaleValue::class,
+        'quotationShippingCostItem' => QuotationShippingCostItem::class,
+        'quotationStatusHistory' => QuotationStatusHistory::class,
+        'recordAddress' => RecordAddress::class,
+        'recurringEvent' => RecurringEvent::class,
+        'reductionAddition' => ReductionAddition::class,
+        'reductionAdditionItem' => ReductionAdditionItem::class,
+        'releases' => Releases::class,
+        'reminderRecurringEvent' => ReminderRecurringEvent::class,
+        'salesBillOfMaterialArticleItem' => SalesBillOfMaterialArticleItem::class,
+        'salesInvoiceItem' => SalesInvoiceItem::class,
+        'salesInvoiceItemRelationship' => SalesInvoiceItemRelationship::class,
+        'salesInvoiceShippingCostItem' => SalesInvoiceShippingCostItem::class,
+        'salesInvoiceStatusHistory' => SalesInvoiceStatusHistory::class,
+        'salesOrderItem' => SalesOrderItem::class,
+        'salesOrderPayment' => SalesOrderPayment::class,
+        'salesOrderShippingCostItem' => SalesOrderShippingCostItem::class,
+        'salesOrderStatusHistory' => SalesOrderStatusHistory::class,
+        'salesStageHistory' => SalesStageHistory::class,
+        'serviceQuotaRelationship' => ServiceQuotaRelationship::class,
+        'serviceQuotaStatusHistory' => ServiceQuotaStatusHistory::class,
+        'shipmentItem' => ShipmentItem::class,
+        'shipmentStatus' => ShipmentStatus::class,
+        'storagePlaceTypeSettings' => StoragePlaceTypeSettings::class,
+        'supplySource' => SupplySource::class,
+        'taskAssignee' => TaskAssignee::class,
+        'taskMailAccount' => TaskMailAccount::class,
+        'taskTemplateAssignee' => TaskTemplateAssignee::class,
+        'termOfPaymentCondition' => TermOfPaymentCondition::class,
+        'ticketPoolingGroupMember' => TicketPoolingGroupMember::class,
+        'ticketServiceLevelAgreementTarget' => TicketServiceLevelAgreementTarget::class,
+        'translationValue' => TranslationValue::class,
+        'transportPick' => TransportPick::class,
+        'transportationOrderStatusHistory' => TransportationOrderStatusHistory::class,
+        'validationError' => ValidationError::class,
+        'validationErrorCodeInfo' => ValidationErrorCodeInfo::class,
+        'variantArticleAttributeOption' => VariantArticleAttributeOption::class,
+        'variantArticleVariantWithoutReference' => VariantArticleVariantWithoutReference::class,
+    ];
+
     /** @var array<string, list<string>>|null Cached definitions map: definitionName -> propertyNames */
     private static ?array $definitions = null;
 
@@ -374,6 +616,22 @@ class SwaggerDefinitionsTest extends TestCase
         return $cases;
     }
 
+    /**
+     * Yields one [definitionName, subModelFqcn] row per sub-definition entry.
+     *
+     * @return array<string, array{string, string}>
+     */
+    public static function subDefinitionClassPairs(): array
+    {
+        $cases = [];
+
+        foreach (self::SUB_DEFINITION_TO_CLASS as $definition => $fqcn) {
+            $cases[$definition] = [$definition, $fqcn];
+        }
+
+        return $cases;
+    }
+
     // -------------------------------------------------------------------------
     // Tests
     // -------------------------------------------------------------------------
@@ -411,6 +669,75 @@ class SwaggerDefinitionsTest extends TestCase
         }
 
         $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Every sub-definition in the swagger spec must be listed in
+     * SUB_DEFINITION_TO_CLASS so it actually gets tested.
+     */
+    public function test_all_sub_definitions_are_covered(): void
+    {
+        $definitions = self::definitions();
+
+        // Compute sub-only definitions: present in swagger but not referenced in paths.
+        $client = new Client(['timeout' => 30]);
+        $response = $client->get('https://www.weclapp.com/api/swagger.json');
+        $swagger = json_decode((string) $response->getBody(), true, flags: JSON_THROW_ON_ERROR);
+
+        $pathRefs = [];
+        preg_match_all('/#\/definitions\/(\w+)/', json_encode($swagger['paths']), $m);
+        foreach ($m[1] as $ref) {
+            $pathRefs[$ref] = true;
+        }
+
+        $coveredSubDefs = array_keys(self::SUB_DEFINITION_TO_CLASS);
+
+        foreach (array_keys($definitions) as $definitionName) {
+            // Only check definitions that are NOT reachable via paths.
+            if (isset($pathRefs[$definitionName])) {
+                continue;
+            }
+
+            if (! in_array($definitionName, $coveredSubDefs, true)) {
+                $this->fail(
+                    "Swagger sub-definition '{$definitionName}' is not listed in SUB_DEFINITION_TO_CLASS."
+                );
+            }
+        }
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Every property of a swagger sub-definition must be declared as @property
+     * on the corresponding sub-model class.
+     */
+    #[DataProvider('subDefinitionClassPairs')]
+    public function test_sub_model_declares_all_swagger_properties(string $definitionName, string $fqcn): void
+    {
+        $definitions = self::definitions();
+
+        $this->assertArrayHasKey(
+            $definitionName,
+            $definitions,
+            "Swagger sub-definition '{$definitionName}' does not exist in the spec."
+        );
+
+        $swaggerProps = $definitions[$definitionName];
+        $modelProps = self::modelProperties($fqcn);
+
+        $missing = array_values(array_diff($swaggerProps, $modelProps));
+
+        $this->assertEmpty(
+            $missing,
+            sprintf(
+                "%s is missing %d @property annotation(s) from the '%s' swagger sub-definition:\n  - %s",
+                $fqcn,
+                count($missing),
+                $definitionName,
+                implode("\n  - ", $missing),
+            )
+        );
     }
 
     /**
