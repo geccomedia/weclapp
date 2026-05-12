@@ -8,6 +8,12 @@ use Geccomedia\Weclapp\Query\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Facades\Date;
 
+/**
+ * @property string|int|null $id
+ * @property Carbon|null $createdDate
+ * @property Carbon|null $lastModifiedDate
+ * @property int $version
+ */
 abstract class Model extends BaseModel
 {
     /**
