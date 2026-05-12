@@ -3,6 +3,8 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutSalesChannel;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,8 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $deliveryTime
  * @property bool|null $primary
  * @property string|null $articleNumber
- * @property array|null $articlePrices
- * @property array|null $customAttributes
+ * @property list<ArticlePriceWithoutSalesChannel>|null $articlePrices
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $description
  * @property bool|null $dropshippingPossible
  * @property string|null $ean
@@ -36,6 +38,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ArticleSupplySource extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'articlePrices' => ArticlePriceWithoutSalesChannel::class,
+        'customAttributes' => CustomAttribute::class,
+    ];
+
     /**
      * @return BelongsTo
      */

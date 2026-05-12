@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -12,6 +14,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $lastModifiedDate
  * @property string|null $salesPartnerSupplierId
  */
-class CommissionSalesPartner
-{
-}
+class CommissionSalesPartner extends SubModel {}

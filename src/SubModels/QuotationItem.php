@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -51,6 +53,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $unitPrice
  * @property string|null $unitPriceInCompanyCurrency
  */
-class QuotationItem
-{
-}
+class QuotationItem extends SubModel {}

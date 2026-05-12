@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\InventoryStatusHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -17,11 +18,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $recorder
  * @property Carbon|null $startDate
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<InventoryStatusHistory>|null $statusHistory
  * @property string|null $warehouseId
  */
 class Inventory extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'statusHistory' => InventoryStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

@@ -3,25 +3,37 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\TransportationOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\TransportPick;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $assignedUserId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $destinationStoragePlaceId
  * @property string|null $internalTransportReferenceId
  * @property string|null $loadingEquipmentArticleId
  * @property string|null $loadingEquipmentIdentifierId
- * @property array|null $picks
+ * @property list<TransportPick>|null $picks
  * @property string|null $productionOrderId
  * @property string|null $shipmentId
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<TransportationOrderStatusHistory>|null $statusHistory
  * @property string|null $transportationOrderNumber
  * @property string|null $transportationOrderType
  */
 class TransportationOrder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'picks' => TransportPick::class,
+        'statusHistory' => TransportationOrderStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

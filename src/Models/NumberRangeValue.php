@@ -4,10 +4,11 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property array|null $articleCategories
+ * @property list<OnlyId>|null $articleCategories
  * @property array|null $creditNoteInvoiceTypes
  * @property string|null $interval
  * @property string|null $lastValue
@@ -22,6 +23,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class NumberRangeValue extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'articleCategories' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

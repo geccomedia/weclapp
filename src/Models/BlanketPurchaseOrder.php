@@ -4,6 +4,12 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\BlanketPurchaseOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\ReductionAdditionItem;
+use Geccomedia\Weclapp\SubModels\Releases;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,29 +22,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $currencyConversionDate
  * @property bool|null $currencyConversionLocked
  * @property float|null $currencyConversionRate
- * @property array|null $customAttributes
- * @property array|null $deliveryAddress
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property RecordAddress|null $deliveryAddress
  * @property string|null $description
  * @property float|null $discountPercentage
  * @property Carbon|null $endDate
  * @property bool|null $formSettingsFromSalesChannel
  * @property float|null $headerDiscount
  * @property float|null $headerSurcharge
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property string|null $nonStandardTaxId
  * @property string|null $note
  * @property Carbon|null $orderDate
  * @property float|null $orderQuantity
  * @property string|null $paymentMethodId
  * @property string|null $recipientCountryCode
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordComment
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property string|null $recordOpening
- * @property array|null $reductionAdditionItems
- * @property array|null $releases
+ * @property list<ReductionAdditionItem>|null $reductionAdditionItems
+ * @property list<Releases>|null $releases
  * @property float|null $residualQuantity
  * @property string|null $responsibleUserId
  * @property string|null $senderCountryCode
@@ -46,7 +52,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $shipmentMethodId
  * @property Carbon|null $startDate
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<BlanketPurchaseOrderStatusHistory>|null $statusHistory
  * @property string|null $supplierBlanketPurchaseOrderNumber
  * @property string|null $supplierId
  * @property string|null $supplierQuotationNumber
@@ -59,6 +65,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BlanketPurchaseOrder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'invoiceAddress' => RecordAddress::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'reductionAdditionItems' => ReductionAdditionItem::class,
+        'releases' => Releases::class,
+        'statusHistory' => BlanketPurchaseOrderStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

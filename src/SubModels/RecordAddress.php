@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $city
  * @property string|null $company
@@ -22,6 +24,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $titleId
  * @property string|null $zipcode
  */
-class RecordAddress
-{
-}
+class RecordAddress extends SubModel {}

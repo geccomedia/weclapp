@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,11 +21,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $parentCommentId
  * @property bool|null $privateComment
  * @property bool|null $publicComment
- * @property array|null $recipientUsers
+ * @property list<OnlyId>|null $recipientUsers
  * @property bool|null $solution
  */
 class Comment extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'recipientUsers' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

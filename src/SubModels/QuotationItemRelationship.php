@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $acceptedQuantity
  * @property string|null $contractItemId
@@ -10,6 +12,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $salesInvoiceItemId
  * @property string|null $salesOrderItemId
  */
-class QuotationItemRelationship
-{
-}
+class QuotationItemRelationship extends SubModel {}

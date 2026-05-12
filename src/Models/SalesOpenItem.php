@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\PaymentApplication;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,11 +16,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool|null $cleared
  * @property string|null $openItemNumber
  * @property string|null $openItemType
- * @property array|null $paymentApplications
+ * @property list<PaymentApplication>|null $paymentApplications
  * @property string|null $salesInvoiceId
  */
 class SalesOpenItem extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'paymentApplications' => PaymentApplication::class,
+    ];
+
     /**
      * @return BelongsTo
      */

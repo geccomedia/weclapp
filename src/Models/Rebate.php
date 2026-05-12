@@ -4,10 +4,11 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property array|null $articleCategories
+ * @property list<OnlyId>|null $articleCategories
  * @property string|null $customerId
  * @property string|null $description
  * @property Carbon|null $endDate
@@ -18,6 +19,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Rebate extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'articleCategories' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

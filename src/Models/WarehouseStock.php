@@ -3,6 +3,8 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\PackagingUnit;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -19,14 +21,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $batchNumberId
  * @property string|null $inboundDate
  * @property string|null $internalTransportReferenceId
- * @property array|null $packagingUnits
- * @property array|null $picks
+ * @property list<PackagingUnit>|null $packagingUnits
+ * @property list<OnlyId>|null $picks
  * @property string|null $salesOrderItemId
- * @property array|null $serialNumbers
+ * @property list<OnlyId>|null $serialNumbers
  * @property string|null $storagePlaceId
  */
 class WarehouseStock extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'packagingUnits' => PackagingUnit::class,
+        'picks' => OnlyId::class,
+        'serialNumbers' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

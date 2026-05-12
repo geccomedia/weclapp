@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\DocumentVersion;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,10 +21,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $documentType
  * @property string|null $mediaType
  * @property string|null $userId
- * @property array|null $versions
+ * @property list<DocumentVersion>|null $versions
  */
 class Document extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'versions' => DocumentVersion::class,
+    ];
+
     /**
      * @return BelongsTo
      */

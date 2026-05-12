@@ -4,6 +4,16 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EcommerceOrder;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\ProjectMembers;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\SalesOrderItem;
+use Geccomedia\Weclapp\SubModels\SalesOrderPayment;
+use Geccomedia\Weclapp\SubModels\SalesOrderShippingCostItem;
+use Geccomedia\Weclapp\SubModels\SalesOrderStatusHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -35,7 +45,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $deliveryDate
  * @property Carbon|null $pricingDate
  * @property Carbon|null $serviceDate
- * @property array|null $orderItems
+ * @property list<SalesOrderItem>|null $orderItems
  * @property array|null $salesOrderPaymentInfos
  * @property float|null $advancePaymentAmount
  * @property string|null $advancePaymentStatus
@@ -43,27 +53,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $cashAccountId
  * @property string|null $commercialLanguage
  * @property float|null $commission
- * @property array|null $commissionSalesPartners
+ * @property list<CommissionSalesPartner>|null $commissionSalesPartners
  * @property string|null $creatorId
  * @property string|null $currencyConversionDate
  * @property bool|null $currencyConversionLocked
  * @property float|null $currencyConversionRate
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $customerHabitualExporterLetterOfIntentId
  * @property string|null $defaultShippingCarrierId
  * @property string|null $defaultShippingReturnCarrierId
- * @property array|null $deliveryAddress
- * @property array|null $deliveryEmailAddresses
+ * @property RecordAddress|null $deliveryAddress
+ * @property EmailAddresses|null $deliveryEmailAddresses
  * @property string|null $description
  * @property bool|null $disableRecordEmailingRule
  * @property string|null $dispatchCountryCode
- * @property array|null $ecommerceOrder
+ * @property EcommerceOrder|null $ecommerceOrder
  * @property bool|null $factoring
  * @property string|null $fulfillmentProviderId
  * @property float|null $grossAmountInCompanyCurrency
  * @property float|null $headerDiscount
  * @property float|null $headerSurcharge
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property string|null $invoiceRecipientId
  * @property bool|null $invoiced
  * @property float|null $netAmountInCompanyCurrency
@@ -72,26 +82,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $orderNumber
  * @property string|null $orderNumberAtCustomer
  * @property bool|null $paid
- * @property array|null $payments
+ * @property list<SalesOrderPayment>|null $payments
  * @property string|null $plannedDeliveryDate
  * @property string|null $plannedProjectEndDate
  * @property string|null $plannedProjectStartDate
  * @property string|null $plannedShippingDate
  * @property string|null $projectGoals
- * @property array|null $projectMembers
+ * @property list<ProjectMembers>|null $projectMembers
  * @property bool|null $projectModeActive
  * @property string|null $quotationId
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordAsn
  * @property string|null $recordComment
  * @property bool|null $recordCommentInheritance
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property bool|null $recordFreeTextInheritance
  * @property string|null $recordOpening
  * @property bool|null $recordOpeningInheritance
- * @property array|null $salesInvoiceEmailAddresses
+ * @property EmailAddresses|null $salesInvoiceEmailAddresses
  * @property string|null $salesOrderPaymentType
  * @property bool|null $sentToRecipient
  * @property string|null $sepaDirectDebitMandateId
@@ -99,14 +109,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $servicePeriodTo
  * @property bool|null $servicesFinished
  * @property bool|null $shipped
- * @property array|null $shippingCostItems
+ * @property list<SalesOrderShippingCostItem>|null $shippingCostItems
  * @property int|null $shippingLabelsCount
- * @property array|null $statusHistory
+ * @property list<SalesOrderStatusHistory>|null $statusHistory
  * @property array|null $tags
  * @property bool|null $template
  */
 class SalesOrder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'commissionSalesPartners' => CommissionSalesPartner::class,
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'deliveryEmailAddresses' => EmailAddresses::class,
+        'ecommerceOrder' => EcommerceOrder::class,
+        'invoiceAddress' => RecordAddress::class,
+        'orderItems' => SalesOrderItem::class,
+        'payments' => SalesOrderPayment::class,
+        'projectMembers' => ProjectMembers::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'salesInvoiceEmailAddresses' => EmailAddresses::class,
+        'shippingCostItems' => SalesOrderShippingCostItem::class,
+        'statusHistory' => SalesOrderStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -27,6 +29,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $weight
  * @property int|null $width
  */
-class Parcel
-{
-}
+class Parcel extends SubModel {}

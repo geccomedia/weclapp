@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -33,6 +35,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $title
  * @property string|null $unitId
  */
-class IncomingGoodsItem
-{
-}
+class IncomingGoodsItem extends SubModel {}

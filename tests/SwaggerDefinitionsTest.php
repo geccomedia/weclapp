@@ -137,6 +137,8 @@ use Geccomedia\Weclapp\SubModels\AcceptQuotationItem;
 use Geccomedia\Weclapp\SubModels\AccountingTransactionDetail;
 use Geccomedia\Weclapp\SubModels\Address;
 use Geccomedia\Weclapp\SubModels\AggregatePackagingUnit;
+use Geccomedia\Weclapp\SubModels\AggregateStock;
+use Geccomedia\Weclapp\SubModels\Amount;
 use Geccomedia\Weclapp\SubModels\ApiProblem;
 use Geccomedia\Weclapp\SubModels\ArticleAlternativeQuantity;
 use Geccomedia\Weclapp\SubModels\ArticleCalculationPrice;
@@ -144,6 +146,7 @@ use Geccomedia\Weclapp\SubModels\ArticleImage;
 use Geccomedia\Weclapp\SubModels\ArticleItemGroupItem;
 use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutArticleReference;
 use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutSalesChannel;
+use Geccomedia\Weclapp\SubModels\BatchBooking;
 use Geccomedia\Weclapp\SubModels\BatchBookingRecord;
 use Geccomedia\Weclapp\SubModels\BatchSerialNumber;
 use Geccomedia\Weclapp\SubModels\BillOfMaterial;
@@ -159,25 +162,37 @@ use Geccomedia\Weclapp\SubModels\ContractAdditionalAddress;
 use Geccomedia\Weclapp\SubModels\ContractCostItem;
 use Geccomedia\Weclapp\SubModels\ContractItem;
 use Geccomedia\Weclapp\SubModels\CostCenterWithDistributionPercentage;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionConditions;
 use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionListValue;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionOrder;
 use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionPermission;
 use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionPropertyCondition;
 use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionTranslation;
 use Geccomedia\Weclapp\SubModels\CustomerSpecificArticleAttributes;
+use Geccomedia\Weclapp\SubModels\DemoTestSystemInfo;
 use Geccomedia\Weclapp\SubModels\DocumentVersion;
 use Geccomedia\Weclapp\SubModels\DropshippingDeliveryNoteFormTextBlockData;
+use Geccomedia\Weclapp\SubModels\DropshippingShipmentParameters;
+use Geccomedia\Weclapp\SubModels\Duration;
 use Geccomedia\Weclapp\SubModels\EcommerceOrder;
 use Geccomedia\Weclapp\SubModels\EmailAddresses;
 use Geccomedia\Weclapp\SubModels\EntityReference;
+use Geccomedia\Weclapp\SubModels\ExistingReservation;
+use Geccomedia\Weclapp\SubModels\FastProductionBookingResult;
+use Geccomedia\Weclapp\SubModels\IncomingBooking;
 use Geccomedia\Weclapp\SubModels\IncomingGoodsItem;
 use Geccomedia\Weclapp\SubModels\InventorySerialNumber;
 use Geccomedia\Weclapp\SubModels\InventoryStatusHistory;
+use Geccomedia\Weclapp\SubModels\ItemAvailability;
 use Geccomedia\Weclapp\SubModels\ItemPick;
 use Geccomedia\Weclapp\SubModels\JobProgress;
+use Geccomedia\Weclapp\SubModels\JobResult;
+use Geccomedia\Weclapp\SubModels\License;
 use Geccomedia\Weclapp\SubModels\MinimalStoragePlace;
 use Geccomedia\Weclapp\SubModels\NestedStoragePlace;
 use Geccomedia\Weclapp\SubModels\OnlineAccount;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Geccomedia\Weclapp\SubModels\PackagingUnit;
 use Geccomedia\Weclapp\SubModels\Parcel;
 use Geccomedia\Weclapp\SubModels\PartyBankAccount;
@@ -187,12 +202,16 @@ use Geccomedia\Weclapp\SubModels\PaymentApplication;
 use Geccomedia\Weclapp\SubModels\PerformanceRecordItem;
 use Geccomedia\Weclapp\SubModels\PerformanceRecordStatusHistory;
 use Geccomedia\Weclapp\SubModels\Period;
+use Geccomedia\Weclapp\SubModels\PriceData;
 use Geccomedia\Weclapp\SubModels\PriceDataReductionAdditionItem;
+use Geccomedia\Weclapp\SubModels\Problem;
+use Geccomedia\Weclapp\SubModels\ProcessPurchaseOrderItem;
 use Geccomedia\Weclapp\SubModels\ProductionOrderItem;
 use Geccomedia\Weclapp\SubModels\ProductionOrderStatusHistory;
 use Geccomedia\Weclapp\SubModels\ProductionOrderWorkItem;
 use Geccomedia\Weclapp\SubModels\ProductionWorkScheduleItem;
 use Geccomedia\Weclapp\SubModels\ProjectMembers;
+use Geccomedia\Weclapp\SubModels\PropertyTranslation;
 use Geccomedia\Weclapp\SubModels\PropertyTranslationValue;
 use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItem;
 use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItemRelationship;
@@ -203,6 +222,7 @@ use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestItem;
 use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestItemScaleValue;
 use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOffer;
 use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOfferItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOfferItemInformation;
 use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOfferItemScaleValue;
 use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestStatusHistory;
 use Geccomedia\Weclapp\SubModels\PurchaseOrderShippingCostItem;
@@ -221,6 +241,7 @@ use Geccomedia\Weclapp\SubModels\ReductionAdditionItem;
 use Geccomedia\Weclapp\SubModels\Releases;
 use Geccomedia\Weclapp\SubModels\ReminderRecurringEvent;
 use Geccomedia\Weclapp\SubModels\SalesBillOfMaterialArticleItem;
+use Geccomedia\Weclapp\SubModels\SalesChannelUsage;
 use Geccomedia\Weclapp\SubModels\SalesInvoiceItem;
 use Geccomedia\Weclapp\SubModels\SalesInvoiceItemRelationship;
 use Geccomedia\Weclapp\SubModels\SalesInvoiceShippingCostItem;
@@ -235,20 +256,25 @@ use Geccomedia\Weclapp\SubModels\ServiceQuotaStatusHistory;
 use Geccomedia\Weclapp\SubModels\ShipmentItem;
 use Geccomedia\Weclapp\SubModels\ShipmentStatus;
 use Geccomedia\Weclapp\SubModels\StoragePlaceTypeSettings;
+use Geccomedia\Weclapp\SubModels\SuccessResponse;
 use Geccomedia\Weclapp\SubModels\SupplySource;
 use Geccomedia\Weclapp\SubModels\TaskAssignee;
+use Geccomedia\Weclapp\SubModels\TaskBillingData;
 use Geccomedia\Weclapp\SubModels\TaskMailAccount;
 use Geccomedia\Weclapp\SubModels\TaskTemplateAssignee;
 use Geccomedia\Weclapp\SubModels\TermOfPaymentCondition;
 use Geccomedia\Weclapp\SubModels\TicketPoolingGroupMember;
 use Geccomedia\Weclapp\SubModels\TicketServiceLevelAgreementTarget;
 use Geccomedia\Weclapp\SubModels\TranslationValue;
-use Geccomedia\Weclapp\SubModels\TransportPick;
 use Geccomedia\Weclapp\SubModels\TransportationOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\TransportPick;
+use Geccomedia\Weclapp\SubModels\UserMfaDevice;
 use Geccomedia\Weclapp\SubModels\ValidationError;
 use Geccomedia\Weclapp\SubModels\ValidationErrorCodeInfo;
+use Geccomedia\Weclapp\SubModels\ValidationErrorCodes;
 use Geccomedia\Weclapp\SubModels\VariantArticleAttributeOption;
 use Geccomedia\Weclapp\SubModels\VariantArticleVariantWithoutReference;
+use Geccomedia\Weclapp\SubModels\WarehouseQuantity;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -425,6 +451,7 @@ class SwaggerDefinitionsTest extends TestCase
         'accountingTransactionDetail' => AccountingTransactionDetail::class,
         'address' => Address::class,
         'aggregatePackagingUnit' => AggregatePackagingUnit::class,
+        'aggregateStock' => AggregateStock::class,
         'apiProblem' => ApiProblem::class,
         'articleAlternativeQuantity' => ArticleAlternativeQuantity::class,
         'articleCalculationPrice' => ArticleCalculationPrice::class,
@@ -537,10 +564,38 @@ class SwaggerDefinitionsTest extends TestCase
         'validationErrorCodeInfo' => ValidationErrorCodeInfo::class,
         'variantArticleAttributeOption' => VariantArticleAttributeOption::class,
         'variantArticleVariantWithoutReference' => VariantArticleVariantWithoutReference::class,
+        'amount' => Amount::class,
+        'batchBooking' => BatchBooking::class,
+        'customAttribute' => CustomAttribute::class,
+        'customAttributeDefinitionOrder' => CustomAttributeDefinitionOrder::class,
+        'demoTestSystemInfo' => DemoTestSystemInfo::class,
+        'dropshippingShipmentParameters' => DropshippingShipmentParameters::class,
+        'duration' => Duration::class,
+        'existingReservation' => ExistingReservation::class,
+        'fastProductionBookingResult' => FastProductionBookingResult::class,
+        'incomingBooking' => IncomingBooking::class,
+        'itemAvailability' => ItemAvailability::class,
+        'jobResult' => JobResult::class,
+        'license' => License::class,
+        'onlyId' => OnlyId::class,
+        'priceData' => PriceData::class,
+        'problem' => Problem::class,
+        'processPurchaseOrderItem' => ProcessPurchaseOrderItem::class,
+        'propertyTranslation' => PropertyTranslation::class,
+        'purchaseOrderRequestOfferItemInformation' => PurchaseOrderRequestOfferItemInformation::class,
+        'salesChannelUsage' => SalesChannelUsage::class,
+        'successResponse' => SuccessResponse::class,
+        'taskBillingData' => TaskBillingData::class,
+        'userMfaDevice' => UserMfaDevice::class,
+        'validationErrorCodes' => ValidationErrorCodes::class,
+        'warehouseQuantity' => WarehouseQuantity::class,
     ];
 
     /** @var array<string, list<string>>|null Cached definitions map: definitionName -> propertyNames */
     private static ?array $definitions = null;
+
+    /** @var array<string, bool>|null Cached set of definition names referenced directly in swagger paths */
+    private static ?array $pathRefs = null;
 
     // -------------------------------------------------------------------------
     // Helpers
@@ -567,7 +622,29 @@ class SwaggerDefinitionsTest extends TestCase
             self::$definitions[$name] = array_keys($definition['properties'] ?? []);
         }
 
+        // Also cache path refs from the same document to avoid a second HTTP request.
+        self::$pathRefs = [];
+        preg_match_all('/#\/definitions\/(\w+)/', json_encode($swagger['paths']), $m);
+        foreach ($m[1] as $ref) {
+            self::$pathRefs[$ref] = true;
+        }
+
         return self::$definitions;
+    }
+
+    /**
+     * Returns the set of definition names referenced directly in swagger paths.
+     * Populated as a side-effect of calling definitions().
+     *
+     * @return array<string, bool>
+     */
+    private static function pathRefs(): array
+    {
+        if (self::$pathRefs === null) {
+            self::definitions();
+        }
+
+        return self::$pathRefs ?? [];
     }
 
     /**
@@ -658,17 +735,22 @@ class SwaggerDefinitionsTest extends TestCase
         }
 
         $coveredDefinitions = array_keys(self::DEFINITION_TO_MODELS);
+        $uncovered = [];
 
         foreach (array_keys($definitions) as $definitionName) {
             if (isset($modelTables[$definitionName]) && ! in_array($definitionName, $coveredDefinitions, true)) {
-                $this->fail(
-                    "Swagger definition '{$definitionName}' has a matching model "
-                    ."({$modelTables[$definitionName]}) but is not listed in DEFINITION_TO_MODELS."
-                );
+                $uncovered[] = "{$definitionName} ({$modelTables[$definitionName]})";
             }
         }
 
-        $this->addToAssertionCount(1);
+        $this->assertEmpty(
+            $uncovered,
+            sprintf(
+                "%d swagger definition(s) have a matching model but are not listed in DEFINITION_TO_MODELS:\n  - %s",
+                count($uncovered),
+                implode("\n  - ", $uncovered),
+            )
+        );
     }
 
     /**
@@ -678,19 +760,11 @@ class SwaggerDefinitionsTest extends TestCase
     public function test_all_sub_definitions_are_covered(): void
     {
         $definitions = self::definitions();
-
-        // Compute sub-only definitions: present in swagger but not referenced in paths.
-        $client = new Client(['timeout' => 30]);
-        $response = $client->get('https://www.weclapp.com/api/swagger.json');
-        $swagger = json_decode((string) $response->getBody(), true, flags: JSON_THROW_ON_ERROR);
-
-        $pathRefs = [];
-        preg_match_all('/#\/definitions\/(\w+)/', json_encode($swagger['paths']), $m);
-        foreach ($m[1] as $ref) {
-            $pathRefs[$ref] = true;
-        }
+        $pathRefs = self::pathRefs();
 
         $coveredSubDefs = array_keys(self::SUB_DEFINITION_TO_CLASS);
+        $coveredTopDefs = array_keys(self::DEFINITION_TO_MODELS);
+        $uncovered = [];
 
         foreach (array_keys($definitions) as $definitionName) {
             // Only check definitions that are NOT reachable via paths.
@@ -698,14 +772,24 @@ class SwaggerDefinitionsTest extends TestCase
                 continue;
             }
 
+            // Skip if already covered as a top-level model definition.
+            if (in_array($definitionName, $coveredTopDefs, true)) {
+                continue;
+            }
+
             if (! in_array($definitionName, $coveredSubDefs, true)) {
-                $this->fail(
-                    "Swagger sub-definition '{$definitionName}' is not listed in SUB_DEFINITION_TO_CLASS."
-                );
+                $uncovered[] = $definitionName;
             }
         }
 
-        $this->addToAssertionCount(1);
+        $this->assertEmpty(
+            $uncovered,
+            sprintf(
+                "%d swagger sub-definition(s) are not listed in SUB_DEFINITION_TO_CLASS:\n  - %s",
+                count($uncovered),
+                implode("\n  - ", $uncovered),
+            )
+        );
     }
 
     /**

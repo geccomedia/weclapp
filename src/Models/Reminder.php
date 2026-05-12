@@ -4,16 +4,18 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\ReminderRecurringEvent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property array|null $additionalRecipients
+ * @property list<OnlyId>|null $additionalRecipients
  * @property bool|null $ccMail
  * @property string|null $entityId
  * @property string|null $entityName
  * @property Carbon|null $lastReminderSentDate
  * @property string|null $message
- * @property array|null $recurringEvent
+ * @property ReminderRecurringEvent|null $recurringEvent
  * @property Carbon|null $reminderDate
  * @property string|null $sendType
  * @property string|null $subject
@@ -21,6 +23,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Reminder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'additionalRecipients' => OnlyId::class,
+        'recurringEvent' => ReminderRecurringEvent::class,
+    ];
+
     /**
      * @return BelongsTo
      */

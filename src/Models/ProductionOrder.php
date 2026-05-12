@@ -4,6 +4,10 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\ProductionOrderItem;
+use Geccomedia\Weclapp\SubModels\ProductionOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\ProductionOrderWorkItem;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,24 +24,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $producedQuantity
  * @property Carbon|null $plannedStartDate
  * @property Carbon|null $plannedEndDate
- * @property array|null $productionOrderItems
+ * @property list<ProductionOrderItem>|null $productionOrderItems
  * @property string|null $actualEndDate
  * @property float|null $actualQuantity
  * @property string|null $actualStartDate
  * @property string|null $assemblyStoragePlaceId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $pickingInstructions
  * @property bool|null $picksComplete
  * @property string|null $purchaseOrderItemId
  * @property string|null $salesOrderItemId
- * @property array|null $statusHistory
+ * @property list<ProductionOrderStatusHistory>|null $statusHistory
  * @property string|null $targetEndDate
  * @property float|null $targetQuantity
  * @property string|null $targetStartDate
- * @property array|null $workItems
+ * @property list<ProductionOrderWorkItem>|null $workItems
  */
 class ProductionOrder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'productionOrderItems' => ProductionOrderItem::class,
+        'statusHistory' => ProductionOrderStatusHistory::class,
+        'workItems' => ProductionOrderWorkItem::class,
+    ];
+
     /**
      * @return BelongsTo
      */

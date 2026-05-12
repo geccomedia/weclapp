@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property int|null $failedCreateCount
  * @property int|null $failedUpdateCount
@@ -10,6 +12,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $succeededUpdateCount
  * @property int|null $totalCount
  */
-class JobProgress
-{
-}
+class JobProgress extends SubModel {}

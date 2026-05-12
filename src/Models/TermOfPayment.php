@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\TermOfPaymentCondition;
 
 /**
  * @property string|null $name
@@ -13,7 +14,7 @@ use Geccomedia\Weclapp\Model;
  * @property int|null $discountDays2
  * @property float|null $discountPercentage2
  * @property bool|null $active
- * @property array|null $conditions
+ * @property list<TermOfPaymentCondition>|null $conditions
  * @property int|null $datevTermOfPaymentNumber
  * @property string|null $dueDateOption
  * @property int|null $fixedDay

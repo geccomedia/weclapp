@@ -4,10 +4,18 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\ContractAdditionalAddress;
+use Geccomedia\Weclapp\SubModels\ContractCostItem;
+use Geccomedia\Weclapp\SubModels\ContractItem;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property array|null $additionalAddresses
+ * @property list<ContractAdditionalAddress>|null $additionalAddresses
  * @property string|null $authorizationUnitId
  * @property bool|null $automaticExtension
  * @property string|null $billUntil
@@ -20,18 +28,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $cancellationPeriodUnit
  * @property string|null $commercialLanguage
  * @property float|null $commission
- * @property array|null $commissionSalesPartners
- * @property array|null $contractCostItems
+ * @property list<CommissionSalesPartner>|null $commissionSalesPartners
+ * @property list<ContractCostItem>|null $contractCostItems
  * @property Carbon|null $contractDate
- * @property array|null $contractItems
+ * @property list<ContractItem>|null $contractItems
  * @property string|null $contractNumber
  * @property string|null $contractNumberAtParty
  * @property string|null $contractStatus
- * @property array|null $correspondenceAddress
+ * @property RecordAddress|null $correspondenceAddress
  * @property string|null $creatorId
- * @property array|null $customAttributes
- * @property array|null $deliveryAddress
- * @property array|null $deliveryEmailAddresses
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property RecordAddress|null $deliveryAddress
+ * @property EmailAddresses|null $deliveryEmailAddresses
  * @property string|null $depositLocationId
  * @property string|null $description
  * @property string|null $desiredSalesOrderStatus
@@ -44,7 +52,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $extensionUnit
  * @property bool|null $factoring
  * @property string|null $formVariantId
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property string|null $invoiceRecipientId
  * @property int|null $latestCancellationWarningQuantity
  * @property string|null $latestCancellationWarningUnit
@@ -58,10 +66,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $partyId
  * @property string|null $paymentMethodId
  * @property Carbon|null $pricingDate
- * @property array|null $purchaseEmailAddresses
+ * @property EmailAddresses|null $purchaseEmailAddresses
  * @property string|null $recordComment
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property string|null $recordOpening
  * @property Carbon|null $reminderDate
@@ -69,8 +77,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $reminderType
  * @property string|null $responsibleUserId
  * @property string|null $salesChannel
- * @property array|null $salesInvoiceEmailAddresses
- * @property array|null $salesOrderEmailAddresses
+ * @property EmailAddresses|null $salesInvoiceEmailAddresses
+ * @property EmailAddresses|null $salesOrderEmailAddresses
  * @property bool|null $sentToRecipient
  * @property Carbon|null $startDate
  * @property array|null $tags
@@ -79,11 +87,31 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $termOfPaymentId
  * @property string|null $terminationReasonId
  * @property string|null $ticketServiceLevelAgreementId
- * @property array|null $types
+ * @property list<OnlyId>|null $types
  * @property bool|null $unlimited
  */
 class Contract extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'additionalAddresses' => ContractAdditionalAddress::class,
+        'commissionSalesPartners' => CommissionSalesPartner::class,
+        'contractCostItems' => ContractCostItem::class,
+        'contractItems' => ContractItem::class,
+        'correspondenceAddress' => RecordAddress::class,
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'deliveryEmailAddresses' => EmailAddresses::class,
+        'invoiceAddress' => RecordAddress::class,
+        'purchaseEmailAddresses' => EmailAddresses::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'salesInvoiceEmailAddresses' => EmailAddresses::class,
+        'salesOrderEmailAddresses' => EmailAddresses::class,
+        'types' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

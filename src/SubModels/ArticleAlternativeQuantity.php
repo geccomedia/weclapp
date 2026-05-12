@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -12,6 +14,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $targetStockQuantity
  * @property string|null $warehouseId
  */
-class ArticleAlternativeQuantity
-{
-}
+class ArticleAlternativeQuantity extends SubModel {}

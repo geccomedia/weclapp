@@ -4,10 +4,11 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\Period;
 
 /**
  * @property string|null $name
- * @property array|null $periods
+ * @property list<Period>|null $periods
  * @property string|null $status
  * @property Carbon|null $validFrom
  * @property Carbon|null $validTo

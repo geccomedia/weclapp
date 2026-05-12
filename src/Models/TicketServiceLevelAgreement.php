@@ -3,17 +3,19 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\TicketServiceLevelAgreementTarget;
 
 /**
  * @property bool|null $active
- * @property array|null $categories
- * @property array|null $customers
+ * @property list<OnlyId>|null $categories
+ * @property list<OnlyId>|null $customers
  * @property float|null $degreeOfPerformance
  * @property bool|null $includeNoTicketType
  * @property string|null $name
  * @property string|null $ratingId
- * @property array|null $targets
- * @property array|null $types
+ * @property list<TicketServiceLevelAgreementTarget>|null $targets
+ * @property list<OnlyId>|null $types
  * @property bool|null $visible
  */
 class TicketServiceLevelAgreement extends Model {}

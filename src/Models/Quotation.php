@@ -4,6 +4,14 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\QuotationItem;
+use Geccomedia\Weclapp\SubModels\QuotationShippingCostItem;
+use Geccomedia\Weclapp\SubModels\QuotationStatusHistory;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\SalesStageHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -22,19 +30,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $netAmount
  * @property Carbon|null $quotationDate
  * @property Carbon|null $validUntilDate
- * @property array|null $quotationItems
+ * @property list<QuotationItem>|null $quotationItems
  * @property bool|null $activeVersion
  * @property string|null $commercialLanguage
  * @property float|null $commission
- * @property array|null $commissionSalesPartners
+ * @property list<CommissionSalesPartner>|null $commissionSalesPartners
  * @property string|null $creatorId
  * @property string|null $currencyConversionDate
  * @property bool|null $currencyConversionLocked
  * @property float|null $currencyConversionRate
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $defaultShippingCarrierId
- * @property array|null $deliveryAddress
- * @property array|null $deliveryEmailAddresses
+ * @property RecordAddress|null $deliveryAddress
+ * @property EmailAddresses|null $deliveryEmailAddresses
  * @property string|null $description
  * @property bool|null $disableRecordEmailingRule
  * @property string|null $dispatchCountryCode
@@ -43,7 +51,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $grossAmountInCompanyCurrency
  * @property float|null $headerDiscount
  * @property float|null $headerSurcharge
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property string|null $invoiceRecipientId
  * @property string|null $mergedToQuotationId
  * @property float|null $netAmountInCompanyCurrency
@@ -55,28 +63,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $publicLink
  * @property string|null $quotationType
  * @property int|null $quotationVersion
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordComment
  * @property bool|null $recordCommentInheritance
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property bool|null $recordFreeTextInheritance
  * @property string|null $recordOpening
  * @property bool|null $recordOpeningInheritance
  * @property string|null $rejectionReason
  * @property string|null $requestDate
- * @property array|null $salesInvoiceEmailAddresses
- * @property array|null $salesOrderEmailAddresses
+ * @property EmailAddresses|null $salesInvoiceEmailAddresses
+ * @property EmailAddresses|null $salesOrderEmailAddresses
  * @property float|null $salesProbability
- * @property array|null $salesStageHistory
+ * @property list<SalesStageHistory>|null $salesStageHistory
  * @property string|null $salesStageId
  * @property bool|null $sentToRecipient
  * @property string|null $servicePeriodFrom
  * @property string|null $servicePeriodTo
  * @property string|null $shipmentMethodId
- * @property array|null $shippingCostItems
- * @property array|null $statusHistory
+ * @property list<QuotationShippingCostItem>|null $shippingCostItems
+ * @property list<QuotationStatusHistory>|null $statusHistory
  * @property array|null $tags
  * @property bool|null $template
  * @property string|null $validFrom
@@ -85,6 +93,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Quotation extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'commissionSalesPartners' => CommissionSalesPartner::class,
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'deliveryEmailAddresses' => EmailAddresses::class,
+        'invoiceAddress' => RecordAddress::class,
+        'quotationItems' => QuotationItem::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'salesInvoiceEmailAddresses' => EmailAddresses::class,
+        'salesOrderEmailAddresses' => EmailAddresses::class,
+        'salesStageHistory' => SalesStageHistory::class,
+        'shippingCostItems' => QuotationShippingCostItem::class,
+        'statusHistory' => QuotationStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

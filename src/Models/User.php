@@ -3,6 +3,8 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 
 /**
  * @property string|null $username
@@ -16,13 +18,13 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userType
  * @property bool|null $active
  * @property string|null $birthDate
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $faxNumber
  * @property string|null $imageId
  * @property array|null $licenses
  * @property string|null $mobilePhoneNumber
  * @property string|null $phoneNumber
  * @property string|null $title
- * @property array|null $userRoles
+ * @property list<OnlyId>|null $userRoles
  */
 class User extends Model {}

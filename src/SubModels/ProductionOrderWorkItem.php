@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -20,6 +22,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $timeType
  * @property string|null $unitTime
  */
-class ProductionOrderWorkItem
-{
-}
+class ProductionOrderWorkItem extends SubModel {}

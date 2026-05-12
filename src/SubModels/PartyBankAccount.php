@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -14,6 +16,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $partyId
  * @property bool|null $primary
  */
-class PartyBankAccount
-{
-}
+class PartyBankAccount extends SubModel {}

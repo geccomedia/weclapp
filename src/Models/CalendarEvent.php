@@ -4,11 +4,14 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CalendarEventAttendee;
+use Geccomedia\Weclapp\SubModels\EntityReference;
+use Geccomedia\Weclapp\SubModels\RecurringEvent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $allDayEvent
- * @property array|null $attendees
+ * @property list<CalendarEventAttendee>|null $attendees
  * @property string|null $calendarId
  * @property string|null $concerningId
  * @property string|null $contactId
@@ -17,8 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $endDate
  * @property string|null $location
  * @property bool|null $privateEvent
- * @property array|null $recurringEvent
- * @property array|null $references
+ * @property RecurringEvent|null $recurringEvent
+ * @property list<EntityReference>|null $references
  * @property string|null $reminderSendType
  * @property int|null $reminderTime
  * @property string|null $showAs
@@ -28,6 +31,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class CalendarEvent extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'attendees' => CalendarEventAttendee::class,
+        'recurringEvent' => RecurringEvent::class,
+        'references' => EntityReference::class,
+    ];
+
     /**
      * @return BelongsTo
      */

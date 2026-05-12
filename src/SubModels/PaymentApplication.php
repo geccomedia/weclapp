@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -16,6 +18,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $lastModifiedDate
  * @property string|null $openItemClearingId
  */
-class PaymentApplication
-{
-}
+class PaymentApplication extends SubModel {}

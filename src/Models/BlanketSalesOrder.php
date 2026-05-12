@@ -4,6 +4,13 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\BlanketSalesOrderItem;
+use Geccomedia\Weclapp\SubModels\BlanketSalesOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\ReductionAdditionItem;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -11,22 +18,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $blanketSalesOrderNumber
  * @property string|null $calculationMode
  * @property string|null $commercialLanguage
- * @property array|null $commissionSalesPartners
- * @property array|null $customAttributes
+ * @property list<CommissionSalesPartner>|null $commissionSalesPartners
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $customerId
  * @property string|null $customerReference
  * @property float|null $defaultHeaderDiscount
  * @property float|null $defaultHeaderSurcharge
  * @property string|null $defaultShippingCarrierId
- * @property array|null $deliveryAddress
- * @property array|null $deliveryEmailAddresses
+ * @property RecordAddress|null $deliveryAddress
+ * @property EmailAddresses|null $deliveryEmailAddresses
  * @property string|null $description
  * @property float|null $discountPercentage
  * @property string|null $distributionChannel
  * @property Carbon|null $endDate
  * @property bool|null $factoring
  * @property string|null $fulfillmentProviderId
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property string|null $invoiceRecipientId
  * @property bool|null $manualUnitPrice
  * @property string|null $nonStandardTaxId
@@ -36,18 +43,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $orderQuantity
  * @property string|null $paymentMethodId
  * @property string|null $recipientCountryCode
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
- * @property array|null $reductionAdditionItems
- * @property array|null $releases
+ * @property EmailAddresses|null $recordEmailAddresses
+ * @property list<ReductionAdditionItem>|null $reductionAdditionItems
+ * @property list<BlanketSalesOrderItem>|null $releases
  * @property string|null $responsibleUserId
- * @property array|null $salesInvoiceEmailAddresses
+ * @property EmailAddresses|null $salesInvoiceEmailAddresses
  * @property bool|null $sentToRecipient
  * @property string|null $shipmentMethodId
  * @property Carbon|null $startDate
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<BlanketSalesOrderStatusHistory>|null $statusHistory
  * @property array|null $tags
  * @property string|null $taxId
  * @property string|null $termOfPaymentId
@@ -56,6 +63,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BlanketSalesOrder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'commissionSalesPartners' => CommissionSalesPartner::class,
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'deliveryEmailAddresses' => EmailAddresses::class,
+        'invoiceAddress' => RecordAddress::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'reductionAdditionItems' => ReductionAdditionItem::class,
+        'releases' => BlanketSalesOrderItem::class,
+        'salesInvoiceEmailAddresses' => EmailAddresses::class,
+        'statusHistory' => BlanketSalesOrderStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

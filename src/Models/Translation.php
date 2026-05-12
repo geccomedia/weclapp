@@ -3,9 +3,10 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\TranslationValue;
 
 /**
  * @property string|null $key
- * @property array|null $values
+ * @property list<TranslationValue>|null $values
  */
 class Translation extends Model {}

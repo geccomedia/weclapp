@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $businessHoursId
  * @property string|null $commercialLanguage
  * @property string|null $distributionChannel
- * @property array|null $parties
+ * @property list<OnlyId>|null $parties
  * @property string|null $responsibleUserId
  * @property string|null $targetStatusId
  * @property string|null $ticketAssigneeType
@@ -23,6 +24,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TicketAssignmentRule extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'parties' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

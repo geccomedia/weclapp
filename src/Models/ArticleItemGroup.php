@@ -3,9 +3,10 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\ArticleItemGroupItem;
 
 /**
- * @property array|null $items
+ * @property list<ArticleItemGroupItem>|null $items
  * @property string|null $name
  */
 class ArticleItemGroup extends Model {}

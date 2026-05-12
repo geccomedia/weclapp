@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property int|null $assignmentTimeQuantity
  * @property string|null $assignmentTimeUnit
@@ -15,6 +17,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $solutionTimeQuantity
  * @property string|null $solutionTimeUnit
  */
-class TicketServiceLevelAgreementTarget
-{
-}
+class TicketServiceLevelAgreementTarget extends SubModel {}

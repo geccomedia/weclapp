@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property int|null $endsOnDate
  * @property int|null $eventInterval
@@ -9,6 +11,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $eventType
  * @property string|null $repeatOn
  */
-class ReminderRecurringEvent
-{
-}
+class ReminderRecurringEvent extends SubModel {}

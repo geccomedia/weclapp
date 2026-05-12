@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $callCategoryId
  * @property string|null $contactId
  * @property string|null $creatorUserId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $description
  * @property Carbon|null $endDate
  * @property string|null $eventCategoryId
@@ -25,6 +26,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class CrmEvent extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+    ];
+
     /**
      * @return BelongsTo
      */

@@ -3,12 +3,14 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\ProductionWorkScheduleItem;
 
 /**
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $description
  * @property string|null $status
- * @property array|null $workScheduleItems
+ * @property list<ProductionWorkScheduleItem>|null $workScheduleItems
  * @property string|null $workScheduleNumber
  */
 class ProductionWorkSchedule extends Model {}

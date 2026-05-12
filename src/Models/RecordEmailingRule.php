@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $mailAccountId
  * @property string|null $name
  * @property array|null $otherRecipients
- * @property array|null $paymentMethods
+ * @property list<OnlyId>|null $paymentMethods
  * @property array|null $performanceRecordInvoicingModes
  * @property string|null $recipientType
  * @property array|null $salesChannels
@@ -29,6 +30,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class RecordEmailingRule extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'paymentMethods' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

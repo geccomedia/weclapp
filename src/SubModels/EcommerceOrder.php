@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $amazonFeedSubmissionId
  * @property string|null $amazonInvoiceUploadSuccess
@@ -10,6 +12,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $ecommerceId
  * @property string|null $externalConnectionId
  */
-class EcommerceOrder
-{
-}
+class EcommerceOrder extends SubModel {}

@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $accountId
  * @property string|null $amount
@@ -10,6 +12,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $description
  * @property string|null $taxId
  */
-class AccountingTransactionDetail
-{
-}
+class AccountingTransactionDetail extends SubModel {}

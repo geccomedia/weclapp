@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $amount
  * @property string|null $creditAccountId
@@ -9,6 +11,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $description
  * @property string|null $taxId
  */
-class BatchBookingRecord
-{
-}
+class BatchBookingRecord extends SubModel {}

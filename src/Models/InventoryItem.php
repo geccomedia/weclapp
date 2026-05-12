@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\InventorySerialNumber;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $expectedQuantity
  * @property Carbon|null $inboundDate
  * @property string|null $inventoryId
- * @property array|null $inventorySerialNumbers
+ * @property list<InventorySerialNumber>|null $inventorySerialNumbers
  * @property string|null $inventoryTransportReferenceId
  * @property bool|null $manualPosition
  * @property string|null $orderItemId
@@ -25,6 +26,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class InventoryItem extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'inventorySerialNumbers' => InventorySerialNumber::class,
+    ];
+
     /**
      * @return BelongsTo
      */

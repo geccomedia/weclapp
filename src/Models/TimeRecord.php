@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool|null $billable
  * @property int|null $billableDurationSeconds
  * @property string|null $billableInvoiceStatus
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $customerId
  * @property string|null $description
  * @property int|null $durationSeconds
@@ -34,6 +35,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TimeRecord extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+    ];
+
     /**
      * @return BelongsTo
      */

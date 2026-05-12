@@ -3,13 +3,14 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CalendarSharingPermissions;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $caldavAccountId
  * @property string|null $calendarColor
  * @property string|null $calendarKey
- * @property array|null $calendarSharingPermissions
+ * @property list<CalendarSharingPermissions>|null $calendarSharingPermissions
  * @property string|null $lastEventsSyncToken
  * @property string|null $mailAccountId
  * @property string|null $name
@@ -19,6 +20,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Calendar extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'calendarSharingPermissions' => CalendarSharingPermissions::class,
+    ];
+
     /**
      * @return BelongsTo
      */

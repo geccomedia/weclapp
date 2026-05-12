@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\ReductionAddition;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,12 +21,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $lastModifiedByUserId
  * @property string|null $priceScaleType
  * @property float|null $priceScaleValue
- * @property array|null $reductionAdditions
+ * @property list<ReductionAddition>|null $reductionAdditions
  * @property string|null $salesChannel
  * @property string|null $startDate
  */
 class ArticlePrice extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'reductionAdditions' => ReductionAddition::class,
+    ];
+
     /**
      * @return BelongsTo
      */

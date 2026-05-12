@@ -4,12 +4,13 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property bool|null $alternative
  * @property string|null $articleId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $productionWorkScheduleId
  * @property Carbon|null $validFrom
  * @property Carbon|null $validTo
@@ -17,15 +18,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProductionWorkScheduleAssignment extends Model
 {
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array<string, string>
+     * @var array<string, class-string|string>
      */
     protected $casts = [
         'createdDate' => 'datetime',
         'lastModifiedDate' => 'datetime',
         'validFrom' => 'datetime',
         'validTo' => 'datetime',
+        'customAttributes' => CustomAttribute::class,
     ];
 
     /**

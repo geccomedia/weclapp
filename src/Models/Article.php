@@ -3,6 +3,17 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\ArticleAlternativeQuantity;
+use Geccomedia\Weclapp\SubModels\ArticleCalculationPrice;
+use Geccomedia\Weclapp\SubModels\ArticleImage;
+use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutArticleReference;
+use Geccomedia\Weclapp\SubModels\BillOfMaterial;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\CustomerSpecificArticleAttributes;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\QuantityConversion;
+use Geccomedia\Weclapp\SubModels\SalesBillOfMaterialArticleItem;
+use Geccomedia\Weclapp\SubModels\SupplySource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -32,17 +43,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool|null $serialNumberRequired
  * @property bool|null $batchNumberRequired
  * @property array|null $articleCategories
- * @property array|null $articlePrices
+ * @property list<ArticlePriceWithoutArticleReference>|null $articlePrices
  * @property array|null $articleSupplySources
  * @property string|null $accountId
  * @property string|null $accountingCodeId
  * @property bool|null $applyCashDiscount
- * @property array|null $articleAlternativeQuantities
- * @property array|null $articleCalculationPrices
+ * @property list<ArticleAlternativeQuantity>|null $articleAlternativeQuantities
+ * @property list<ArticleCalculationPrice>|null $articleCalculationPrices
  * @property string|null $articleCategoryId
  * @property float|null $articleGrossWeight
  * @property float|null $articleHeight
- * @property array|null $articleImages
+ * @property list<ArticleImage>|null $articleImages
  * @property float|null $articleLength
  * @property float|null $articleNetWeight
  * @property float|null $articleWidth
@@ -55,12 +66,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $commissionRate
  * @property string|null $contractBillingCycle
  * @property string|null $contractBillingMode
- * @property array|null $customAttributes
- * @property array|null $customerArticleNumbers
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property list<CustomerSpecificArticleAttributes>|null $customerArticleNumbers
  * @property string|null $customsDescription
  * @property string|null $defaultLoadingEquipmentIdentifierId
  * @property string|null $defaultPriceCalculationType
- * @property array|null $defaultStoragePlaces
+ * @property list<OnlyId>|null $defaultStoragePlaces
  * @property bool|null $defineIndividualTaskTemplates
  * @property string|null $expenseAccountId
  * @property int|null $expirationDays
@@ -83,14 +94,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $procurementLeadDays
  * @property string|null $producerType
  * @property bool|null $productionArticle
- * @property array|null $productionBillOfMaterialItems
+ * @property list<BillOfMaterial>|null $productionBillOfMaterialItems
  * @property string|null $productionConfigurationRule
  * @property string|null $purchaseCostCenterId
- * @property array|null $quantityConversions
+ * @property list<QuantityConversion>|null $quantityConversions
  * @property string|null $ratingId
  * @property string|null $recordItemGroupName
  * @property int|null $safetyStockDays
- * @property array|null $salesBillOfMaterialItems
+ * @property list<SalesBillOfMaterialArticleItem>|null $salesBillOfMaterialItems
  * @property string|null $salesCostCenterId
  * @property string|null $sellByDate
  * @property string|null $sellFromDate
@@ -98,7 +109,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $serviceQuotaQuantity
  * @property bool|null $showOnDeliveryNote
  * @property string|null $statusId
- * @property array|null $supplySources
+ * @property list<SupplySource>|null $supplySources
  * @property string|null $supportUntilDate
  * @property string|null $systemCode
  * @property array|null $tags
@@ -111,6 +122,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Article extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'articleAlternativeQuantities' => ArticleAlternativeQuantity::class,
+        'articleCalculationPrices' => ArticleCalculationPrice::class,
+        'articleImages' => ArticleImage::class,
+        'articlePrices' => ArticlePriceWithoutArticleReference::class,
+        'customAttributes' => CustomAttribute::class,
+        'customerArticleNumbers' => CustomerSpecificArticleAttributes::class,
+        'defaultStoragePlaces' => OnlyId::class,
+        'productionBillOfMaterialItems' => BillOfMaterial::class,
+        'quantityConversions' => QuantityConversion::class,
+        'salesBillOfMaterialItems' => SalesBillOfMaterialArticleItem::class,
+        'supplySources' => SupplySource::class,
+    ];
+
     /**
      * @return BelongsTo
      */

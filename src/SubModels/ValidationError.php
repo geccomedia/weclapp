@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property array|null $allowed
  * @property string|null $detail
@@ -11,6 +13,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $title
  * @property string|null $type
  */
-class ValidationError
-{
-}
+class ValidationError extends SubModel {}

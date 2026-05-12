@@ -4,11 +4,13 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\PurchaseRequisitionStatusHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property Carbon|null $earliestRequiredDate
  * @property string|null $internalShipmentId
  * @property Carbon|null $latestRequiredDate
@@ -22,12 +24,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $requisitionNumber
  * @property string|null $salesOrderItemId
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<PurchaseRequisitionStatusHistory>|null $statusHistory
  * @property string|null $supplierId
  * @property string|null $warehouseId
  */
 class PurchaseRequisition extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'statusHistory' => PurchaseRequisitionStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

@@ -8,9 +8,13 @@ use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\SalesInvoice;
+use Geccomedia\Weclapp\Models\SalesOrder;
 use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\NotSupportedException;
 use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\SubModel;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\SalesOrderItem;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
@@ -532,5 +536,146 @@ class ModelTest extends OrchestraTestCase
         Unit::findMany([1, 2]);
 
         $this->assertEmpty(app(Connection::class)->getQueryLog());
+    }
+
+    // -------------------------------------------------------------------------
+    // SubModel hydration
+    // -------------------------------------------------------------------------
+
+    public function test_sub_model_list_is_hydrated_on_fetch(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": [{"id": "1", "orderItems": [{"articleId": "A1", "quantity": "2", "positionNumber": 10}]}]}'
+            ));
+
+        $order = SalesOrder::find('1');
+
+        // The attribute is hydrated into SubModel instances
+        $this->assertIsArray($order->orderItems);
+        $this->assertCount(1, $order->orderItems);
+        $this->assertInstanceOf(SalesOrderItem::class, $order->orderItems[0]);
+    }
+
+    public function test_sub_model_single_object_is_hydrated_on_fetch(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": [{"id": "1", "recordAddress": {"city": "Berlin", "countryCode": "DE"}}]}'
+            ));
+
+        $order = SalesOrder::find('1');
+
+        $this->assertInstanceOf(RecordAddress::class, $order->recordAddress);
+        $this->assertEquals('Berlin', $order->recordAddress->city);
+        $this->assertEquals('DE', $order->recordAddress->countryCode);
+    }
+
+    public function test_sub_model_null_attribute_stays_null(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": [{"id": "1"}]}'
+            ));
+
+        $order = SalesOrder::find('1');
+
+        $this->assertNull($order->orderItems);
+        $this->assertNull($order->recordAddress);
+    }
+
+    public function test_sub_model_array_access_backwards_compat(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                200,
+                [],
+                '{"result": [{"id": "1", "orderItems": [{"articleId": "A1", "quantity": "2"}]}]}'
+            ));
+
+        $order = SalesOrder::find('1');
+
+        // Old array-access style still works
+        $this->assertEquals('A1', $order->orderItems[0]['articleId']);
+        $this->assertEquals('2', $order->orderItems[0]['quantity']);
+
+        // New object-style also works
+        $this->assertEquals('A1', $order->orderItems[0]->articleId);
+        $this->assertEquals('2', $order->orderItems[0]->quantity);
+    }
+
+    public function test_sub_model_serialises_back_to_plain_arrays_on_save(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->twice()
+            ->andReturn(
+                new Response(200, [], '{"result": [{"id": "1", "orderItems": [{"articleId": "A1", "quantity": "2"}]}]}'),
+                new Response(200, [], '{"result": [{"id": "1"}]}')
+            );
+
+        $order = SalesOrder::find('1');
+
+        // Dirty the model so save() actually fires a PUT.
+        $order->note = 'updated';
+        $order->save();
+
+        // PUT bindings must contain plain arrays, not SubModel objects.
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            if ((string) $event->sql !== 'PUT:salesOrder/id/1') {
+                return false;
+            }
+            $items = $event->bindings['orderItems'] ?? null;
+
+            return is_array($items) && isset($items[0]) && is_array($items[0]);
+        });
+    }
+
+    public function test_sub_model_cast_resolves_correct_class(): void
+    {
+        $cast = SalesOrderItem::castUsing([]);
+        $result = $cast->get(new SalesOrder, 'orderItems', [['articleId' => 'X']], []);
+
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(SalesOrderItem::class, $result[0]);
+        $this->assertInstanceOf(SubModel::class, $result[0]);
+        $this->assertEquals('X', $result[0]->articleId);
+        $this->assertEquals('X', $result[0]['articleId']);
+    }
+
+    public function test_sub_model_set_returns_plain_arrays(): void
+    {
+        $cast = SalesOrderItem::castUsing([]);
+        $item = new SalesOrderItem(['articleId' => 'X', 'quantity' => '1']);
+
+        $result = $cast->set(new SalesOrder, 'orderItems', [$item], []);
+
+        $this->assertIsArray($result);
+        $this->assertIsArray($result[0]);
+        $this->assertEquals('X', $result[0]['articleId']);
     }
 }

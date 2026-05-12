@@ -3,11 +3,13 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\TicketPoolingGroupMember;
 
 /**
  * @property string|null $description
  * @property string|null $name
- * @property array|null $ticketCategories
- * @property array|null $ticketPoolingGroupMembers
+ * @property list<OnlyId>|null $ticketCategories
+ * @property list<TicketPoolingGroupMember>|null $ticketPoolingGroupMembers
  */
 class TicketPoolingGroup extends Model {}

@@ -3,6 +3,9 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\Address;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\MinimalStoragePlace;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -10,22 +13,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $description
  * @property string|null $warehouseType
  * @property bool|null $active
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $defaultConsolidationStoragePlaceId
  * @property string|null $defaultProductionStoragePlaceId
  * @property string|null $defaultReturnsStoragePlaceId
  * @property string|null $defaultStoragePlaceId
- * @property array|null $deliveryAddress
+ * @property Address|null $deliveryAddress
  * @property string|null $directBookingInternalTransportReferenceId
- * @property array|null $invoiceAddress
+ * @property Address|null $invoiceAddress
  * @property string|null $loadingEquipmentStoragePlace
- * @property array|null $primaryAddress
+ * @property Address|null $primaryAddress
  * @property string|null $shortIdentifier
  * @property bool|null $standard
  * @property string|null $transitStoragePlace
  */
 class Warehouse extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => Address::class,
+        'invoiceAddress' => Address::class,
+        'loadingEquipmentStoragePlace' => MinimalStoragePlace::class,
+        'primaryAddress' => Address::class,
+        'transitStoragePlace' => MinimalStoragePlace::class,
+    ];
+
     /**
      * @return BelongsTo
      */

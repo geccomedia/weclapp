@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $articleId
  * @property string|null $articleName
@@ -9,6 +11,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $baseArticleQuantity
  * @property int|null $packagingUnitQuantity
  */
-class AggregatePackagingUnit
-{
-}
+class AggregatePackagingUnit extends SubModel {}

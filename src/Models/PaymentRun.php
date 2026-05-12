@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property Carbon|null $paymentRunDate
- * @property array|null $paymentRunItems
+ * @property list<PaymentRunItem>|null $paymentRunItems
  * @property string|null $paymentRunNumber
  * @property string|null $runByUserId
  * @property float|null $totalAmount
@@ -16,14 +16,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PaymentRun extends Model
 {
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array<string, string>
+     * @var array<string, class-string|string>
      */
     protected $casts = [
         'createdDate' => 'datetime',
         'lastModifiedDate' => 'datetime',
         'paymentRunDate' => 'datetime',
+        'paymentRunItems' => PaymentRunItem::class,
     ];
 
     /**

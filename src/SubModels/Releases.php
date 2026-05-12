@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -13,6 +15,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $purchaseOrderId
  * @property string|null $releasedQuantity
  */
-class Releases
-{
-}
+class Releases extends SubModel {}

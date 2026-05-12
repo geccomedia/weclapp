@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property int|null $quantity
  * @property string|null $salesOrderItemId
@@ -9,6 +11,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $servicePeriodToDate
  * @property string|null $serviceQuotaId
  */
-class ServiceQuotaRelationship
-{
-}
+class ServiceQuotaRelationship extends SubModel {}

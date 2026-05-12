@@ -4,6 +4,9 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EntityReference;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -14,11 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $ccEmailAddresses
  * @property string|null $contactId
  * @property string|null $contractId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $description
  * @property bool|null $disableEmailTemplates
  * @property string|null $email
- * @property array|null $entityReferences
+ * @property list<EntityReference>|null $entityReferences
  * @property Carbon|null $finishedDate
  * @property string|null $firstName
  * @property Carbon|null $followUpDate
@@ -53,10 +56,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $ticketServiceLevelAgreementId
  * @property string|null $ticketStatusId
  * @property string|null $ticketTypeId
- * @property array|null $watchers
+ * @property list<OnlyId>|null $watchers
  */
 class Ticket extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'entityReferences' => EntityReference::class,
+        'watchers' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

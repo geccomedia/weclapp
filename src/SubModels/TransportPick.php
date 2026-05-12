@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -24,6 +26,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $sourceStoragePlaceId
  * @property string|null $storagePlaceId
  */
-class TransportPick
-{
-}
+class TransportPick extends SubModel {}

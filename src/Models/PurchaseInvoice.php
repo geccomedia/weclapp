@@ -4,6 +4,13 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceItem;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceShippingCostItem;
+use Geccomedia\Weclapp\SubModels\PurchaseInvoiceStatusHistory;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -19,8 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $currencyConversionDate
  * @property bool|null $currencyConversionLocked
  * @property float|null $currencyConversionRate
- * @property array|null $customAttributes
- * @property array|null $deliveryAddress
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property RecordAddress|null $deliveryAddress
  * @property Carbon|null $deliveryDate
  * @property string|null $description
  * @property bool|null $disableRecordEmailingRule
@@ -35,7 +42,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $importSalesTaxAmount
  * @property string|null $importSalesTaxId
  * @property string|null $internalInvoiceNumber
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property Carbon|null $invoiceDate
  * @property string|null $invoiceNumber
  * @property float|null $netAmount
@@ -47,14 +54,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $paymentStatus
  * @property string|null $precedingPurchaseInvoiceId
  * @property Carbon|null $pricingDate
- * @property array|null $purchaseInvoiceItems
+ * @property list<PurchaseInvoiceItem>|null $purchaseInvoiceItems
  * @property string|null $purchaseInvoiceType
- * @property array|null $purchaseOrders
+ * @property list<OnlyId>|null $purchaseOrders
  * @property string|null $recipientCountryCode
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordComment
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property string|null $recordOpening
  * @property string|null $responsibleUserId
@@ -62,10 +69,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool|null $sentToRecipient
  * @property Carbon|null $servicePeriodFrom
  * @property Carbon|null $servicePeriodTo
- * @property array|null $shippingCostItems
+ * @property list<PurchaseInvoiceShippingCostItem>|null $shippingCostItems
  * @property Carbon|null $shippingDate
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<PurchaseInvoiceStatusHistory>|null $statusHistory
  * @property string|null $supplierHabitualExporterLetterOfIntentId
  * @property string|null $supplierId
  * @property array|null $tags
@@ -75,9 +82,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PurchaseInvoice extends Model
 {
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array<string, string>
+     * @var array<string, class-string|string>
      */
     protected $casts = [
         'bookingDate' => 'datetime',
@@ -92,6 +97,15 @@ class PurchaseInvoice extends Model
         'servicePeriodFrom' => 'datetime',
         'servicePeriodTo' => 'datetime',
         'shippingDate' => 'datetime',
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'invoiceAddress' => RecordAddress::class,
+        'purchaseInvoiceItems' => PurchaseInvoiceItem::class,
+        'purchaseOrders' => OnlyId::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'shippingCostItems' => PurchaseInvoiceShippingCostItem::class,
+        'statusHistory' => PurchaseInvoiceStatusHistory::class,
     ];
 
     /**

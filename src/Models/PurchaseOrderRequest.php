@@ -4,6 +4,11 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestOffer;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderRequestStatusHistory;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -11,18 +16,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $commission
  * @property Carbon|null $confirmationDeadline
  * @property string|null $creatorId
- * @property array|null $customAttributes
- * @property array|null $deliveryAddress
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property RecordAddress|null $deliveryAddress
  * @property string|null $description
  * @property bool|null $disableRecordEmailingRule
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property Carbon|null $plannedDeliveryDate
- * @property array|null $purchaseOrderRequestItems
+ * @property list<PurchaseOrderRequestItem>|null $purchaseOrderRequestItems
  * @property string|null $purchaseOrderRequestNumber
- * @property array|null $purchaseOrderRequestOffers
+ * @property list<PurchaseOrderRequestOffer>|null $purchaseOrderRequestOffers
  * @property string|null $purchaseOrderRequestType
  * @property string|null $quotationId
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordComment
  * @property string|null $recordFreeText
  * @property string|null $recordOpening
@@ -30,12 +35,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $salesOrderId
  * @property bool|null $sentToRecipient
  * @property string|null $status
- * @property array|null $statusHistory
+ * @property list<PurchaseOrderRequestStatusHistory>|null $statusHistory
  * @property array|null $tags
  * @property string|null $warehouseId
  */
 class PurchaseOrderRequest extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'invoiceAddress' => RecordAddress::class,
+        'purchaseOrderRequestItems' => PurchaseOrderRequestItem::class,
+        'purchaseOrderRequestOffers' => PurchaseOrderRequestOffer::class,
+        'recordAddress' => RecordAddress::class,
+        'statusHistory' => PurchaseOrderRequestStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */

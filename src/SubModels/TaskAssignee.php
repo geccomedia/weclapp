@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property string|null $id
  * @property string|null $version
@@ -10,6 +12,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property int|null $plannedEffort
  * @property string|null $userId
  */
-class TaskAssignee
-{
-}
+class TaskAssignee extends SubModel {}

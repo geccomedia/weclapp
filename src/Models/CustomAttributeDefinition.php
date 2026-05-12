@@ -3,6 +3,10 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionConditions;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionListValue;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionPermission;
+use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionTranslation;
 
 /**
  * @property string|null $attributeKey
@@ -11,11 +15,11 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $entityType
  * @property bool|null $required
  * @property bool|null $active
- * @property array|null $selectableValues
+ * @property list<CustomAttributeDefinitionListValue>|null $selectableValues
  * @property string|null $attributeDescription
  * @property string|null $attributeEntityType
- * @property array|null $attributeLabels
- * @property array|null $conditions
+ * @property list<CustomAttributeDefinitionTranslation>|null $attributeLabels
+ * @property CustomAttributeDefinitionConditions|null $conditions
  * @property bool|null $defaultBooleanValue
  * @property string|null $defaultDateValue
  * @property float|null $defaultNumberValue
@@ -25,7 +29,7 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $inheritOnCopy
  * @property array|null $legacyEntities
  * @property bool|null $mandatory
- * @property array|null $permissions
+ * @property list<CustomAttributeDefinitionPermission>|null $permissions
  * @property array|null $publicPageTypes
  * @property bool|null $readOnly
  * @property bool|null $showAttributeEntityType

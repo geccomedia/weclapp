@@ -4,6 +4,9 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\SalesStageHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -26,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $expectedCloseDate
  * @property string|null $contactId
  * @property string|null $creatorId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $expectedDeliveryDate
  * @property string|null $expectedSignatureDate
  * @property bool|null $hotLead
@@ -34,14 +37,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $opportunityNumber
  * @property float|null $revenue
  * @property float|null $salesProbability
- * @property array|null $salesStageHistory
+ * @property list<SalesStageHistory>|null $salesStageHistory
  * @property string|null $startDate
  * @property array|null $tags
- * @property array|null $topics
+ * @property list<OnlyId>|null $topics
  * @property string|null $winLossDescription
  */
 class Opportunity extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'salesStageHistory' => SalesStageHistory::class,
+        'topics' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool|null $blockedForResupply
  * @property string|null $blockedForResupplyReasonId
  * @property string|null $currentInventoryId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $customerId
  * @property int|null $fieldNumber
  * @property int|null $levelNumber
@@ -25,6 +26,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class StoragePlace extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+    ];
+
     /**
      * @return BelongsTo
      */

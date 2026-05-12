@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -10,12 +11,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $articleNumber
  * @property bool|null $active
  * @property array|null $attributeValues
- * @property array|null $attributeOptions
+ * @property list<OnlyId>|null $attributeOptions
  * @property int|null $positionNumber
  * @property string|null $variantArticleId
  */
 class VariantArticleVariant extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'attributeOptions' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */

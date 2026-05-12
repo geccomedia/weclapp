@@ -4,6 +4,13 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\Parcel;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\ShipmentItem;
+use Geccomedia\Weclapp\SubModels\ShipmentStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -22,12 +29,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $fulfillmentProviderId
  * @property string|null $note
  * @property Carbon|null $shipmentDate
- * @property array|null $shipmentItems
+ * @property list<ShipmentItem>|null $shipmentItems
  * @property string|null $additionalDeliveryInformation
  * @property string|null $commercialLanguage
  * @property string|null $consolidationStoragePlaceId
  * @property string|null $creatorId
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $customerPurchaseOrderNumber
  * @property float|null $declaredValueAmount
  * @property string|null $declaredValueAmountCurrencyId
@@ -37,7 +44,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $destinationWarehouseId
  * @property string|null $dhlReceiverId
  * @property bool|null $disableRecordEmailingRule
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property string|null $invoiceRecipientId
  * @property string|null $mainSalesOrderId
  * @property float|null $packageHeight
@@ -49,34 +56,51 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $packageTrackingUrl
  * @property float|null $packageWeight
  * @property float|null $packageWidth
- * @property array|null $parcels
+ * @property list<Parcel>|null $parcels
  * @property string|null $pickingInstructions
  * @property bool|null $picksComplete
- * @property array|null $purchaseOrders
- * @property array|null $recipientAddress
+ * @property list<OnlyId>|null $purchaseOrders
+ * @property RecordAddress|null $recipientAddress
  * @property string|null $recipientCustomerNumber
  * @property string|null $recipientPartyId
  * @property string|null $recipientSupplierNumber
  * @property string|null $recordComment
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property string|null $recordOpening
- * @property array|null $salesInvoiceEmailAddresses
- * @property array|null $salesOrders
+ * @property EmailAddresses|null $salesInvoiceEmailAddresses
+ * @property list<OnlyId>|null $salesOrders
  * @property bool|null $sentToRecipient
  * @property string|null $shipmentType
- * @property array|null $shippedFromAddress
+ * @property RecordAddress|null $shippedFromAddress
  * @property string|null $shippingCarrierId
  * @property string|null $shippingDate
  * @property int|null $shippingLabelsCount
  * @property string|null $shippingReturnCarrierId
  * @property int|null $shippingReturnLabelsCount
- * @property array|null $statusHistory
+ * @property list<ShipmentStatus>|null $statusHistory
  * @property array|null $tags
  * @property float|null $totalWeight
  */
 class Shipment extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'invoiceAddress' => RecordAddress::class,
+        'parcels' => Parcel::class,
+        'purchaseOrders' => OnlyId::class,
+        'recipientAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'salesInvoiceEmailAddresses' => EmailAddresses::class,
+        'salesOrders' => OnlyId::class,
+        'shipmentItems' => ShipmentItem::class,
+        'shippedFromAddress' => RecordAddress::class,
+        'statusHistory' => ShipmentStatus::class,
+    ];
+
     /**
      * @return BelongsTo
      */

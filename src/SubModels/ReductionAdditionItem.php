@@ -2,6 +2,8 @@
 
 namespace Geccomedia\Weclapp\SubModels;
 
+use Geccomedia\Weclapp\SubModel;
+
 /**
  * @property int|null $position
  * @property string|null $source
@@ -10,6 +12,4 @@ namespace Geccomedia\Weclapp\SubModels;
  * @property string|null $type
  * @property string|null $value
  */
-class ReductionAdditionItem
-{
-}
+class ReductionAdditionItem extends SubModel {}

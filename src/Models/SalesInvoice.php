@@ -4,6 +4,14 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceItem;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceShippingCostItem;
+use Geccomedia\Weclapp\SubModels\SalesInvoiceStatusHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -33,8 +41,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $servicePeriodFrom
  * @property Carbon|null $servicePeriodTo
  * @property Carbon|null $shippingDate
- * @property array|null $salesInvoiceItems
- * @property array|null $shippingCostItems
+ * @property list<SalesInvoiceItem>|null $salesInvoiceItems
+ * @property list<SalesInvoiceShippingCostItem>|null $shippingCostItems
  * @property array|null $salesInvoiceTaxAmounts
  * @property string|null $bookingDate
  * @property string|null $bookingText
@@ -46,7 +54,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $commercialLanguage
  * @property float|null $commission
  * @property bool|null $commissionBlock
- * @property array|null $commissionSalesPartners
+ * @property list<CommissionSalesPartner>|null $commissionSalesPartners
  * @property bool|null $commissionSettlementDone
  * @property string|null $costCenterId
  * @property string|null $costTypeId
@@ -55,9 +63,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $currencyConversionDate
  * @property bool|null $currencyConversionLocked
  * @property float|null $currencyConversionRate
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $customerHabitualExporterLetterOfIntentId
- * @property array|null $deliveryAddress
+ * @property RecordAddress|null $deliveryAddress
  * @property string|null $description
  * @property bool|null $directDebitFileCreated
  * @property string|null $directDebitFileLatestDate
@@ -78,11 +86,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $paymentStatus
  * @property string|null $precedingSalesInvoiceId
  * @property string|null $quotationId
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordComment
  * @property bool|null $recordCommentInheritance
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property bool|null $recordFreeTextInheritance
  * @property string|null $recordOpening
@@ -90,20 +98,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $recurringInvoiceId
  * @property string|null $salesInvoiceType
  * @property string|null $salesOrderId
- * @property array|null $salesOrders
+ * @property list<OnlyId>|null $salesOrders
  * @property bool|null $sentToRecipient
  * @property string|null $sepaDirectDebitMandateId
  * @property string|null $shipmentMethodId
- * @property array|null $statusHistory
+ * @property list<SalesInvoiceStatusHistory>|null $statusHistory
  * @property array|null $tags
  * @property string|null $vatRegistrationNumber
  */
 class SalesInvoice extends Model
 {
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array<string, string>
+     * @var array<string, class-string|string>
      */
     protected $casts = [
         'createdDate' => 'datetime',
@@ -115,6 +121,15 @@ class SalesInvoice extends Model
         'servicePeriodFrom' => 'datetime',
         'servicePeriodTo' => 'datetime',
         'shippingDate' => 'datetime',
+        'commissionSalesPartners' => CommissionSalesPartner::class,
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'salesInvoiceItems' => SalesInvoiceItem::class,
+        'salesOrders' => OnlyId::class,
+        'shippingCostItems' => SalesInvoiceShippingCostItem::class,
+        'statusHistory' => SalesInvoiceStatusHistory::class,
     ];
 
     /**

@@ -4,6 +4,13 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\DropshippingDeliveryNoteFormTextBlockData;
+use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderShippingCostItem;
+use Geccomedia\Weclapp\SubModels\PurchaseOrderStatusHistory;
+use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -23,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float|null $netAmount
  * @property Carbon|null $orderDate
  * @property Carbon|null $deliveryDate
- * @property array|null $purchaseOrderItems
+ * @property list<PurchaseOrderItem>|null $purchaseOrderItems
  * @property string|null $advancePaymentStatus
  * @property string|null $commercialLanguage
  * @property string|null $commercialLanguageCustomer
@@ -33,18 +40,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $currencyConversionDate
  * @property bool|null $currencyConversionLocked
  * @property float|null $currencyConversionRate
- * @property array|null $customAttributes
- * @property array|null $deliveryAddress
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property RecordAddress|null $deliveryAddress
  * @property string|null $description
  * @property bool|null $disableRecordEmailingRule
- * @property array|null $dropshippingDeliveryNoteFormTexts
+ * @property DropshippingDeliveryNoteFormTextBlockData|null $dropshippingDeliveryNoteFormTexts
  * @property string|null $externalPurchaseOrderNumber
  * @property bool|null $formSettingsFromSalesChannel
  * @property float|null $grossAmountInCompanyCurrency
  * @property float|null $headerDiscount
  * @property float|null $headerSurcharge
  * @property bool|null $includeCashDiscountInValuationPrice
- * @property array|null $invoiceAddress
+ * @property RecordAddress|null $invoiceAddress
  * @property bool|null $invoiced
  * @property string|null $mergedToPurchaseOrderId
  * @property float|null $netAmountInCompanyCurrency
@@ -58,10 +65,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $purchaseOrderType
  * @property bool|null $received
  * @property string|null $recipientCountryCode
- * @property array|null $recordAddress
+ * @property RecordAddress|null $recordAddress
  * @property string|null $recordComment
  * @property string|null $recordCurrencyId
- * @property array|null $recordEmailAddresses
+ * @property EmailAddresses|null $recordEmailAddresses
  * @property string|null $recordFreeText
  * @property string|null $recordOpening
  * @property string|null $salesOrderId
@@ -71,15 +78,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $servicePeriodTo
  * @property string|null $shipmentMethodId
  * @property string|null $shippingCarrierId
- * @property array|null $shippingCostItems
+ * @property list<PurchaseOrderShippingCostItem>|null $shippingCostItems
  * @property string|null $shippingNotificationDate
- * @property array|null $statusHistory
+ * @property list<PurchaseOrderStatusHistory>|null $statusHistory
  * @property string|null $supplierHabitualExporterLetterOfIntentId
  * @property string|null $supplierQuotationNumber
  * @property array|null $tags
  */
 class PurchaseOrder extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'deliveryAddress' => RecordAddress::class,
+        'dropshippingDeliveryNoteFormTexts' => DropshippingDeliveryNoteFormTextBlockData::class,
+        'invoiceAddress' => RecordAddress::class,
+        'purchaseOrderItems' => PurchaseOrderItem::class,
+        'recordAddress' => RecordAddress::class,
+        'recordEmailAddresses' => EmailAddresses::class,
+        'shippingCostItems' => PurchaseOrderShippingCostItem::class,
+        'statusHistory' => PurchaseOrderStatusHistory::class,
+    ];
+
     /**
      * @return BelongsTo
      */
