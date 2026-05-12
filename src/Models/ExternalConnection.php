@@ -8,4 +8,9 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $connectionType
  * @property string|null $name
  */
-class ExternalConnection extends Model {}
+class ExternalConnection extends Model
+{
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+}

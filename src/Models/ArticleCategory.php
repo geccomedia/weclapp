@@ -52,4 +52,14 @@ class ArticleCategory extends Model
     {
         return $this->belongsTo(CostCenter::class, 'salesCostCenterId');
     }
+
+    public function articleAccountingCode(): BelongsTo
+    {
+        return $this->belongsTo(ArticleAccountingCode::class, 'articleAccountingCodeId');
+    }
+
+    public function articleCategoryClassification(): BelongsTo
+    {
+        return $this->belongsTo(ArticleCategoryClassification::class, 'articleCategoryClassificationId');
+    }
 }

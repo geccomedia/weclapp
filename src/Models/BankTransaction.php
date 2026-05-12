@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BankTransaction extends Model
 {
+    protected bool $creatable = false;
+
     /**
      * @return BelongsTo
      */

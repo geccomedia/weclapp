@@ -31,4 +31,9 @@ class RemotePrintJob extends Model
     {
         return $this->belongsTo(WeclappOs::class, 'weclappOsId');
     }
+
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class, 'documentId');
+    }
 }

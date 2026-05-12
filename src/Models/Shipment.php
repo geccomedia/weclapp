@@ -204,4 +204,19 @@ class Shipment extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customerId');
+    }
+
+    public function salesOrder(): BelongsTo
+    {
+        return $this->belongsTo(SalesOrder::class, 'salesOrderId');
+    }
+
+    public function fulfillmentProvider(): BelongsTo
+    {
+        return $this->belongsTo(FulfillmentProvider::class, 'fulfillmentProviderId');
+    }
 }

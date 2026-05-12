@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $name
@@ -26,5 +27,15 @@ class PaymentMethod extends Model
     public function clearingAccount()
     {
         return $this->belongsTo(BankAccount::class, 'clearingAccountId');
+    }
+
+    public function salesOrders(): HasMany
+    {
+        return $this->hasMany(SalesOrder::class, 'paymentMethodId');
+    }
+
+    public function purchaseOrders(): HasMany
+    {
+        return $this->hasMany(PurchaseOrder::class, 'paymentMethodId');
     }
 }

@@ -98,6 +98,46 @@ abstract class Model extends BaseModel
     }
 
     /**
+     * Whether new instances of this model can be created via the API.
+     * Set to false on models that are read-only at creation time.
+     */
+    protected bool $creatable = true;
+
+    /**
+     * Whether existing instances of this model can be deleted via the API.
+     * Set to false on models that are read-only for deletions.
+     */
+    protected bool $deletable = true;
+
+    /**
+     * Override Eloquent's insert path to enforce the $creatable guard.
+     *
+     * @throws NotSupportedException
+     */
+    protected function performInsert(\Illuminate\Database\Eloquent\Builder $query)
+    {
+        if (! $this->creatable) {
+            throw new NotSupportedException('Creating '.static::class.' is not supported by weclapp');
+        }
+
+        return parent::performInsert($query);
+    }
+
+    /**
+     * Override Eloquent's delete path to enforce the $deletable guard.
+     *
+     * @throws NotSupportedException
+     */
+    protected function performDeleteOnModel()
+    {
+        if (! $this->deletable) {
+            throw new NotSupportedException('Deleting '.static::class.' is not supported by weclapp');
+        }
+
+        parent::performDeleteOnModel();
+    }
+
+    /**
      * Derive the API resource name from the class name: lcfirst(ShortClassName).
      * This means no model subclass needs to declare $table explicitly.
      *

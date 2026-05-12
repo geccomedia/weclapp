@@ -76,8 +76,8 @@ $customer->fill(['partyType' => 'ORGANIZATION']);
 
 ## Relations
 
-Models declare `belongsTo` relationships using Weclapp's camelCase foreign key
-convention (e.g. `customerId`, not `customer_id`).
+Models declare `belongsTo` and `hasMany` relationships using Weclapp's
+camelCase foreign key convention (e.g. `customerId`, not `customer_id`).
 
 ### Eager loading (recommended — single batched request)
 
@@ -103,6 +103,90 @@ foreach ($orders as $order) {
     echo $order->customer->company;  // 1 request per order
 }
 ```
+
+### Inverse relations (hasMany)
+
+Common inverse relations are defined, so you can traverse from either side:
+
+```php
+$customer = Customer::find('1');
+
+$customer->salesOrders()->get();   // GET /salesOrder?customerId-eq=1
+$customer->shipments()->get();     // GET /shipment?customerId-eq=1
+$customer->quotations()->get();    // GET /quotation?customerId-eq=1
+$customer->salesInvoices()->get(); // GET /salesInvoice?customerId-eq=1
+
+$warehouse->warehouseStock()->get();     // GET /warehouseStock?warehouseId-eq=1
+$salesOrder->shipments()->get();         // GET /shipment?salesOrderId-eq=1
+$salesOrder->salesInvoices()->get();     // GET /salesInvoice?salesOrderId-eq=1
+$article->articlePrices()->get();        // GET /articlePrice?articleId-eq=1
+$supplier->purchaseOrders()->get();      // GET /purchaseOrder?supplierId-eq=1
+```
+
+## Additional Properties
+
+Weclapp can return extra computed fields that are not included by default.
+Request them with `withProperties()`:
+
+```php
+// Includes the orderItems and tags fields in the response
+$orders = SalesOrder::withProperties('orderItems', 'tags')->get();
+// → GET /salesOrder?additionalProperties=orderItems,tags
+```
+
+This can be combined with `select()` and other query methods:
+
+```php
+SalesOrder::select('id', 'orderNumber')
+    ->withProperties('orderItems')
+    ->where('status', 'ORDER_ENTRY_IN_PROGRESS')
+    ->get();
+```
+
+## Custom Actions
+
+Weclapp exposes many action endpoints beyond standard CRUD. Call them via
+`action()` at the class level or `callAction()` on a model instance.
+
+### Collection-level actions
+
+```php
+// POST /salesOrder/defaultValuesForCreate
+$defaults = SalesOrder::action('defaultValuesForCreate');
+
+// POST /tax/configureSalesTaxes  {"taxRateType": "STANDARD"}
+Tax::action('configureSalesTaxes', ['taxRateType' => 'STANDARD']);
+```
+
+### Instance-level actions
+
+```php
+$order = SalesOrder::find('123');
+
+// POST /salesOrder/id/123/createShipment
+$order->newQuery()->callAction('createShipment');
+
+// POST /salesOrder/id/123/createSalesInvoice  {"invoiceDate": 1234567890000}
+$order->newQuery()->callAction('createSalesInvoice', ['invoiceDate' => 1234567890000]);
+
+// POST /quotation/id/456/accept
+$quotation->newQuery()->callAction('accept');
+```
+
+All actions return the decoded JSON response body as an array, or `null` if
+the response has no body.
+
+## Read-only Models
+
+Some Weclapp endpoints are read-only (no create or delete). Attempting to
+`save()` a new instance or `delete()` an existing one on these models will
+throw a `NotSupportedException` immediately, without making an HTTP request.
+
+Examples of non-creatable models: `WarehouseStock`, `AccountingTransaction`,
+`ArchivedEmail`, `BankTransaction`, `Pick`, `PaymentRun`, `SalesOpenItem`.
+
+Examples of non-deletable models: `CashAccount`, `User`, `SerialNumber`,
+`InventoryTransportReference`.
 
 ## Embedded Sub-Objects
 

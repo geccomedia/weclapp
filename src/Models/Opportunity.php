@@ -101,4 +101,9 @@ class Opportunity extends Model
     {
         return $this->belongsTo(OpportunityWinLossReason::class, 'winLossReasonId');
     }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
 }

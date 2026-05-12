@@ -12,4 +12,9 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $read
  * @property string|null $title
  */
-class Notification extends Model {}
+class Notification extends Model
+{
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+}

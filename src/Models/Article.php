@@ -15,6 +15,7 @@ use Geccomedia\Weclapp\SubModels\QuantityConversion;
 use Geccomedia\Weclapp\SubModels\SalesBillOfMaterialArticleItem;
 use Geccomedia\Weclapp\SubModels\SupplySource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $articleNumber
@@ -249,5 +250,40 @@ class Article extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class, 'unitId');
+    }
+
+    public function articlePrices(): HasMany
+    {
+        return $this->hasMany(ArticlePrice::class, 'articleId');
+    }
+
+    public function articleSupplySources(): HasMany
+    {
+        return $this->hasMany(ArticleSupplySource::class, 'articleId');
+    }
+
+    public function batchNumbers(): HasMany
+    {
+        return $this->hasMany(BatchNumber::class, 'articleId');
+    }
+
+    public function serialNumbers(): HasMany
+    {
+        return $this->hasMany(SerialNumber::class, 'articleId');
+    }
+
+    public function warehouseStock(): HasMany
+    {
+        return $this->hasMany(WarehouseStock::class, 'articleId');
+    }
+
+    public function tax(): BelongsTo
+    {
+        return $this->belongsTo(Tax::class, 'taxId');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
 }

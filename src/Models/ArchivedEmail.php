@@ -23,4 +23,9 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $toAddresses
  * @property string|null $receivedDate
  */
-class ArchivedEmail extends Model {}
+class ArchivedEmail extends Model
+{
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+}

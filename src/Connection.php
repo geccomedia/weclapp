@@ -200,6 +200,21 @@ class Connection implements ConnectionInterface
     }
 
     /**
+     * Execute a custom action endpoint and return the decoded response body.
+     *
+     * @return array<mixed>|null
+     */
+    public function action(Request $query): ?array
+    {
+        return $this->run($query, [], function ($query) {
+            $response = $this->client->send($query);
+            $body = json_decode((string) $response->getBody(), true);
+
+            return $body ?? null;
+        });
+    }
+
+    /**
      * Run an update statement against the database.
      *
      * @param  Request  $query

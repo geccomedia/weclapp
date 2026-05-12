@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $isoCode
@@ -10,4 +11,15 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $active
  * @property string|null $currencySymbol
  */
-class Currency extends Model {}
+class Currency extends Model
+{
+    public function articlePrices(): HasMany
+    {
+        return $this->hasMany(ArticlePrice::class, 'currencyId');
+    }
+
+    public function articleSupplySources(): HasMany
+    {
+        return $this->hasMany(ArticleSupplySource::class, 'currencyId');
+    }
+}

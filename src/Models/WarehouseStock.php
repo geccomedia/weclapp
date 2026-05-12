@@ -29,6 +29,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class WarehouseStock extends Model
 {
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+
     /**
      * @var array<string, class-string|string>
      */
@@ -76,5 +80,10 @@ class WarehouseStock extends Model
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+
+    public function warehouseLevel(): BelongsTo
+    {
+        return $this->belongsTo(WarehouseLevel::class, 'warehouseLevelId');
     }
 }

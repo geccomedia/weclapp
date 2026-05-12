@@ -7,6 +7,7 @@ use Geccomedia\Weclapp\SubModels\Address;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\MinimalStoragePlace;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $name
@@ -79,5 +80,20 @@ class Warehouse extends Model
     public function directBookingInternalTransportReference()
     {
         return $this->belongsTo(InternalTransportReference::class, 'directBookingInternalTransportReferenceId');
+    }
+
+    public function warehouseStock(): HasMany
+    {
+        return $this->hasMany(WarehouseStock::class, 'warehouseId');
+    }
+
+    public function storageLocations(): HasMany
+    {
+        return $this->hasMany(StorageLocation::class, 'warehouseId');
+    }
+
+    public function storagePlaces(): HasMany
+    {
+        return $this->hasMany(StoragePlace::class, 'warehouseId');
     }
 }

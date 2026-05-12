@@ -243,4 +243,9 @@ class SalesInvoice extends Model
     {
         return $this->belongsTo(TermOfPayment::class, 'termOfPaymentId');
     }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
 }

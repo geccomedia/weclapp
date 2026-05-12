@@ -3,6 +3,15 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\Address;
+use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\OnlineAccount;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\PartyBankAccount;
+use Geccomedia\Weclapp\SubModels\PartyEmailAddresses;
+use Geccomedia\Weclapp\SubModels\PartyHabitualExporterLetterOfIntent;
+use Geccomedia\Weclapp\SubModels\SalesStageHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -26,19 +35,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $salesChannel
  * @property string|null $currencyId
  * @property float|null $opportunityValue
- * @property array|null $addresses
- * @property array|null $topics
- * @property array|null $bankAccounts
+ * @property list<Address>|null $addresses
+ * @property list<OnlyId>|null $topics
+ * @property list<PartyBankAccount>|null $bankAccounts
  * @property string|null $birthDate
  * @property string|null $commercialLanguageId
  * @property bool|null $commissionBlock
- * @property array|null $commissionSalesPartners
+ * @property list<CommissionSalesPartner>|null $commissionSalesPartners
  * @property string|null $company2
  * @property string|null $companySizeId
  * @property bool|null $competitor
- * @property array|null $contacts
+ * @property list<OnlyId>|null $contacts
  * @property string|null $convertedOnDate
- * @property array|null $customAttributes
+ * @property list<CustomAttribute>|null $customAttributes
  * @property bool|null $customer
  * @property bool|null $customerAllowDropshippingOrderCreation
  * @property float|null $customerAmountInsured
@@ -68,7 +77,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $customerSalesChannel
  * @property string|null $customerSalesOrderPaymentType
  * @property float|null $customerSalesProbability
- * @property array|null $customerSalesStageHistory
+ * @property list<SalesStageHistory>|null $customerSalesStageHistory
  * @property string|null $customerSatisfaction
  * @property string|null $customerShipmentMethodId
  * @property string|null $customerSupplierNumber
@@ -96,14 +105,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $legalFormId
  * @property string|null $middleName
  * @property string|null $mobilePhone2
- * @property array|null $onlineAccounts
+ * @property list<OnlineAccount>|null $onlineAccounts
  * @property bool|null $optInEmail
  * @property bool|null $optInLetter
  * @property bool|null $optInPhone
  * @property bool|null $optInSms
  * @property string|null $parentPartyId
- * @property array|null $partyEmailAddresses
- * @property array|null $partyHabitualExporterLettersOfIntent
+ * @property list<PartyEmailAddresses>|null $partyEmailAddresses
+ * @property list<PartyHabitualExporterLetterOfIntent>|null $partyHabitualExporterLettersOfIntent
  * @property string|null $personCompany
  * @property string|null $personDepartmentId
  * @property string|null $personRoleId
@@ -149,6 +158,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Lead extends Model
 {
+    protected string $table = 'party';
+
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'addresses' => Address::class,
+        'bankAccounts' => PartyBankAccount::class,
+        'commissionSalesPartners' => CommissionSalesPartner::class,
+        'contacts' => OnlyId::class,
+        'customAttributes' => CustomAttribute::class,
+        'customerSalesStageHistory' => SalesStageHistory::class,
+        'onlineAccounts' => OnlineAccount::class,
+        'partyEmailAddresses' => PartyEmailAddresses::class,
+        'partyHabitualExporterLettersOfIntent' => PartyHabitualExporterLetterOfIntent::class,
+        'topics' => OnlyId::class,
+    ];
+
     /**
      * @return BelongsTo
      */
@@ -363,5 +390,30 @@ class Lead extends Model
     public function tax()
     {
         return $this->belongsTo(Tax::class, 'taxId');
+    }
+
+    public function leadRating(): BelongsTo
+    {
+        return $this->belongsTo(LeadRating::class, 'leadRatingId');
+    }
+
+    public function legalForm(): BelongsTo
+    {
+        return $this->belongsTo(LegalForm::class, 'legalFormId');
+    }
+
+    public function personDepartment(): BelongsTo
+    {
+        return $this->belongsTo(PersonDepartment::class, 'personDepartmentId');
+    }
+
+    public function personRole(): BelongsTo
+    {
+        return $this->belongsTo(PersonRole::class, 'personRoleId');
+    }
+
+    public function title(): BelongsTo
+    {
+        return $this->belongsTo(Title::class, 'titleId');
     }
 }

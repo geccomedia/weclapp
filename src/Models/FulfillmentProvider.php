@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class FulfillmentProvider extends Model
 {
+    protected bool $creatable = false;
+
     /**
      * @return BelongsTo
      */

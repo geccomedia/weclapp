@@ -61,4 +61,14 @@ class ArticleSupplySource extends Model
     {
         return $this->belongsTo(Unit::class, 'unitId');
     }
+
+    public function article(): BelongsTo
+    {
+        return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
 }

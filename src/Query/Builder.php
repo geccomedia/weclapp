@@ -10,6 +10,13 @@ class Builder extends BaseBuilder
 {
     public $operators = [];
 
+    /**
+     * Additional properties to request via the `additionalProperties` query parameter.
+     *
+     * @var array<string>|null
+     */
+    public ?array $additionalProperties = null;
+
     public function insert(array $values): bool
     {
         if (! is_array(reset($values))) {

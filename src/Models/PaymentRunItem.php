@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PaymentRunItem extends Model
 {
+    protected bool $creatable = false;
+
     /**
      * @var array<string, class-string|string>
      */
@@ -55,5 +57,10 @@ class PaymentRunItem extends Model
     public function purchaseOpenItem()
     {
         return $this->belongsTo(PurchaseOpenItem::class, 'purchaseOpenItemId');
+    }
+
+    public function bankTransaction(): BelongsTo
+    {
+        return $this->belongsTo(BankTransaction::class, 'bankTransactionId');
     }
 }

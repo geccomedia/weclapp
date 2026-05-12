@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $name
@@ -59,5 +60,10 @@ class Tax extends Model
     public function depositAccount()
     {
         return $this->belongsTo(LedgerAccount::class, 'depositAccountId');
+    }
+
+    public function salesOrders(): HasMany
+    {
+        return $this->hasMany(SalesOrder::class, 'nonStandardTaxId');
     }
 }

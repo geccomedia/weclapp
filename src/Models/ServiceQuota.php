@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ServiceQuota extends Model
 {
+    protected bool $creatable = false;
+
     /**
      * @var array<string, class-string|string>
      */

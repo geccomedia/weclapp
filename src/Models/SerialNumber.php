@@ -20,6 +20,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SerialNumber extends Model
 {
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+
     /**
      * @var array<string, class-string|string>
      */
@@ -33,5 +37,10 @@ class SerialNumber extends Model
     public function article()
     {
         return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
 }

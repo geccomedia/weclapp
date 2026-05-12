@@ -164,4 +164,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(TicketType::class, 'ticketTypeId');
     }
+
+    public function ticketChannel(): BelongsTo
+    {
+        return $this->belongsTo(TicketChannel::class, 'ticketChannelId');
+    }
 }

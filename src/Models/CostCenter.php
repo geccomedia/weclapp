@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $costCenterGroupId
@@ -10,4 +11,10 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $costCenterType
  * @property string|null $description
  */
-class CostCenter extends Model {}
+class CostCenter extends Model
+{
+    public function costCenterGroup(): BelongsTo
+    {
+        return $this->belongsTo(CostCenterGroup::class, 'costCenterGroupId');
+    }
+}

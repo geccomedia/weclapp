@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PaymentRun extends Model
 {
+    protected bool $creatable = false;
+
     /**
      * @var array<string, class-string|string>
      */

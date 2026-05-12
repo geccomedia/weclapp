@@ -25,6 +25,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AccountingTransaction extends Model
 {
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+
     /**
      * @var array<string, class-string|string>
      */

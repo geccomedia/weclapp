@@ -27,6 +27,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Pick extends Model
 {
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+
     /**
      * The attributes that should be mutated to dates.
      *

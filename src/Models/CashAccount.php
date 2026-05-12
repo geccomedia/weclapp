@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class CashAccount extends Model
 {
+    protected bool $deletable = false;
+
     /**
      * @return BelongsTo
      */

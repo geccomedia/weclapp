@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\TermOfPaymentCondition;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $name
@@ -23,4 +24,15 @@ use Geccomedia\Weclapp\SubModels\TermOfPaymentCondition;
  * @property string|null $validFrom
  * @property string|null $validTo
  */
-class TermOfPayment extends Model {}
+class TermOfPayment extends Model
+{
+    public function salesOrders(): HasMany
+    {
+        return $this->hasMany(SalesOrder::class, 'termOfPaymentId');
+    }
+
+    public function purchaseOrders(): HasMany
+    {
+        return $this->hasMany(PurchaseOrder::class, 'termOfPaymentId');
+    }
+}

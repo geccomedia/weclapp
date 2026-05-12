@@ -7,4 +7,9 @@ use Geccomedia\Weclapp\Model;
 /**
  * @property string|null $name
  */
-class InventoryGroup extends Model {}
+class InventoryGroup extends Model
+{
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+}

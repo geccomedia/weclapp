@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class InventoryTransportReference extends Model
 {
+    protected bool $deletable = false;
+
     /**
      * @return BelongsTo
      */

@@ -49,6 +49,7 @@ class Grammar extends BaseGrammar
         'from',
         'aggregate',
         'columns',
+        'additionalProperties',
         'wheres',
         'orders',
         'offset',
@@ -154,6 +155,21 @@ class Grammar extends BaseGrammar
         }
 
         return ['properties', $this->columnize($columns)];
+    }
+
+    /**
+     * Compile the "additionalProperties" portion of the query.
+     *
+     * @param  array<string>  $additionalProperties
+     * @return array<string>|null
+     */
+    protected function compileAdditionalProperties(Builder $query, $additionalProperties): ?array
+    {
+        if (empty($additionalProperties)) {
+            return null;
+        }
+
+        return ['additionalProperties', $this->columnize($additionalProperties)];
     }
 
     /**
@@ -371,6 +387,27 @@ class Grammar extends BaseGrammar
         $key = array_shift($query->wheres);
 
         return new Request('PUT', $query->from.'/'.$key['column'].'/'.$key['value'], [], json_encode($values));
+    }
+
+    /**
+     * Compile a custom action endpoint request.
+     *
+     * Instance action:   POST /salesOrder/id/{id}/createShipment
+     * Collection action: POST /salesOrder/defaultValuesForCreate
+     *
+     * @param  string  $action  The action name, e.g. "createShipment"
+     * @param  array<mixed>  $params  Optional JSON body
+     * @param  string|null  $id  Record ID for instance actions; null for collection actions
+     */
+    public function compileAction(Builder $query, string $action, array $params = [], ?string $id = null): Request
+    {
+        $uri = $id !== null
+            ? $query->from.'/id/'.$id.'/'.$action
+            : $query->from.'/'.$action;
+
+        $body = empty($params) ? null : json_encode($params);
+
+        return new Request('POST', $uri, [], $body);
     }
 
     /**

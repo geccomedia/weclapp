@@ -113,4 +113,9 @@ class TimeRecord extends Model
     {
         return $this->belongsTo(User::class, 'userId');
     }
+
+    public function placeOfService(): BelongsTo
+    {
+        return $this->belongsTo(PlaceOfService::class, 'placeOfServiceId');
+    }
 }

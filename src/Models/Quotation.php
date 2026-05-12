@@ -223,4 +223,9 @@ class Quotation extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
+    }
 }

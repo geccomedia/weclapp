@@ -382,4 +382,29 @@ class Party extends Model
     {
         return $this->belongsTo(Tax::class, 'taxId');
     }
+
+    public function leadRating(): BelongsTo
+    {
+        return $this->belongsTo(LeadRating::class, 'leadRatingId');
+    }
+
+    public function legalForm(): BelongsTo
+    {
+        return $this->belongsTo(LegalForm::class, 'legalFormId');
+    }
+
+    public function personDepartment(): BelongsTo
+    {
+        return $this->belongsTo(PersonDepartment::class, 'personDepartmentId');
+    }
+
+    public function personRole(): BelongsTo
+    {
+        return $this->belongsTo(PersonRole::class, 'personRoleId');
+    }
+
+    public function title(): BelongsTo
+    {
+        return $this->belongsTo(Title::class, 'titleId');
+    }
 }

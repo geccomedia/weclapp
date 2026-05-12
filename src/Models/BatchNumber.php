@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BatchNumber extends Model
 {
+    protected bool $creatable = false;
+
     /**
      * @var array<string, class-string|string>
      */
@@ -34,5 +36,10 @@ class BatchNumber extends Model
     public function article()
     {
         return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
 }

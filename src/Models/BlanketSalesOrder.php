@@ -63,6 +63,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BlanketSalesOrder extends Model
 {
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+
     /**
      * @var array<string, class-string|string>
      */

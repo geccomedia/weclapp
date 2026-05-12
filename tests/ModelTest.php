@@ -5,11 +5,15 @@ namespace Geccomedia\Weclapp\Tests;
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Connection;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Models\CashAccount;
 use Geccomedia\Weclapp\Models\Comment;
+use Geccomedia\Weclapp\Models\Currency;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\SalesInvoice;
 use Geccomedia\Weclapp\Models\SalesOrder;
+use Geccomedia\Weclapp\Models\Shipment;
 use Geccomedia\Weclapp\Models\Unit;
+use Geccomedia\Weclapp\Models\WarehouseStock;
 use Geccomedia\Weclapp\NotSupportedException;
 use Geccomedia\Weclapp\ServiceProvider;
 use Geccomedia\Weclapp\SubModel;
@@ -949,5 +953,243 @@ class ModelTest extends OrchestraTestCase
 
         // Three distinct queries were fired
         Event::assertDispatched(QueryExecuted::class, 3);
+    }
+
+    // -------------------------------------------------------------------------
+    // Read-only guards ($creatable / $deletable)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Calling save() on a new WarehouseStock (creatable=false) must throw.
+     */
+    public function test_non_creatable_model_throws_on_save(): void
+    {
+        $this->expectException(NotSupportedException::class);
+
+        $stock = new WarehouseStock;
+        $stock->save();
+    }
+
+    /**
+     * Calling delete() on an existing WarehouseStock (deletable=false) must throw.
+     */
+    public function test_non_deletable_model_throws_on_delete(): void
+    {
+        $this->expectException(NotSupportedException::class);
+
+        $stock = new WarehouseStock;
+        $stock->exists = true;
+        $stock->id = '1';
+        $stock->delete();
+    }
+
+    /**
+     * Calling delete() on an existing CashAccount (deletable=false) must throw.
+     */
+    public function test_cash_account_non_deletable_throws_on_delete(): void
+    {
+        $this->expectException(NotSupportedException::class);
+
+        $account = new CashAccount;
+        $account->exists = true;
+        $account->id = '1';
+        $account->delete();
+    }
+
+    /**
+     * CashAccount is creatable (no $creatable=false), so save() on a new
+     * instance must NOT throw — it should proceed to the HTTP layer.
+     * We mock the Client so it never actually hits the network.
+     */
+    public function test_creatable_model_does_not_throw_on_save(): void
+    {
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(201, [], '{"id": "1"}'));
+
+        $account = new CashAccount;
+        $account->save(); // must not throw NotSupportedException
+
+        $this->assertTrue($account->exists);
+    }
+
+    /**
+     * SalesOrder is both creatable and deletable (defaults), so delete() must
+     * NOT throw — the HTTP layer handles it.
+     */
+    public function test_deletable_model_does_not_throw_on_delete(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(204));
+
+        $order = new SalesOrder;
+        $order->exists = true;
+        $order->id = '1';
+        $order->delete(); // must not throw NotSupportedException
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'DELETE:salesOrder/id/1';
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // withProperties query builder method
+    // -------------------------------------------------------------------------
+
+    /**
+     * withProperties() must append additionalProperties=... to the compiled URL.
+     */
+    public function test_with_properties_compiles_correct_url(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        SalesOrder::withProperties('orderItems', 'tags')
+            ->where('status', 'OPEN')
+            ->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            return str_contains($sql, 'additionalProperties=orderItems%2Ctags') ||
+                   str_contains($sql, 'additionalProperties=orderItems,tags');
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // action (collection-level) and callAction (instance-level)
+    // -------------------------------------------------------------------------
+
+    /**
+     * SalesOrder::action('defaultValuesForCreate') must POST to salesOrder/defaultValuesForCreate.
+     */
+    public function test_collection_action_dispatches_correct_sql(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": "ok"}'));
+
+        SalesOrder::action('defaultValuesForCreate');
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'POST:salesOrder/defaultValuesForCreate';
+        });
+    }
+
+    /**
+     * Calling callAction('createShipment') on an instance must POST to
+     * salesOrder/id/{id}/createShipment.
+     */
+    public function test_instance_call_action_dispatches_correct_sql(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->twice()
+            ->andReturn(
+                new Response(200, [], '{"result": [{"id": "1"}]}'),
+                new Response(200, [], '{"result": "ok"}')
+            );
+
+        $order = SalesOrder::find('1');
+
+        $order->newQuery()->callAction('createShipment', ['shipmentMethodId' => 'abc']);
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'POST:salesOrder/id/1/createShipment';
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // belongsTo relations
+    // -------------------------------------------------------------------------
+
+    /**
+     * Shipment::customer() fires GET:customer?id-eq=X
+     * SalesOrder::currency() fires GET:currency?id-eq=X
+     */
+    public function test_belongs_to_relations_compile_correct_queries(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->times(4)  // fetch shipment + customer + salesOrder + currency
+            ->andReturn(
+                new Response(200, [], '{"result": [{"id": "10", "customerId": "99"}]}'),
+                new Response(200, [], '{"result": [{"id": "99", "company": "Acme", "partyType": "ORGANIZATION"}]}'),
+                new Response(200, [], '{"result": [{"id": "20", "currencyId": "55"}]}'),
+                new Response(200, [], '{"result": [{"id": "55", "isoCode": "EUR"}]}')
+            );
+
+        $shipment = Shipment::find('10');
+        $customer = $shipment->customer;
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            // BelongsTo uses getQualifiedOwnerKeyName() → 'customer.id'
+            return str_contains($sql, 'GET:customer') && str_contains($sql, 'id-eq=99');
+        });
+
+        $this->assertEquals('Acme', $customer->company);
+
+        $order = SalesOrder::find('20');
+        $currency = $order->currency;
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            // BelongsTo uses getQualifiedOwnerKeyName() → 'currency.id'
+            return str_contains($sql, 'GET:currency') && str_contains($sql, 'id-eq=55');
+        });
+
+        $this->assertEquals('EUR', $currency->isoCode);
+    }
+
+    // -------------------------------------------------------------------------
+    // hasMany relations
+    // -------------------------------------------------------------------------
+
+    /**
+     * $customer->salesOrders()->get() must compile to
+     * GET:salesOrder?customerId-eq={id}&pageSize=100
+     */
+    public function test_has_many_sales_orders_compiles_correct_query(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->twice()
+            ->andReturn(
+                new Response(200, [], '{"result": [{"id": "1", "company": "Acme"}]}'),
+                new Response(200, [], '{"result": [{"id": "10"}, {"id": "11"}]}')
+            );
+
+        $customer = Customer::find('1');
+        $orders = $customer->salesOrders()->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            // HasMany uses qualifyColumn() on the related model → 'salesOrder.customerId'
+            return str_contains($sql, 'GET:salesOrder') && str_contains($sql, 'customerId-eq=1');
+        });
+
+        $this->assertCount(2, $orders);
     }
 }

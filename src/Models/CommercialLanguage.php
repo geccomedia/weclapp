@@ -11,4 +11,9 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $countryCode
  * @property string|null $languageCode
  */
-class CommercialLanguage extends Model {}
+class CommercialLanguage extends Model
+{
+    protected bool $creatable = false;
+
+    protected bool $deletable = false;
+}

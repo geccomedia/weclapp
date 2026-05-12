@@ -144,4 +144,14 @@ class IncomingGoods extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class, 'supplierId');
+    }
+
+    public function purchaseOrder(): BelongsTo
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'purchaseOrderId');
+    }
 }

@@ -15,6 +15,7 @@ use Geccomedia\Weclapp\SubModels\SalesOrderPayment;
 use Geccomedia\Weclapp\SubModels\SalesOrderShippingCostItem;
 use Geccomedia\Weclapp\SubModels\SalesOrderStatusHistory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string|null $salesOrderNumber
@@ -263,5 +264,20 @@ class SalesOrder extends Model
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+
+    public function shipments(): HasMany
+    {
+        return $this->hasMany(Shipment::class, 'salesOrderId');
+    }
+
+    public function salesInvoices(): HasMany
+    {
+        return $this->hasMany(SalesInvoice::class, 'salesOrderId');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currencyId');
     }
 }
