@@ -4,6 +4,33 @@
 
 This repo implements most of the Laravel Eloquent Model for the Weclapp web api.
 
+## Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Available Models](#available-models)
+- [Custom Models](#custom-models)
+- [Mass Assignments](#mass-assignments)
+- [Relations](#relations)
+  - [Eager loading](#eager-loading-recommended--single-batched-request)
+  - [Lazy loading](#lazy-loading-n1)
+  - [Inverse relations](#inverse-relations-hasmany)
+- [Additional Properties](#additional-properties)
+- [Custom Actions](#custom-actions)
+  - [Collection-level actions](#collection-level-actions)
+  - [Instance-level actions](#instance-level-actions)
+- [Read-only Models](#read-only-models)
+- [Embedded Sub-Objects](#embedded-sub-objects)
+- [Sub Entities](#sub-entities)
+- [Logging](#logging)
+- [Party-type Models](#party-type-models)
+  - [leadStatus values](#leadstatus-values)
+- [Boolean Filters](#boolean-filters)
+- [License & Copyright](#license--copyright)
+- [Known Gaps / Future Work](#known-gaps--future-work)
+  - [1. Utility path roots](#1-utility-path-roots-without-model-classes)
+  - [2. Plain string\[\] fields](#2-plain-string-fields-not-in-casts)
+
 ## Installation
 
 Require this package with Composer
@@ -313,53 +340,12 @@ Copyright © 2017–2026 Gecco Media GmbH
 
 This section documents remaining coverage gaps for future contributors.
 
-### 1. Named action helpers (184 action endpoints)
-
-The generic `callAction()` / `action()` API works for every endpoint, but none
-of the model classes define named convenience wrappers. High-value candidates:
-
-| Model | Actions worth wrapping |
-|---|---|
-| `SalesOrder` | `createShipment`, `createSalesInvoice`, `createPurchaseOrder`, `cancelOrManuallyClose`, `createAdvancePaymentRequest` |
-| `Quotation` | `accept`, `createQuotationPdf`, `downloadLatestQuotationPdf`, `calculateSalesPrices` |
-| `Shipment` | `createShippingLabels`, `createSalesInvoice`, `createReturnLabels`, `downloadLatestDeliveryNotePdf` |
-| `PurchaseOrder` | `createIncomingGoods`, `createPurchaseInvoice`, `createSupplierReturn` |
-| `SalesInvoice` | `cancel`, `createCreditNote`, `downloadLatestSalesInvoicePdf` |
-| `Document` | `download`, `upload`, `downloadDocumentVersion` |
-| `User` | `invite`, `softDelete` |
-| `Inventory` | `bookInventory` |
-| `Article` | `uploadArticleImage`, `downloadArticleImage` |
-| `Party` | `uploadImage`, `downloadImage` |
-
-All 184 action endpoints across 37 resources currently require raw
-`callAction('name', [...])` calls. See the Custom Actions section above for usage.
-
-### 2. Collection-level (non-id) action endpoints
-
-Some resources expose actions at the collection root (no `/id/{id}/`) rather
-than on a specific instance. These use `Builder::action()` (class-level), not
-`callAction()`. Notable ones:
-
-| Endpoint | Method |
-|---|---|
-| `POST /warehouseStockMovement/bookDirectStockTransfer` | `WarehouseStockMovement::action('bookDirectStockTransfer', [...])` |
-| `POST /warehouseStockMovement/bookIncomingMovement` | `WarehouseStockMovement::action('bookIncomingMovement', [...])` |
-| `POST /warehouseStockMovement/bookOutgoingMovement` | `WarehouseStockMovement::action('bookOutgoingMovement', [...])` |
-| `POST /warehouseStockMovement/bookOntoInternalTransportReference` | `WarehouseStockMovement::action('bookOntoInternalTransportReference', [...])` |
-| `POST /warehouseStockMovement/bookFromLoadingEquipmentPlace` | `WarehouseStockMovement::action(...)` |
-| `POST /warehouseStockMovement/bookToLoadingEquipmentPlace` | `WarehouseStockMovement::action(...)` |
-| `POST /purchaseRequisition/deleteAllRequisitions` | `PurchaseRequisition::action('deleteAllRequisitions')` |
-| `POST /purchaseRequisition/startMaterialPlanningRun` | `PurchaseRequisition::action('startMaterialPlanningRun', [...])` |
-| `POST /accountingTransaction/batchBooking` | `AccountingTransaction::action('batchBooking', [...])` |
-| `POST /document/upload` | `Document::action('upload', [...])` |
-| `POST /document/copy` | `Document::action('copy', [...])` |
-
-### 3. Utility path roots without model classes
+### 1. Utility path roots without model classes
 
 Two swagger path roots have no dedicated model class because they expose
-only utility/action endpoints (no CRUD). Both use `GET`, which the `Builder`
-`action()` helper does not support (it always uses `POST`). Call them directly
-through the `Connection`, which is available via the service container.
+only utility/action endpoints (no CRUD). The `Builder` `action()` helper
+cannot be used for these because it requires a model's table name as the path
+root. Call them directly through the `Connection` instead.
 
 #### `system` endpoints
 
@@ -431,7 +417,7 @@ All valid `type` values are the `SCREAMING_SNAKE_CASE` job names listed in the
 swagger `jobResult` definition (e.g. `INVENTORY_BOOKING`, `MATERIAL_PLANNING_RUN`,
 `MASS_SHIPMENT_CREATION`, `ACCOUNTING_EXPORT`, …).
 
-### 4. Plain `string[]` fields not in `$casts`
+### 2. Plain `string[]` fields not in `$casts`
 
 The following fields are plain arrays of strings (not SubModel objects), so
 they have no cast and arrive as raw `array|null`. This is correct behaviour;

@@ -89,4 +89,81 @@ class TransportationOrder extends Model
     {
         return $this->belongsTo(Shipment::class, 'shipmentId');
     }
+
+    /**
+     * POST /addPicks
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addPicks(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addPicks', $params, 'POST');
+    }
+
+    /**
+     * POST /createPick
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPick(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPick', $params, 'POST');
+    }
+
+    /**
+     * POST /createPickingList
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPickingList(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPickingList', $params, 'POST');
+    }
+
+    /**
+     * POST /createTransportationOrderFromUnpickedRecords
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createTransportationOrderFromUnpickedRecords(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createTransportationOrderFromUnpickedRecords', $params, 'POST');
+    }
+
+    /**
+     * GET /internalTransportReferencesForPickUp
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function internalTransportReferencesForPickUp(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('internalTransportReferencesForPickUp', $params, 'GET');
+    }
+
+    /**
+     * POST /pickPick
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function pickPick(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('pickPick', $params, 'POST');
+    }
+
+    /**
+     * POST /putDownInternalTransportReference
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function putDownInternalTransportReference(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('putDownInternalTransportReference', $params, 'POST');
+    }
 }

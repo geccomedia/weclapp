@@ -195,4 +195,103 @@ class PurchaseInvoice extends Model
     {
         return $this->belongsTo(TermOfPayment::class, 'termOfPaymentId');
     }
+
+    /**
+     * POST /cancel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function cancel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('cancel', $params, 'POST');
+    }
+
+    /**
+     * POST /convertPurchaseInvoiceToCreditNote
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function convertPurchaseInvoiceToCreditNote(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('convertPurchaseInvoiceToCreditNote', $params, 'POST');
+    }
+
+    /**
+     * POST /createContract
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createContract(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createContract', $params, 'POST');
+    }
+
+    /**
+     * POST /createCreditNote
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCreditNote(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCreditNote', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestPurchaseInvoiceDocument
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestPurchaseInvoiceDocument(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestPurchaseInvoiceDocument', $params, 'GET');
+    }
+
+    /**
+     * POST /printLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+    }
+
+    /**
+     * POST /resetTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function resetTaxes(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+    }
+
+    /**
+     * POST /saveDuplicateInvoiceAsOriginal
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function saveDuplicateInvoiceAsOriginal(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('saveDuplicateInvoiceAsOriginal', $params, 'POST');
+    }
+
+    /**
+     * POST /startInvoiceDocumentProcessing
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function startInvoiceDocumentProcessing(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('startInvoiceDocumentProcessing', $params, 'POST');
+    }
 }

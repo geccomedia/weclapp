@@ -28,4 +28,15 @@ class ArchivedEmail extends Model
     protected bool $creatable = false;
 
     protected bool $deletable = false;
+
+    /**
+     * POST /removeReference
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function removeReference(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('removeReference', $params, 'POST');
+    }
 }

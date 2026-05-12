@@ -52,4 +52,37 @@ class ServiceQuota extends Model
     {
         return $this->belongsTo(Party::class, 'customerId');
     }
+
+    /**
+     * POST /close
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function close(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('close', $params, 'POST');
+    }
+
+    /**
+     * POST /createPerformanceRecord
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPerformanceRecord(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+    }
+
+    /**
+     * POST /open
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function open(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('open', $params, 'POST');
+    }
 }

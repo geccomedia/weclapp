@@ -228,4 +228,180 @@ class Quotation extends Model
     {
         return $this->belongsTo(Currency::class, 'currencyId');
     }
+
+    /**
+     * POST /accept
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function accept(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('accept', $params, 'POST');
+    }
+
+    /**
+     * POST /addDefaultScalePricesToItems
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addDefaultScalePricesToItems(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addDefaultScalePricesToItems', $params, 'POST');
+    }
+
+    /**
+     * POST /calculateSalesPrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function calculateSalesPrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('calculateSalesPrices', $params, 'POST');
+    }
+
+    /**
+     * POST /createNewVersion
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createNewVersion(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createNewVersion', $params, 'POST');
+    }
+
+    /**
+     * POST /createPublicPageLink
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPublicPageLink(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPublicPageLink', $params, 'POST');
+    }
+
+    /**
+     * POST /createPurchaseOrderRequest
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPurchaseOrderRequest(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPurchaseOrderRequest', $params, 'POST');
+    }
+
+    /**
+     * POST /createQuotationPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createQuotationPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createQuotationPdf', $params, 'POST');
+    }
+
+    /**
+     * POST /disablePublicPageLink
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function disablePublicPageLink(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('disablePublicPageLink', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestQuotationPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestQuotationPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestQuotationPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /inquire
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function inquire(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('inquire', $params, 'POST');
+    }
+
+    /**
+     * POST /printLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+    }
+
+    /**
+     * GET /printQuotationData
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printQuotationData(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printQuotationData', $params, 'GET');
+    }
+
+    /**
+     * POST /recalculateCosts
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function recalculateCosts(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('recalculateCosts', $params, 'POST');
+    }
+
+    /**
+     * POST /resetTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function resetTaxes(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+    }
+
+    /**
+     * POST /setCostsForItemsWithoutCost
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function setCostsForItemsWithoutCost(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('setCostsForItemsWithoutCost', $params, 'POST');
+    }
+
+    /**
+     * POST /updatePrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updatePrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('updatePrices', $params, 'POST');
+    }
 }

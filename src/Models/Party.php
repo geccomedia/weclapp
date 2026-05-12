@@ -407,4 +407,59 @@ class Party extends Model
     {
         return $this->belongsTo(Title::class, 'titleId');
     }
+
+    /**
+     * POST /createPublicPage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPublicPage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPublicPage', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadImage', $params, 'GET');
+    }
+
+    /**
+     * POST /startTransferAddressesToOpenRecords
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function startTransferAddressesToOpenRecords(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('startTransferAddressesToOpenRecords', $params, 'POST');
+    }
+
+    /**
+     * POST /startTransferEmailAddressesToOpenRecords
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function startTransferEmailAddressesToOpenRecords(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('startTransferEmailAddressesToOpenRecords', $params, 'POST');
+    }
+
+    /**
+     * POST /uploadImage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function uploadImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('uploadImage', $params, 'POST');
+    }
 }

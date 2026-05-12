@@ -219,4 +219,114 @@ class Shipment extends Model
     {
         return $this->belongsTo(FulfillmentProvider::class, 'fulfillmentProviderId');
     }
+
+    /**
+     * POST /createPickingList
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPickingList(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPickingList', $params, 'POST');
+    }
+
+    /**
+     * POST /createPickingOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPickingOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPickingOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /createReturnLabels
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createReturnLabels(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createReturnLabels', $params, 'POST');
+    }
+
+    /**
+     * POST /createSalesInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createSalesInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createSalesInvoice', $params, 'POST');
+    }
+
+    /**
+     * POST /createShippingLabelPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createShippingLabelPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createShippingLabelPdf', $params, 'POST');
+    }
+
+    /**
+     * POST /createShippingLabels
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createShippingLabels(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createShippingLabels', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestDeliveryNotePdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestDeliveryNotePdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestDeliveryNotePdf', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadLatestPickingListPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestPickingListPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestPickingListPdf', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadLatestShippingLabelPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestShippingLabelPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestShippingLabelPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /printLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+    }
 }

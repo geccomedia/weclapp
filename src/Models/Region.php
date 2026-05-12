@@ -21,4 +21,15 @@ class Region extends Model
     {
         return $this->belongsTo(User::class, 'responsibleUserId');
     }
+
+    /**
+     * POST /resetResponsiblePerson
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function resetResponsiblePerson(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('resetResponsiblePerson', $params, 'POST');
+    }
 }

@@ -406,17 +406,28 @@ class Grammar extends BaseGrammar
      * Compile a custom action endpoint request.
      *
      * Instance action:   POST /salesOrder/id/{id}/createShipment
+     *                    GET  /document/id/{id}/download
      * Collection action: POST /salesOrder/defaultValuesForCreate
+     *                    GET  /system/permissions
      *
      * @param  string  $action  The action name, e.g. "createShipment"
-     * @param  array<mixed>  $params  Optional JSON body
+     * @param  array<mixed>  $params  For POST: JSON body. For GET: query parameters appended to the URI.
      * @param  string|null  $id  Record ID for instance actions; null for collection actions
+     * @param  string  $method  HTTP method — 'POST' (default) or 'GET'
      */
-    public function compileAction(Builder $query, string $action, array $params = [], ?string $id = null): Request
+    public function compileAction(Builder $query, string $action, array $params = [], ?string $id = null, string $method = 'POST'): Request
     {
         $uri = $id !== null
             ? $query->from.'/id/'.$id.'/'.$action
             : $query->from.'/'.$action;
+
+        if (strtoupper($method) === 'GET') {
+            $uri = empty($params)
+                ? $uri
+                : (string) Uri::withQueryValues(new Uri($uri), $params);
+
+            return new Request('GET', $uri);
+        }
 
         $body = empty($params) ? null : json_encode($params);
 

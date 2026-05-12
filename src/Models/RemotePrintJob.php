@@ -36,4 +36,15 @@ class RemotePrintJob extends Model
     {
         return $this->belongsTo(Document::class, 'documentId');
     }
+
+    /**
+     * POST /createPrintJobWithDocument
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function createPrintJobWithDocument(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('createPrintJobWithDocument', $params, 'POST');
+    }
 }

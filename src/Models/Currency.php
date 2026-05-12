@@ -22,4 +22,15 @@ class Currency extends Model
     {
         return $this->hasMany(ArticleSupplySource::class, 'currencyId');
     }
+
+    /**
+     * GET /companyCurrency
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function companyCurrency(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('companyCurrency', $params, 'GET');
+    }
 }

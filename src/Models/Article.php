@@ -286,4 +286,81 @@ class Article extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * POST /changeUnit
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function changeUnit(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('changeUnit', $params, 'POST');
+    }
+
+    /**
+     * POST /createDatasheetPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createDatasheetPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createDatasheetPdf', $params, 'POST');
+    }
+
+    /**
+     * POST /createLabelPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createLabelPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createLabelPdf', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadArticleImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadArticleImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadArticleImage', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadMainArticleImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadMainArticleImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadMainArticleImage', $params, 'GET');
+    }
+
+    /**
+     * GET /packagingUnitStructure
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function packagingUnitStructure(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('packagingUnitStructure', $params, 'GET');
+    }
+
+    /**
+     * POST /uploadArticleImage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function uploadArticleImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('uploadArticleImage', $params, 'POST');
+    }
 }

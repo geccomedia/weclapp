@@ -34,4 +34,26 @@ class Calendar extends Model
     {
         return $this->belongsTo(User::class, 'ownerId');
     }
+
+    /**
+     * POST /deleteCalendarAndMoveEvents
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function deleteCalendarAndMoveEvents(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('deleteCalendarAndMoveEvents', $params, 'POST');
+    }
+
+    /**
+     * POST /importiCal
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function importiCal(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('importiCal', $params, 'POST');
+    }
 }

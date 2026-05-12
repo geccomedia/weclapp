@@ -43,4 +43,15 @@ class AccountingTransaction extends Model
     {
         return $this->belongsTo(Currency::class, 'currencyId');
     }
+
+    /**
+     * POST /batchBooking
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function batchBooking(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('batchBooking', $params, 'POST');
+    }
 }

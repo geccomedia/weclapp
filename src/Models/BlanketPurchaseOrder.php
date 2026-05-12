@@ -166,4 +166,26 @@ class BlanketPurchaseOrder extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * GET /downloadLatestBlanketPurchaseOrderPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestBlanketPurchaseOrderPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestBlanketPurchaseOrderPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /generateReleases
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function generateReleases(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('generateReleases', $params, 'POST');
+    }
 }

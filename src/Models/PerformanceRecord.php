@@ -107,4 +107,103 @@ class PerformanceRecord extends Model
     {
         return $this->belongsTo(User::class, 'serviceProviderId');
     }
+
+    /**
+     * POST /addToPerformanceRecord
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addToPerformanceRecord(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addToPerformanceRecord', $params, 'POST');
+    }
+
+    /**
+     * POST /createInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createInvoice', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestPerformanceRecordPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestPerformanceRecordPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestPerformanceRecordPdf', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadSignature
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadSignature(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadSignature', $params, 'GET');
+    }
+
+    /**
+     * POST /performServiceQuotaAssignmentForTimeRecords
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function performServiceQuotaAssignmentForTimeRecords(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('performServiceQuotaAssignmentForTimeRecords', $params, 'POST');
+    }
+
+    /**
+     * POST /recalculateQuantities
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function recalculateQuantities(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('recalculateQuantities', $params, 'POST');
+    }
+
+    /**
+     * POST /removeSignature
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function removeSignature(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('removeSignature', $params, 'POST');
+    }
+
+    /**
+     * POST /uploadSignature
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function uploadSignature(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('uploadSignature', $params, 'POST');
+    }
+
+    /**
+     * POST /startConfiguredMassPerformanceRecordCreation
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function startConfiguredMassPerformanceRecordCreation(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('startConfiguredMassPerformanceRecordCreation', $params, 'POST');
+    }
 }

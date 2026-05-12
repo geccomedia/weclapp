@@ -169,4 +169,59 @@ class Ticket extends Model
     {
         return $this->belongsTo(TicketChannel::class, 'ticketChannelId');
     }
+
+    /**
+     * POST /createPerformanceRecord
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPerformanceRecord(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+    }
+
+    /**
+     * POST /createPublicPage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPublicPage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPublicPage', $params, 'POST');
+    }
+
+    /**
+     * POST /disablePublicPage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function disablePublicPage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('disablePublicPage', $params, 'POST');
+    }
+
+    /**
+     * POST /linkSalesOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function linkSalesOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('linkSalesOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /unlinkSalesOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function unlinkSalesOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('unlinkSalesOrder', $params, 'POST');
+    }
 }

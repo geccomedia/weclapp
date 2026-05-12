@@ -37,4 +37,27 @@ use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionTranslation;
  * @property bool|null $showOnCreationDialog
  * @property bool|null $systemCustomAttribute
  */
-class CustomAttributeDefinition extends Model {}
+class CustomAttributeDefinition extends Model
+{
+    /**
+     * GET /readOrder
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function readOrder(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('readOrder', $params, 'GET');
+    }
+
+    /**
+     * POST /updateOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function updateOrder(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('updateOrder', $params, 'POST');
+    }
+}

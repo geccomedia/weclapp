@@ -38,4 +38,26 @@ class InternalTransportReference extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * POST /createLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createLabel', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestLabel
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestLabel', $params, 'GET');
+    }
 }

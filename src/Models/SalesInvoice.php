@@ -248,4 +248,136 @@ class SalesInvoice extends Model
     {
         return $this->belongsTo(Currency::class, 'currencyId');
     }
+
+    /**
+     * POST /addSalesOrders
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addSalesOrders(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addSalesOrders', $params, 'POST');
+    }
+
+    /**
+     * POST /calculateSalesPrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function calculateSalesPrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('calculateSalesPrices', $params, 'POST');
+    }
+
+    /**
+     * POST /cancel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function cancel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('cancel', $params, 'POST');
+    }
+
+    /**
+     * POST /createContract
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createContract(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createContract', $params, 'POST');
+    }
+
+    /**
+     * POST /createCreditNote
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCreditNote(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCreditNote', $params, 'POST');
+    }
+
+    /**
+     * POST /createCreditNoteOpenItem
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCreditNoteOpenItem(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCreditNoteOpenItem', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestSalesInvoicePdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestSalesInvoicePdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestSalesInvoicePdf', $params, 'GET');
+    }
+
+    /**
+     * POST /printLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+    }
+
+    /**
+     * POST /recalculateCosts
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function recalculateCosts(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('recalculateCosts', $params, 'POST');
+    }
+
+    /**
+     * POST /resetTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function resetTaxes(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+    }
+
+    /**
+     * POST /setCostsForItemsWithoutCost
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function setCostsForItemsWithoutCost(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('setCostsForItemsWithoutCost', $params, 'POST');
+    }
+
+    /**
+     * POST /updatePrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updatePrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('updatePrices', $params, 'POST');
+    }
 }

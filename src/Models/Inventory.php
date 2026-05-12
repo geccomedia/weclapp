@@ -53,4 +53,26 @@ class Inventory extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * POST /bookInventory
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function bookInventory(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('bookInventory', $params, 'POST');
+    }
+
+    /**
+     * POST /create
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function create(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('create', $params, 'POST');
+    }
 }

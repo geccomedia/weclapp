@@ -106,4 +106,15 @@ class Opportunity extends Model
     {
         return $this->belongsTo(Currency::class, 'currencyId');
     }
+
+    /**
+     * POST /linkQuotation
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function linkQuotation(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('linkQuotation', $params, 'POST');
+    }
 }

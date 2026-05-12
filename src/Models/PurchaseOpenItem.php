@@ -42,4 +42,26 @@ class PurchaseOpenItem extends Model
     {
         return $this->belongsTo(PurchaseInvoice::class, 'purchaseInvoiceId');
     }
+
+    /**
+     * POST /createPaymentApplication
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPaymentApplication(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPaymentApplication', $params, 'POST');
+    }
+
+    /**
+     * POST /updatePaymentState
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updatePaymentState(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('updatePaymentState', $params, 'POST');
+    }
 }

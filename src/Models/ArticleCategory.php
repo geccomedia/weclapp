@@ -62,4 +62,26 @@ class ArticleCategory extends Model
     {
         return $this->belongsTo(ArticleCategoryClassification::class, 'articleCategoryClassificationId');
     }
+
+    /**
+     * GET /downloadImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadImage', $params, 'GET');
+    }
+
+    /**
+     * POST /uploadImage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function uploadImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('uploadImage', $params, 'POST');
+    }
 }

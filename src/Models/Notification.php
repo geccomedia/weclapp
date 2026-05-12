@@ -17,4 +17,15 @@ class Notification extends Model
     protected bool $creatable = false;
 
     protected bool $deletable = false;
+
+    /**
+     * POST /markRead
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function markRead(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('markRead', $params, 'POST');
+    }
 }

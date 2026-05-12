@@ -280,4 +280,334 @@ class SalesOrder extends Model
     {
         return $this->belongsTo(Currency::class, 'currencyId');
     }
+
+    /**
+     * POST /activateProjectView
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function activateProjectView(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('activateProjectView', $params, 'POST');
+    }
+
+    /**
+     * POST /calculateSalesPrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function calculateSalesPrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('calculateSalesPrices', $params, 'POST');
+    }
+
+    /**
+     * POST /cancelOrManuallyClose
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function cancelOrManuallyClose(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('cancelOrManuallyClose', $params, 'POST');
+    }
+
+    /**
+     * POST /createAdvancePaymentRequest
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createAdvancePaymentRequest(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createAdvancePaymentRequest', $params, 'POST');
+    }
+
+    /**
+     * POST /createContract
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createContract(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createContract', $params, 'POST');
+    }
+
+    /**
+     * POST /createCustomerReturn
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCustomerReturn(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCustomerReturn', $params, 'POST');
+    }
+
+    /**
+     * POST /createDropshipping
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createDropshipping(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createDropshipping', $params, 'POST');
+    }
+
+    /**
+     * POST /createPartPaymentInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPartPaymentInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPartPaymentInvoice', $params, 'POST');
+    }
+
+    /**
+     * POST /createPerformanceRecord
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPerformanceRecord(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+    }
+
+    /**
+     * POST /createPrepaymentFinalInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPrepaymentFinalInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPrepaymentFinalInvoice', $params, 'POST');
+    }
+
+    /**
+     * POST /createProductionOrders
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createProductionOrders(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createProductionOrders', $params, 'POST');
+    }
+
+    /**
+     * POST /createPurchaseOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPurchaseOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPurchaseOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /createPurchaseOrderRequest
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPurchaseOrderRequest(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPurchaseOrderRequest', $params, 'POST');
+    }
+
+    /**
+     * POST /createReturnLabels
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createReturnLabels(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createReturnLabels', $params, 'POST');
+    }
+
+    /**
+     * POST /createSalesInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createSalesInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createSalesInvoice', $params, 'POST');
+    }
+
+    /**
+     * POST /createShipment
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createShipment(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createShipment', $params, 'POST');
+    }
+
+    /**
+     * POST /createShippingLabels
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createShippingLabels(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createShippingLabels', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestOrderConfirmationPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestOrderConfirmationPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestOrderConfirmationPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /manuallyClose
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function manuallyClose(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('manuallyClose', $params, 'POST');
+    }
+
+    /**
+     * GET /previewSalesOrderConfirmation
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function previewSalesOrderConfirmation(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('previewSalesOrderConfirmation', $params, 'GET');
+    }
+
+    /**
+     * POST /printLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+    }
+
+    /**
+     * GET /printOrderData
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printOrderData(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printOrderData', $params, 'GET');
+    }
+
+    /**
+     * POST /recalculateCosts
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function recalculateCosts(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('recalculateCosts', $params, 'POST');
+    }
+
+    /**
+     * POST /resetTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function resetTaxes(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+    }
+
+    /**
+     * POST /setCostsForItemsWithoutCost
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function setCostsForItemsWithoutCost(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('setCostsForItemsWithoutCost', $params, 'POST');
+    }
+
+    /**
+     * POST /shipOrderForExternalFulfillment
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function shipOrderForExternalFulfillment(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('shipOrderForExternalFulfillment', $params, 'POST');
+    }
+
+    /**
+     * POST /toggleProjectTeam
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function toggleProjectTeam(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('toggleProjectTeam', $params, 'POST');
+    }
+
+    /**
+     * POST /toggleServicesFinished
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function toggleServicesFinished(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('toggleServicesFinished', $params, 'POST');
+    }
+
+    /**
+     * POST /updatePrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updatePrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('updatePrices', $params, 'POST');
+    }
+
+    /**
+     * GET /defaultValuesForCreate
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function defaultValuesForCreate(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('defaultValuesForCreate', $params, 'GET');
+    }
 }

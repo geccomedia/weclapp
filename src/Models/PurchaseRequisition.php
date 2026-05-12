@@ -89,4 +89,59 @@ class PurchaseRequisition extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * POST /addToInternalShipment
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addToInternalShipment(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addToInternalShipment', $params, 'POST');
+    }
+
+    /**
+     * POST /addToPurchaseOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addToPurchaseOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addToPurchaseOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /createProductionOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createProductionOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createProductionOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /deleteAllRequisitions
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function deleteAllRequisitions(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('deleteAllRequisitions', $params, 'POST');
+    }
+
+    /**
+     * POST /startMaterialPlanningRun
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function startMaterialPlanningRun(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('startMaterialPlanningRun', $params, 'POST');
+    }
 }

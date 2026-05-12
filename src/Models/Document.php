@@ -41,4 +41,59 @@ class Document extends Model
     {
         return $this->belongsTo(User::class, 'userId');
     }
+
+    /**
+     * POST /copy
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function copy(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('copy', $params, 'POST');
+    }
+
+    /**
+     * GET /download
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function download(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('download', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadDocumentVersion
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadDocumentVersion(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadDocumentVersion', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadDocumentVersionsZipped
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadDocumentVersionsZipped(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadDocumentVersionsZipped', $params, 'GET');
+    }
+
+    /**
+     * POST /upload
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function upload(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('upload', $params, 'POST');
+    }
 }

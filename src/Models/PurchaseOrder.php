@@ -210,4 +210,158 @@ class PurchaseOrder extends Model
     {
         return $this->belongsTo(Currency::class, 'currencyId');
     }
+
+    /**
+     * POST /cancelDropshippingShipments
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function cancelDropshippingShipments(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('cancelDropshippingShipments', $params, 'POST');
+    }
+
+    /**
+     * POST /createCancellationSlipPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCancellationSlipPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCancellationSlipPdf', $params, 'POST');
+    }
+
+    /**
+     * POST /createContract
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createContract(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createContract', $params, 'POST');
+    }
+
+    /**
+     * POST /createDropshippingDeliveryNotePdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createDropshippingDeliveryNotePdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createDropshippingDeliveryNotePdf', $params, 'POST');
+    }
+
+    /**
+     * POST /createIncomingGoods
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createIncomingGoods(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createIncomingGoods', $params, 'POST');
+    }
+
+    /**
+     * POST /createProductionOrders
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createProductionOrders(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createProductionOrders', $params, 'POST');
+    }
+
+    /**
+     * POST /createPurchaseInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPurchaseInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPurchaseInvoice', $params, 'POST');
+    }
+
+    /**
+     * POST /createSupplierReturn
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createSupplierReturn(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createSupplierReturn', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestCancellationSlipPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestCancellationSlipPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestCancellationSlipPdf', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadLatestDropshippingDeliveryNotePdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestDropshippingDeliveryNotePdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestDropshippingDeliveryNotePdf', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadLatestPurchaseOrderPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestPurchaseOrderPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestPurchaseOrderPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /printLabel
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function printLabel(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+    }
+
+    /**
+     * POST /processDropshipping
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function processDropshipping(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('processDropshipping', $params, 'POST');
+    }
+
+    /**
+     * POST /resetTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function resetTaxes(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+    }
 }

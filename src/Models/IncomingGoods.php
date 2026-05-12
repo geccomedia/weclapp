@@ -154,4 +154,92 @@ class IncomingGoods extends Model
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchaseOrderId');
     }
+
+    /**
+     * POST /addPurchaseOrders
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function addPurchaseOrders(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('addPurchaseOrders', $params, 'POST');
+    }
+
+    /**
+     * POST /createCompensationShipment
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCompensationShipment(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCompensationShipment', $params, 'POST');
+    }
+
+    /**
+     * POST /createCreditNote
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createCreditNote(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createCreditNote', $params, 'POST');
+    }
+
+    /**
+     * POST /createPurchaseInvoice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPurchaseInvoice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPurchaseInvoice', $params, 'POST');
+    }
+
+    /**
+     * POST /createReturnLabels
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createReturnLabels(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createReturnLabels', $params, 'POST');
+    }
+
+    /**
+     * POST /createSupplierReturn
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createSupplierReturn(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createSupplierReturn', $params, 'POST');
+    }
+
+    /**
+     * GET /incomingBookings
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function incomingBookings(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('incomingBookings', $params, 'GET');
+    }
+
+    /**
+     * POST /updateIncomingBookings
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updateIncomingBookings(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('updateIncomingBookings', $params, 'POST');
+    }
 }

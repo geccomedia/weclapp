@@ -66,4 +66,59 @@ class Tax extends Model
     {
         return $this->hasMany(SalesOrder::class, 'nonStandardTaxId');
     }
+
+    /**
+     * POST /configurePurchaseTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function configurePurchaseTaxes(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('configurePurchaseTaxes', $params, 'POST');
+    }
+
+    /**
+     * POST /configureSalesTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function configureSalesTaxes(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('configureSalesTaxes', $params, 'POST');
+    }
+
+    /**
+     * GET /findPurchaseTax
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function findPurchaseTax(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('findPurchaseTax', $params, 'GET');
+    }
+
+    /**
+     * GET /findSalesTax
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function findSalesTax(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('findSalesTax', $params, 'GET');
+    }
+
+    /**
+     * POST /resetSystemTaxes
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function resetSystemTaxes(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('resetSystemTaxes', $params, 'POST');
+    }
 }

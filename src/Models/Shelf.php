@@ -28,4 +28,26 @@ class Shelf extends Model
     {
         return $this->belongsTo(StorageLocation::class, 'storageLocationId');
     }
+
+    /**
+     * POST /activate
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function activate(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('activate', $params, 'POST');
+    }
+
+    /**
+     * POST /deactivate
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function deactivate(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('deactivate', $params, 'POST');
+    }
 }

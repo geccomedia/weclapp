@@ -93,4 +93,48 @@ class PurchaseOrderRequest extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * POST /createBlanketPurchaseOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createBlanketPurchaseOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createBlanketPurchaseOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /createPurchaseOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPurchaseOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPurchaseOrder', $params, 'POST');
+    }
+
+    /**
+     * POST /exportItemsAsCsv
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function exportItemsAsCsv(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('exportItemsAsCsv', $params, 'POST');
+    }
+
+    /**
+     * POST /pushPurchasePrices
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function pushPurchasePrices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('pushPurchasePrices', $params, 'POST');
+    }
 }

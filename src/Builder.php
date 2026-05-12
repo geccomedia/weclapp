@@ -108,16 +108,16 @@ class Builder extends BaseBuilder
     /**
      * Call a collection-level custom action endpoint.
      *
-     * @param  array<mixed>  $params
+     * @param  array<mixed>  $params  For POST: JSON body. For GET: query parameters.
      * @return array<mixed>|null
      */
-    public function action(string $action, array $params = []): ?array
+    public function action(string $action, array $params = [], string $method = 'POST'): ?array
     {
         /** @var QueryBuilder $query */
         $query = $this->query;
         /** @var Grammar $grammar */
         $grammar = $query->grammar;
-        $request = $grammar->compileAction($query, $action, $params);
+        $request = $grammar->compileAction($query, $action, $params, null, $method);
 
         return app(Connection::class)->action($request);
     }
@@ -125,10 +125,10 @@ class Builder extends BaseBuilder
     /**
      * Call an instance-level custom action endpoint on an existing record.
      *
-     * @param  array<mixed>  $params
+     * @param  array<mixed>  $params  For POST: JSON body. For GET: query parameters.
      * @return array<mixed>|null
      */
-    public function callAction(string $action, array $params = []): ?array
+    public function callAction(string $action, array $params = [], string $method = 'POST'): ?array
     {
         $id = (string) $this->model->getKey();
 
@@ -136,7 +136,7 @@ class Builder extends BaseBuilder
         $query = $this->query;
         /** @var Grammar $grammar */
         $grammar = $query->grammar;
-        $request = $grammar->compileAction($query, $action, $params, $id);
+        $request = $grammar->compileAction($query, $action, $params, $id, $method);
 
         return app(Connection::class)->action($request);
     }

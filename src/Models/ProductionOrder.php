@@ -75,4 +75,48 @@ class ProductionOrder extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
+
+    /**
+     * POST /createPickingList
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPickingList(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPickingList', $params, 'POST');
+    }
+
+    /**
+     * POST /createPickingOrder
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPickingOrder(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPickingOrder', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestProductionOrderPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestProductionOrderPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestProductionOrderPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /fastProductionBooking
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function fastProductionBooking(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('fastProductionBooking', $params, 'POST');
+    }
 }

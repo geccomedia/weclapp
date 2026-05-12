@@ -207,4 +207,26 @@ class Contract extends Model
     {
         return $this->belongsTo(TicketServiceLevelAgreement::class, 'ticketServiceLevelAgreementId');
     }
+
+    /**
+     * POST /createContractDocument
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createContractDocument(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createContractDocument', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadLatestContractDocumentPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestContractDocumentPdf(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('downloadLatestContractDocumentPdf', $params, 'GET');
+    }
 }

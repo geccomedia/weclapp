@@ -30,4 +30,81 @@ use Geccomedia\Weclapp\SubModels\OnlyId;
 class User extends Model
 {
     protected bool $deletable = false;
+
+    /**
+     * POST /deleteMfaDevice
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function deleteMfaDevice(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('deleteMfaDevice', $params, 'POST');
+    }
+
+    /**
+     * POST /invite
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function invite(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('invite', $params, 'POST');
+    }
+
+    /**
+     * GET /readMfaDevices
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function readMfaDevices(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('readMfaDevices', $params, 'GET');
+    }
+
+    /**
+     * POST /softDelete
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function softDelete(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('softDelete', $params, 'POST');
+    }
+
+    /**
+     * GET /userImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function userImage(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('userImage', $params, 'GET');
+    }
+
+    /**
+     * GET /userImageThumbnail
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function userImageThumbnail(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('userImageThumbnail', $params, 'GET');
+    }
+
+    /**
+     * GET /currentUser
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function currentUser(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('currentUser', $params, 'GET');
+    }
 }

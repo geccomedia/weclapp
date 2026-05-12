@@ -125,4 +125,37 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'userOfLastStatusChangeId');
     }
+
+    /**
+     * POST /createPerformanceRecord
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createPerformanceRecord(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+    }
+
+    /**
+     * POST /updateBillingData
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updateBillingData(array $params = []): ?array
+    {
+        return $this->newQuery()->callAction('updateBillingData', $params, 'POST');
+    }
+
+    /**
+     * GET /fromTemplate
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function fromTemplate(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('fromTemplate', $params, 'GET');
+    }
 }

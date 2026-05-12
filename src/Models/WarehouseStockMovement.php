@@ -114,4 +114,70 @@ class WarehouseStockMovement extends Model
     {
         return $this->belongsTo(User::class, 'userId');
     }
+
+    /**
+     * POST /bookDirectStockTransfer
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function bookDirectStockTransfer(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('bookDirectStockTransfer', $params, 'POST');
+    }
+
+    /**
+     * POST /bookFromLoadingEquipmentPlace
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function bookFromLoadingEquipmentPlace(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('bookFromLoadingEquipmentPlace', $params, 'POST');
+    }
+
+    /**
+     * POST /bookIncomingMovement
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function bookIncomingMovement(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('bookIncomingMovement', $params, 'POST');
+    }
+
+    /**
+     * POST /bookOntoInternalTransportReference
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function bookOntoInternalTransportReference(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('bookOntoInternalTransportReference', $params, 'POST');
+    }
+
+    /**
+     * POST /bookOutgoingMovement
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function bookOutgoingMovement(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('bookOutgoingMovement', $params, 'POST');
+    }
+
+    /**
+     * POST /bookToLoadingEquipmentPlace
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public static function bookToLoadingEquipmentPlace(array $params = []): ?array
+    {
+        return (new self)->newQuery()->action('bookToLoadingEquipmentPlace', $params, 'POST');
+    }
 }
