@@ -173,8 +173,17 @@ class Grammar extends BaseGrammar
     public function compileWheres(Builder $query): array
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
-            if (! in_array($where['type'], ['In', 'NotIn', 'Null', 'NotNull', 'Entity'])) {
+            if (! in_array($where['type'], ['In', 'NotIn', 'InRaw', 'NotInRaw', 'Null', 'NotNull', 'Entity'])) {
                 $where['type'] = 'Basic';
+            }
+
+            // InRaw / NotInRaw are produced by Eloquent's whereIntegerInRaw() for
+            // eager-loading on integer key types. They have the same shape as
+            // In / NotIn (a 'values' array), so we map them down to our handlers.
+            if ($where['type'] === 'InRaw') {
+                $where['type'] = 'In';
+            } elseif ($where['type'] === 'NotInRaw') {
+                $where['type'] = 'NotIn';
             }
 
             return $this->{"where{$where['type']}"}($query, $where);

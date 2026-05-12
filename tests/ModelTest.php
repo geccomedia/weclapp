@@ -865,4 +865,89 @@ class ModelTest extends OrchestraTestCase
 
         $this->assertSame(['articleId' => 'A1', 'quantity' => '3'], $item->toArray());
     }
+
+    // -------------------------------------------------------------------------
+    // Relation loading: eager (batch) vs lazy (N+1)
+    // -------------------------------------------------------------------------
+
+    /**
+     * The base Model must declare $keyType = 'string' so that Eloquent's
+     * eager-loader picks whereIn instead of whereIntegerInRaw.
+     */
+    public function test_model_key_type_is_string(): void
+    {
+        $this->assertSame('string', (new SalesOrder)->getKeyType());
+        $this->assertSame('string', (new Customer)->getKeyType());
+        $this->assertSame('string', (new Unit)->getKeyType());
+    }
+
+    /**
+     * with('relation') must issue exactly ONE batched request for the related
+     * model, not one per parent — i.e. it must NOT be N+1.
+     *
+     * The batched query uses id-in=[...] to fetch all related records at once.
+     */
+    public function test_eager_load_issues_single_batched_request(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->twice()  // exactly 2: one for salesOrder list, one batched party lookup
+            ->andReturn(
+                // First call: fetch the sales orders
+                new Response(200, [], '{"result": [
+                    {"id": "1", "customerId": "100"},
+                    {"id": "2", "customerId": "101"},
+                    {"id": "3", "customerId": "100"}
+                ]}'),
+                // Second call: batched fetch of unique customer IDs
+                new Response(200, [], '{"result": [
+                    {"id": "100", "company": "Acme"},
+                    {"id": "101", "company": "Globex"}
+                ]}')
+            );
+
+        $orders = SalesOrder::with('customer')->get();
+
+        // Confirm the batched query used id-in with the two unique IDs
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return str_contains((string) $event->sql, 'id-in=') &&
+                   str_contains((string) $event->sql, '100') &&
+                   str_contains((string) $event->sql, '101');
+        });
+
+        // Relations are correctly hydrated
+        $this->assertSame('Acme', $orders->find('1')->customer->company);
+        $this->assertSame('Globex', $orders->find('2')->customer->company);
+        // Duplicate foreign key (100) reuses the same loaded instance — no extra request
+        $this->assertSame('Acme', $orders->find('3')->customer->company);
+    }
+
+    /**
+     * Without with(), each relation access fires its own request — N+1.
+     * This test documents and proves the lazy-loading (N+1) behaviour.
+     */
+    public function test_lazy_load_issues_one_request_per_relation_access(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->times(3)  // 1 list + 2 individual lookups
+            ->andReturn(
+                new Response(200, [], '{"result": [{"id": "1", "customerId": "100"}, {"id": "2", "customerId": "101"}]}'),
+                new Response(200, [], '{"result": [{"id": "100", "company": "Acme"}]}'),
+                new Response(200, [], '{"result": [{"id": "101", "company": "Globex"}]}')
+            );
+
+        $orders = SalesOrder::get();
+
+        // Each access triggers a separate request
+        $this->assertSame('Acme', $orders->find('1')->customer->company);
+        $this->assertSame('Globex', $orders->find('2')->customer->company);
+
+        // Three distinct queries were fired
+        Event::assertDispatched(QueryExecuted::class, 3);
+    }
 }

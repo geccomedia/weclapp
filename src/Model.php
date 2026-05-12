@@ -32,6 +32,16 @@ abstract class Model extends BaseModel
     public $incrementing = true;
 
     /**
+     * Weclapp IDs are strings, not integers.
+     *
+     * Declaring this explicitly ensures Eloquent's eager-loading picks `whereIn`
+     * rather than `whereIntegerInRaw`, which our grammar does not handle.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
