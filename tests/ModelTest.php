@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Tests;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Connection;
+use Geccomedia\Weclapp\JobApi;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\Models\CashAccount;
 use Geccomedia\Weclapp\Models\Comment;
@@ -22,6 +23,7 @@ use Geccomedia\Weclapp\ServiceProvider;
 use Geccomedia\Weclapp\SubModel;
 use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Geccomedia\Weclapp\SubModels\SalesOrderItem;
+use Geccomedia\Weclapp\SystemApi;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
@@ -1330,6 +1332,165 @@ class ModelTest extends OrchestraTestCase
 
             return str_contains($sql, 'customer-eq=true')
                 && str_contains($sql, 'company-eq=Acme');
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // SystemApi
+    // -------------------------------------------------------------------------
+
+    /**
+     * SystemApi::permissions() must issue GET:system/permissions and return the result array.
+     */
+    public function test_system_api_permissions_returns_array(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": ["party:read", "salesOrder:read"]}'));
+
+        $api = app(SystemApi::class);
+        $result = $api->permissions();
+
+        $this->assertSame(['party:read', 'salesOrder:read'], $result);
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'GET:system/permissions';
+        });
+    }
+
+    /**
+     * SystemApi::permissions() returns an empty array when the result is empty/null.
+     */
+    public function test_system_api_permissions_returns_empty_array_on_null(): void
+    {
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        $result = app(SystemApi::class)->permissions();
+
+        $this->assertSame([], $result);
+    }
+
+    /**
+     * SystemApi::licenses() must issue GET:system/licenses and return the result array.
+     */
+    public function test_system_api_licenses_returns_array(): void
+    {
+        Event::fake();
+
+        $licenses = [
+            ['name' => 'SALES', 'permissions' => ['salesOrder:read', 'salesOrder:write']],
+        ];
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], json_encode(['result' => $licenses])));
+
+        $result = app(SystemApi::class)->licenses();
+
+        $this->assertSame($licenses, $result);
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'GET:system/licenses';
+        });
+    }
+
+    /**
+     * SystemApi::demoTestSystemInfo() must issue GET:system/demoTestSystemInfo
+     * and return the unwrapped 'result' value.
+     */
+    public function test_system_api_demo_test_system_info_returns_result(): void
+    {
+        Event::fake();
+
+        $info = ['createPossible' => true, 'creationInProgress' => false, 'demoInstanceUrl' => null, 'mainInstanceUrl' => null];
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], json_encode(['result' => $info])));
+
+        $result = app(SystemApi::class)->demoTestSystemInfo();
+
+        $this->assertSame($info, $result);
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'GET:system/demoTestSystemInfo';
+        });
+    }
+
+    /**
+     * SystemApi::createDemoTestSystem() must issue POST:system/createDemoTestSystem.
+     */
+    public function test_system_api_create_demo_test_system_posts_correct_url(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": {"result": "SUCCESS"}}'));
+
+        app(SystemApi::class)->createDemoTestSystem('My Test', 'PROD_SYSTEM');
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'POST:system/createDemoTestSystem';
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // JobApi
+    // -------------------------------------------------------------------------
+
+    /**
+     * JobApi::status() must issue GET:job/status?type=INVENTORY_BOOKING and return result.
+     */
+    public function test_job_api_status_dispatches_correct_url(): void
+    {
+        Event::fake();
+
+        $jobResult = ['type' => 'INVENTORY_BOOKING', 'status' => 'EXECUTING', 'progress' => ['current' => 42, 'total' => 100]];
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], json_encode(['result' => $jobResult])));
+
+        $result = app(JobApi::class)->status('INVENTORY_BOOKING');
+
+        $this->assertSame($jobResult, $result);
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'GET:job/status?type=INVENTORY_BOOKING';
+        });
+    }
+
+    /**
+     * JobApi::abort() must issue GET:job/abort?type=INVENTORY_BOOKING and return result.
+     */
+    public function test_job_api_abort_dispatches_correct_url(): void
+    {
+        Event::fake();
+
+        $jobResult = ['type' => 'INVENTORY_BOOKING', 'status' => 'ABORTING', 'progress' => null];
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], json_encode(['result' => $jobResult])));
+
+        $result = app(JobApi::class)->abort('INVENTORY_BOOKING');
+
+        $this->assertSame($jobResult, $result);
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'GET:job/abort?type=INVENTORY_BOOKING';
         });
     }
 }

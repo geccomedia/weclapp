@@ -26,10 +26,10 @@ This repo implements most of the Laravel Eloquent Model for the Weclapp web api.
 - [Party-type Models](#party-type-models)
   - [leadStatus values](#leadstatus-values)
 - [Boolean Filters](#boolean-filters)
+- [System & Job Utility APIs](#system--job-utility-apis)
+  - [SystemApi](#systemapi)
+  - [JobApi](#jobapi)
 - [License & Copyright](#license--copyright)
-- [Known Gaps / Future Work](#known-gaps--future-work)
-  - [1. Utility path roots](#1-utility-path-roots-without-model-classes)
-  - [2. Plain string\[\] fields](#2-plain-string-fields-not-in-casts)
 
 ## Installation
 
@@ -328,101 +328,65 @@ Customer::where('customerBlocked', false)->get();
 Article::whereIn('active', [true, false])->get();
 ```
 
+## System & Job Utility APIs
+
+Weclapp exposes a handful of endpoints under `/system` and `/job` that have no
+CRUD model. Two dedicated classes wrap these as typed methods.
+
+### SystemApi
+
+```php
+use Geccomedia\Weclapp\SystemApi;
+
+$api = app(SystemApi::class);
+
+// GET /system/permissions → string[]
+// Returns the permission slugs granted to the current API key.
+$permissions = $api->permissions();
+// e.g. ['party:read', 'salesOrder:read', 'salesOrder:write', ...]
+
+// GET /system/licenses → array of {name: string, permissions: string[]}
+// Returns the active licence modules and their included permissions.
+$licenses = $api->licenses();
+// e.g. [['name' => 'SALES', 'permissions' => ['salesOrder:read', ...]], ...]
+
+// GET /system/demoTestSystemInfo
+// Returns whether a demo instance can be created from this tenant.
+$info = $api->demoTestSystemInfo();
+// e.g. ['createPossible' => true, 'creationInProgress' => false, ...]
+
+// POST /system/createDemoTestSystem
+// Creates a demo copy of this tenant. Preset: 'NONE', 'PROD_SYSTEM', or 'TEMPLATE_SYSTEM'.
+$api->createDemoTestSystem('My Test System', 'PROD_SYSTEM');
+$api->createDemoTestSystem('My Test System', 'PROD_SYSTEM', allUsers: true);
+```
+
+### JobApi
+
+Weclapp runs long-running background jobs asynchronously. Use `JobApi` to poll
+or cancel them by type.
+
+```php
+use Geccomedia\Weclapp\JobApi;
+
+$api = app(JobApi::class);
+
+// GET /job/status?type=INVENTORY_BOOKING
+// Returns the current status and progress of the named background job.
+$status = $api->status('INVENTORY_BOOKING');
+// e.g. ['type' => 'INVENTORY_BOOKING', 'status' => 'EXECUTING', 'progress' => ['current' => 42, 'total' => 100]]
+
+// GET /job/abort?type=INVENTORY_BOOKING
+// Requests cancellation of a running job.
+$result = $api->abort('INVENTORY_BOOKING');
+```
+
+Valid `type` values are the `SCREAMING_SNAKE_CASE` job names from the Weclapp
+API spec (e.g. `INVENTORY_BOOKING`, `MATERIAL_PLANNING_RUN`,
+`MASS_SHIPMENT_CREATION`, `ACCOUNTING_EXPORT`, and many more).
+
 ## License & Copyright
 
 Copyright © 2017–2026 Gecco Media GmbH
 
 [License](LICENSE)
-
----
-
-## Known Gaps / Future Work
-
-This section documents remaining coverage gaps for future contributors.
-
-### 1. Utility path roots without model classes
-
-Two swagger path roots have no dedicated model class because they expose
-only utility/action endpoints (no CRUD). The `Builder` `action()` helper
-cannot be used for these because it requires a model's table name as the path
-root. Call them directly through the `Connection` instead.
-
-#### `system` endpoints
-
-```php
-use GuzzleHttp\Psr7\Request;
-use Geccomedia\Weclapp\Connection;
-
-$connection = app(Connection::class);
-
-// GET /system/permissions → string[]
-// Returns the list of permission slugs granted to the current API key.
-$permissions = $connection->select(new Request('GET', 'system/permissions'));
-// e.g. ['party:read', 'salesOrder:read', 'salesOrder:write', ...]
-
-// GET /system/licenses → array of {name: string, permissions: string[]}
-// Returns the active licence modules and their included permissions.
-$licenses = $connection->select(new Request('GET', 'system/licenses'));
-// e.g. [['name' => 'SALES', 'permissions' => ['salesOrder:read', ...]], ...]
-
-// GET /system/demoTestSystemInfo → {createPossible, creationInProgress, demoInstanceUrl, mainInstanceUrl}
-// Check whether a demo instance can be created from this tenant.
-$info = $connection->action(new Request('GET', 'system/demoTestSystemInfo'));
-$demoInfo = $info['result'] ?? null;
-// e.g. ['createPossible' => true, 'creationInProgress' => false, 'demoInstanceUrl' => null, ...]
-
-// POST /system/createDemoTestSystem  — creates a demo copy of this tenant
-$connection->action(new Request(
-    'POST',
-    'system/createDemoTestSystem',
-    [],
-    json_encode(['label' => 'My Test System', 'preset' => 'PROD_SYSTEM'])
-));
-```
-
-#### `job` endpoints
-
-Weclapp runs long-running background jobs (imports, mass-operations, syncs,
-etc.) asynchronously. You can poll or abort them by `type`.
-
-```php
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Uri;
-use Geccomedia\Weclapp\Connection;
-
-$connection = app(Connection::class);
-
-// GET /job/status?type=INVENTORY_BOOKING
-// Returns the current status and progress of the named background job.
-$statusResult = $connection->action(
-    new Request('GET', (string) Uri::withQueryValues(
-        new Uri('job/status'),
-        ['type' => 'INVENTORY_BOOKING']
-    ))
-);
-$status = $statusResult['result'] ?? null;
-// e.g. ['status' => 'EXECUTING', 'progress' => ['current' => 42, 'total' => 100], 'type' => 'INVENTORY_BOOKING']
-
-// GET /job/abort?type=INVENTORY_BOOKING
-// Requests cancellation of a running job.
-$connection->action(
-    new Request('GET', (string) Uri::withQueryValues(
-        new Uri('job/abort'),
-        ['type' => 'INVENTORY_BOOKING']
-    ))
-);
-```
-
-All valid `type` values are the `SCREAMING_SNAKE_CASE` job names listed in the
-swagger `jobResult` definition (e.g. `INVENTORY_BOOKING`, `MATERIAL_PLANNING_RUN`,
-`MASS_SHIPMENT_CREATION`, `ACCOUNTING_EXPORT`, …).
-
-### 2. Plain `string[]` fields not in `$casts`
-
-The following fields are plain arrays of strings (not SubModel objects), so
-they have no cast and arrive as raw `array|null`. This is correct behaviour;
-they are documented here for clarity:
-
-- `tags` — present on `SalesOrder`, `Quotation`, `Shipment`, `PurchaseOrder`,
-  `SalesInvoice`, `Party`, `Customer`, `Contact`, `Lead`, `Supplier`, and others
-- `availableForSalesChannels` — present on `Article`
