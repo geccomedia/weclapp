@@ -15,12 +15,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $type
  * @property bool|null $useAsDefault
  */
-class MailTemplate extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'mailTemplate';
-}
+class MailTemplate extends Model {}

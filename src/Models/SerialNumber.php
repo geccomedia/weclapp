@@ -16,12 +16,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $warrantyExpirationDate
  * @property array|null $customAttributes
  */
-class SerialNumber extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'serialNumber';
-}
+class SerialNumber extends Model {}

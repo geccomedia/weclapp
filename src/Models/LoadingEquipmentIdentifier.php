@@ -9,12 +9,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $loadingEquipmentArticles
  * @property string|null $name
  */
-class LoadingEquipmentIdentifier extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'loadingEquipmentIdentifier';
-}
+class LoadingEquipmentIdentifier extends Model {}

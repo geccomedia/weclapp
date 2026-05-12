@@ -19,12 +19,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $statusHistory
  * @property string|null $warehouseId
  */
-class Inventory extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'inventory';
-}
+class Inventory extends Model {}

@@ -77,12 +77,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $supplierQuotationNumber
  * @property array|null $tags
  */
-class PurchaseOrder extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'purchaseOrder';
-}
+class PurchaseOrder extends Model {}

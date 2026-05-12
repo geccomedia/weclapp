@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $startTime
  * @property string|null $userId
  */
-class Attendance extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'attendance';
-}
+class Attendance extends Model {}

@@ -43,13 +43,6 @@ use Geccomedia\Weclapp\Model;
 class PerformanceRecord extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'performanceRecord';
-
-    /**
      * The attributes that should be mutated to dates.
      *
      * @var array<string, string>

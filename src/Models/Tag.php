@@ -7,12 +7,4 @@ use Geccomedia\Weclapp\Model;
 /**
  * @property string|null $name
  */
-class Tag extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'tag';
-}
+class Tag extends Model {}

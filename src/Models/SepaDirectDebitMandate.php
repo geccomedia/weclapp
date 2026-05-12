@@ -16,12 +16,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $signatureDate
  * @property string|null $type
  */
-class SepaDirectDebitMandate extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'sepaDirectDebitMandate';
-}
+class SepaDirectDebitMandate extends Model {}

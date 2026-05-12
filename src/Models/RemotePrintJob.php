@@ -13,12 +13,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $weclappOsHardwareId
  * @property string|null $weclappOsId
  */
-class RemotePrintJob extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'remotePrintJob';
-}
+class RemotePrintJob extends Model {}

@@ -18,12 +18,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taxRateType
  * @property bool|null $validVatId
  */
-class TaxDeterminationRule extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'taxDeterminationRule';
-}
+class TaxDeterminationRule extends Model {}

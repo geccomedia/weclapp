@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $parentAccountId
  * @property string|null $type
  */
-class LedgerAccount extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ledgerAccount';
-}
+class LedgerAccount extends Model {}

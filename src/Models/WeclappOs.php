@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $name
  * @property array|null $printerNames
  */
-class WeclappOs extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'weclappOs';
-}
+class WeclappOs extends Model {}

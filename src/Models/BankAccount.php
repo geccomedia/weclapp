@@ -32,12 +32,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $qrIdentifier
  * @property string|null $swiftBic
  */
-class BankAccount extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'bankAccount';
-}
+class BankAccount extends Model {}

@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $email
  * @property string|null $participation
  */
-class CampaignParticipant extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'campaignParticipant';
-}
+class CampaignParticipant extends Model {}

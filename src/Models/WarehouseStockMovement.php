@@ -34,12 +34,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userId
  * @property float|null $valuationPrice
  */
-class WarehouseStockMovement extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'warehouseStockMovement';
-}
+class WarehouseStockMovement extends Model {}

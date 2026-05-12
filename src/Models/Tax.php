@@ -18,12 +18,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taxKey
  * @property float|null $taxValue
  */
-class Tax extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'tax';
-}
+class Tax extends Model {}

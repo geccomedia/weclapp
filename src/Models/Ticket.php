@@ -54,12 +54,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $ticketTypeId
  * @property array|null $watchers
  */
-class Ticket extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ticket';
-}
+class Ticket extends Model {}

@@ -15,12 +15,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $requestMethod
  * @property string|null $url
  */
-class Webhook extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'webhook';
-}
+class Webhook extends Model {}

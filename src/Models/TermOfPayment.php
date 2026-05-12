@@ -22,12 +22,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $validFrom
  * @property string|null $validTo
  */
-class TermOfPayment extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'termOfPayment';
-}
+class TermOfPayment extends Model {}

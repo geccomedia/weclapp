@@ -17,12 +17,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $paymentApplications
  * @property string|null $salesInvoiceId
  */
-class SalesOpenItem extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'salesOpenItem';
-}
+class SalesOpenItem extends Model {}

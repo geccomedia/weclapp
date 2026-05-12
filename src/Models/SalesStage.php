@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property float|null $probability
  * @property bool|null $active
  */
-class SalesStage extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'salesStage';
-}
+class SalesStage extends Model {}

@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $ticketCategories
  * @property array|null $ticketPoolingGroupMembers
  */
-class TicketPoolingGroup extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ticketPoolingGroup';
-}
+class TicketPoolingGroup extends Model {}

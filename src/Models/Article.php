@@ -108,12 +108,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $useSalesBillOfMaterialItemPricesForPurchase
  * @property bool|null $useSalesBillOfMaterialSubitemCosts
  */
-class Article extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'article';
-}
+class Article extends Model {}

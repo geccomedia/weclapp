@@ -24,12 +24,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $serialNumbers
  * @property string|null $storagePlaceId
  */
-class WarehouseStock extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'warehouseStock';
-}
+class WarehouseStock extends Model {}

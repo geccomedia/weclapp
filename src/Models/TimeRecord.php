@@ -31,12 +31,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $timeRecordSource
  * @property string|null $userId
  */
-class TimeRecord extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'timeRecord';
-}
+class TimeRecord extends Model {}

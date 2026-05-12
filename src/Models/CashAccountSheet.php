@@ -15,12 +15,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $openingDate
  * @property string|null $sheetNumber
  */
-class CashAccountSheet extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'cashAccountSheet';
-}
+class CashAccountSheet extends Model {}

@@ -25,12 +25,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $subject
  * @property string|null $userId
  */
-class CalendarEvent extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'calendarEvent';
-}
+class CalendarEvent extends Model {}

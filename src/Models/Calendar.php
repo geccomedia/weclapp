@@ -16,12 +16,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $sharePrivateEvents
  * @property bool|null $synchronize
  */
-class Calendar extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'calendar';
-}
+class Calendar extends Model {}

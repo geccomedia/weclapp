@@ -22,12 +22,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $recipientUsers
  * @property bool|null $solution
  */
-class Comment extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'comment';
-}
+class Comment extends Model {}

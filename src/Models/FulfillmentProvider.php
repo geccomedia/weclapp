@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $fulfillmentProviderType
  * @property string|null $warehouseId
  */
-class FulfillmentProvider extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'fulfillmentProvider';
-}
+class FulfillmentProvider extends Model {}

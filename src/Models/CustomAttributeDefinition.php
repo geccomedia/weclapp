@@ -33,12 +33,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $showOnCreationDialog
  * @property bool|null $systemCustomAttribute
  */
-class CustomAttributeDefinition extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'customAttributeDefinition';
-}
+class CustomAttributeDefinition extends Model {}

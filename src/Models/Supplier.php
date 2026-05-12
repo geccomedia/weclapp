@@ -145,12 +145,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $vatIdentificationNumber
  * @property string|null $xRechnungLeitwegId
  */
-class Supplier extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'supplier';
-}
+class Supplier extends Model {}

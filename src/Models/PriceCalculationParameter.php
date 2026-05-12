@@ -15,12 +15,4 @@ use Geccomedia\Weclapp\Model;
  * @property float|null $profit
  * @property string|null $salesChannel
  */
-class PriceCalculationParameter extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'priceCalculationParameter';
-}
+class PriceCalculationParameter extends Model {}

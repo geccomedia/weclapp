@@ -35,12 +35,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $targetStartDate
  * @property array|null $workItems
  */
-class ProductionOrder extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'productionOrder';
-}
+class ProductionOrder extends Model {}

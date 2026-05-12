@@ -14,12 +14,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $ticketCategories
  * @property string|null $visibility
  */
-class TicketFaq extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ticketFaq';
-}
+class TicketFaq extends Model {}

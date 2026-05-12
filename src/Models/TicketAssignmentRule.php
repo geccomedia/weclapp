@@ -20,12 +20,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $ticketPriorityId
  * @property string|null $ticketTypeId
  */
-class TicketAssignmentRule extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ticketAssignmentRule';
-}
+class TicketAssignmentRule extends Model {}

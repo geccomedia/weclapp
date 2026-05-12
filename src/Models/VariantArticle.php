@@ -15,12 +15,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $variantArticleName
  * @property string|null $variantArticleNumber
  */
-class VariantArticle extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'variantArticle';
-}
+class VariantArticle extends Model {}

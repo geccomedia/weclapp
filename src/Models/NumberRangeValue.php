@@ -19,12 +19,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $validFromDate
  * @property Carbon|null $validToDate
  */
-class NumberRangeValue extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'numberRangeValue';
-}
+class NumberRangeValue extends Model {}

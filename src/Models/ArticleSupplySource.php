@@ -33,12 +33,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taxRateType
  * @property string|null $unitId
  */
-class ArticleSupplySource extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'articleSupplySource';
-}
+class ArticleSupplySource extends Model {}

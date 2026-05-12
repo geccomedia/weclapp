@@ -40,12 +40,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userOfLastStatusChangeId
  * @property array|null $watchers
  */
-class Task extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'task';
-}
+class Task extends Model {}

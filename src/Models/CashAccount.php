@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property float|null $openingBalance
  * @property string|null $treasurerId
  */
-class CashAccount extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'cashAccount';
-}
+class CashAccount extends Model {}

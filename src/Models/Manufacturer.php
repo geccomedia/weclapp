@@ -11,12 +11,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $address
  * @property string|null $email
  */
-class Manufacturer extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'manufacturer';
-}
+class Manufacturer extends Model {}

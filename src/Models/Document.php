@@ -21,12 +21,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $userId
  * @property array|null $versions
  */
-class Document extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'document';
-}
+class Document extends Model {}

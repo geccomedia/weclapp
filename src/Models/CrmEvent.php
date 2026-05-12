@@ -22,12 +22,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $tags
  * @property string|null $type
  */
-class CrmEvent extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'crmEvent';
-}
+class CrmEvent extends Model {}

@@ -22,12 +22,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $campaignStartDate
  * @property array|null $customAttributes
  */
-class Campaign extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'campaign';
-}
+class Campaign extends Model {}

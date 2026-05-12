@@ -19,12 +19,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $ticketsVisible
  * @property bool|null $uploadDocument
  */
-class ProjectOrderStatusPage extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'projectOrderStatusPage';
-}
+class ProjectOrderStatusPage extends Model {}

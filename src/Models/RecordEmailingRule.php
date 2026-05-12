@@ -26,12 +26,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $shipmentOutTypes
  * @property string|null $templateId
  */
-class RecordEmailingRule extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'recordEmailingRule';
-}
+class RecordEmailingRule extends Model {}

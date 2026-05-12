@@ -17,12 +17,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $productionDate
  * @property array|null $customAttributes
  */
-class BatchNumber extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'batchNumber';
-}
+class BatchNumber extends Model {}

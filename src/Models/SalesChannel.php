@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $active
  * @property string|null $key
  */
-class SalesChannel extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'salesChannel';
-}
+class SalesChannel extends Model {}

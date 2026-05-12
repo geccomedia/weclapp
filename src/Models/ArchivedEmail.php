@@ -23,12 +23,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $toAddresses
  * @property string|null $receivedDate
  */
-class ArchivedEmail extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'archivedEmail';
-}
+class ArchivedEmail extends Model {}

@@ -33,12 +33,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $tags
  * @property string|null $warehouseId
  */
-class PurchaseOrderRequest extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'purchaseOrderRequest';
-}
+class PurchaseOrderRequest extends Model {}

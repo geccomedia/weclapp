@@ -394,8 +394,7 @@ class SwaggerDefinitionsTest extends TestCase
             if (class_exists($fqcn)) {
                 $rc = new ReflectionClass($fqcn);
                 if (! $rc->isAbstract()) {
-                    $prop = $rc->getProperty('table');
-                    $table = $prop->getValue($rc->newInstanceWithoutConstructor());
+                    $table = $rc->newInstanceWithoutConstructor()->getTable();
                     $modelTables[$table] = $fqcn;
                 }
             }

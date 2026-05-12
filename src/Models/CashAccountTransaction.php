@@ -20,12 +20,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $paymentType
  * @property string|null $taxId
  */
-class CashAccountTransaction extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'cashAccountTransaction';
-}
+class CashAccountTransaction extends Model {}

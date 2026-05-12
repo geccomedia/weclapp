@@ -16,13 +16,6 @@ use Geccomedia\Weclapp\Model;
 class ProductionWorkScheduleAssignment extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'productionWorkScheduleAssignment';
-
-    /**
      * The attributes that should be mutated to dates.
      *
      * @var array<string, string>

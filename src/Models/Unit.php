@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $active
  * @property float|null $timeUnitAmount
  */
-class Unit extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'unit';
-}
+class Unit extends Model {}

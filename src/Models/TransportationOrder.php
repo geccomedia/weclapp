@@ -19,12 +19,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $transportationOrderNumber
  * @property string|null $transportationOrderType
  */
-class TransportationOrder extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'transportationOrder';
-}
+class TransportationOrder extends Model {}

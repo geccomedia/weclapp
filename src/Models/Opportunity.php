@@ -39,12 +39,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $topics
  * @property string|null $winLossDescription
  */
-class Opportunity extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'opportunity';
-}
+class Opportunity extends Model {}

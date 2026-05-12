@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $validFrom
  * @property Carbon|null $validTo
  */
-class FinancialYear extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'financialYear';
-}
+class FinancialYear extends Model {}

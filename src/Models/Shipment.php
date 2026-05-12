@@ -74,12 +74,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $tags
  * @property float|null $totalWeight
  */
-class Shipment extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'shipment';
-}
+class Shipment extends Model {}

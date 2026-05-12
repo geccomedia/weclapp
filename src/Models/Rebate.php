@@ -15,12 +15,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $type
  * @property float|null $value
  */
-class Rebate extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'rebate';
-}
+class Rebate extends Model {}

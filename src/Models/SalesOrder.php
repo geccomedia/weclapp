@@ -104,12 +104,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $tags
  * @property bool|null $template
  */
-class SalesOrder extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'salesOrder';
-}
+class SalesOrder extends Model {}

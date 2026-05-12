@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $permanent
  * @property string|null $warehouseId
  */
-class InternalTransportReference extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'internalTransportReference';
-}
+class InternalTransportReference extends Model {}

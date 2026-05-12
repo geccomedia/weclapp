@@ -81,12 +81,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $types
  * @property bool|null $unlimited
  */
-class Contract extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'contract';
-}
+class Contract extends Model {}

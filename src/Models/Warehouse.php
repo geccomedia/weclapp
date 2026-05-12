@@ -23,12 +23,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $standard
  * @property string|null $transitStoragePlace
  */
-class Warehouse extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'warehouse';
-}
+class Warehouse extends Model {}

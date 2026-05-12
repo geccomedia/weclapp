@@ -22,12 +22,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $taskVisibilityType
  * @property array|null $watchers
  */
-class TaskTemplate extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'taskTemplate';
-}
+class TaskTemplate extends Model {}

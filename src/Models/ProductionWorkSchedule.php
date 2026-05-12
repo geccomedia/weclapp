@@ -11,12 +11,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $workScheduleItems
  * @property string|null $workScheduleNumber
  */
-class ProductionWorkSchedule extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'productionWorkSchedule';
-}
+class ProductionWorkSchedule extends Model {}

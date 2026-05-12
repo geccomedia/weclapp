@@ -25,12 +25,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $title
  * @property array|null $userRoles
  */
-class User extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'user';
-}
+class User extends Model {}

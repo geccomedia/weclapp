@@ -25,12 +25,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $supplierId
  * @property string|null $warehouseId
  */
-class PurchaseRequisition extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'purchaseRequisition';
-}
+class PurchaseRequisition extends Model {}

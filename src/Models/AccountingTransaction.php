@@ -21,12 +21,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $transactionNumber
  * @property string|null $type
  */
-class AccountingTransaction extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'accountingTransaction';
-}
+class AccountingTransaction extends Model {}

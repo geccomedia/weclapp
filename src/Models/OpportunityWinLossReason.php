@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $active
  * @property int|null $positionNumber
  */
-class OpportunityWinLossReason extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'opportunityWinLossReason';
-}
+class OpportunityWinLossReason extends Model {}

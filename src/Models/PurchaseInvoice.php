@@ -74,13 +74,6 @@ use Geccomedia\Weclapp\Model;
 class PurchaseInvoice extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'purchaseInvoice';
-
-    /**
      * The attributes that should be mutated to dates.
      *
      * @var array<string, string>

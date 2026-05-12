@@ -18,12 +18,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $purchaseCostCenterId
  * @property string|null $salesCostCenterId
  */
-class ArticleCategory extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'articleCategory';
-}
+class ArticleCategory extends Model {}

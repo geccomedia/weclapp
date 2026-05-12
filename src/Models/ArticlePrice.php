@@ -23,12 +23,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $salesChannel
  * @property string|null $startDate
  */
-class ArticlePrice extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'articlePrice';
-}
+class ArticlePrice extends Model {}

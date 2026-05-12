@@ -49,12 +49,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $statusHistory
  * @property array|null $tags
  */
-class IncomingGoods extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'incomingGoods';
-}
+class IncomingGoods extends Model {}

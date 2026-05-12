@@ -59,6 +59,23 @@ abstract class Model extends BaseModel
     protected $perPage = 100;
 
     /**
+     * Derive the API resource name from the class name: lcfirst(ShortClassName).
+     * This means no model subclass needs to declare $table explicitly.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        if (isset($this->table)) {
+            return $this->table;
+        }
+
+        $shortName = (new \ReflectionClass($this))->getShortName();
+
+        return lcfirst($shortName);
+    }
+
+    /**
      * Get the table qualified key name.
      *
      * @return string

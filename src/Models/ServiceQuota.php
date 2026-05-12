@@ -20,12 +20,4 @@ use Geccomedia\Weclapp\Model;
  * @property Carbon|null $validFromDate
  * @property Carbon|null $validUntilDate
  */
-class ServiceQuota extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'serviceQuota';
-}
+class ServiceQuota extends Model {}

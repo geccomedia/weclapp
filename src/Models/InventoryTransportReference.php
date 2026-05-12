@@ -11,12 +11,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $loadingEquipmentIdentifierId
  * @property bool|null $manualReference
  */
-class InventoryTransportReference extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'inventoryTransportReference';
-}
+class InventoryTransportReference extends Model {}

@@ -16,12 +16,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $storagePlaceTypeSettingsStock
  * @property string|null $warehouseId
  */
-class StorageLocation extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'storageLocation';
-}
+class StorageLocation extends Model {}

@@ -17,12 +17,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $reference
  * @property string|null $type
  */
-class PaymentMethod extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'paymentMethod';
-}
+class PaymentMethod extends Model {}

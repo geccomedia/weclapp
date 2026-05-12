@@ -16,12 +16,4 @@ use Geccomedia\Weclapp\Model;
  * @property array|null $types
  * @property bool|null $visible
  */
-class TicketServiceLevelAgreement extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ticketServiceLevelAgreement';
-}
+class TicketServiceLevelAgreement extends Model {}

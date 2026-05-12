@@ -12,12 +12,4 @@ use Geccomedia\Weclapp\Model;
  * @property bool|null $read
  * @property string|null $title
  */
-class Notification extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'notification';
-}
+class Notification extends Model {}

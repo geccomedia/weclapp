@@ -11,12 +11,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $countryCode
  * @property string|null $languageCode
  */
-class CommercialLanguage extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'commercialLanguage';
-}
+class CommercialLanguage extends Model {}

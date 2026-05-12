@@ -18,12 +18,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $subject
  * @property string|null $userId
  */
-class Reminder extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'reminder';
-}
+class Reminder extends Model {}

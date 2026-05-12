@@ -22,12 +22,4 @@ use Geccomedia\Weclapp\Model;
  * @property float|null $replacementValue
  * @property string|null $storagePlaceId
  */
-class InventoryItem extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'inventoryItem';
-}
+class InventoryItem extends Model {}

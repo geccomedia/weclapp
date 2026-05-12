@@ -82,12 +82,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $validTo
  * @property string|null $warehouseId
  */
-class Quotation extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'quotation';
-}
+class Quotation extends Model {}

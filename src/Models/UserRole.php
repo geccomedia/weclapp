@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $name
  * @property array|null $permissions
  */
-class UserRole extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'userRole';
-}
+class UserRole extends Model {}

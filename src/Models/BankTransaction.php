@@ -25,12 +25,4 @@ use Geccomedia\Weclapp\Model;
  * @property string|null $paymentToleranceAccountId
  * @property string|null $paymentType
  */
-class BankTransaction extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'bankTransaction';
-}
+class BankTransaction extends Model {}

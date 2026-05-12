@@ -14,12 +14,4 @@ use Geccomedia\Weclapp\Model;
  * @property int|null $positionNumber
  * @property string|null $targetStatusId
  */
-class TicketStatus extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ticketStatus';
-}
+class TicketStatus extends Model {}

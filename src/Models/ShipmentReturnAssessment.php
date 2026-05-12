@@ -10,12 +10,4 @@ use Geccomedia\Weclapp\Model;
  * @property int|null $position
  * @property bool|null $supplierReturn
  */
-class ShipmentReturnAssessment extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'shipmentReturnAssessment';
-}
+class ShipmentReturnAssessment extends Model {}
