@@ -1,6 +1,6 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Model;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Models\Contact;
@@ -8,22 +8,16 @@ use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\Lead;
 use Geccomedia\Weclapp\Models\SalesOrder;
 use Geccomedia\Weclapp\Models\Supplier;
-use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelQueryGrammarTest extends OrchestraTestCase
+class QueryGrammarTest extends OrchestraTestCase
 {
-    /**
-     * @param  Application  $app
-     */
-    protected function getPackageProviders($app): array
-    {
-        return [ServiceProvider::class];
-    }
+    use MocksClient, UsesServiceProvider;
 
     /**
      * withProperties() must append additionalProperties=... to the compiled URL.
@@ -219,6 +213,122 @@ class ModelQueryGrammarTest extends OrchestraTestCase
 
             return str_contains($sql, 'customer-eq=true')
                 && str_contains($sql, 'company-eq=Acme');
+        });
+    }
+
+    /**
+     * compileAction() with GET method and non-empty params must append a query
+     * string to the URI instead of a request body.
+     */
+    public function test_compile_action_get_with_params_appends_query_string(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->twice()
+            ->andReturn(
+                new Response(200, [], '{"result": [{"id": "99"}]}'),
+                new Response(200, [], '{"result": "ok"}')
+            );
+
+        $order = SalesOrder::find('99');
+        $order->callAction('download', ['format' => 'pdf'], 'GET');
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            return str_contains($sql, 'GET:salesOrder/id/99/download')
+                && str_contains($sql, 'format=pdf');
+        });
+    }
+
+    /**
+     * compileAction() with POST method and empty params must send a null body
+     * (not an empty JSON object).
+     */
+    public function test_compile_action_post_with_empty_params_sends_null_body(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": "ok"}'));
+
+        SalesOrder::action('defaultValuesForCreate', [], 'POST');
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return (string) $event->sql === 'POST:salesOrder/defaultValuesForCreate';
+        });
+    }
+
+    /**
+     * compileColumns() must return void (null) when $query->aggregate is set,
+     * so that the columns component is omitted from the compiled query.
+     */
+    public function test_compile_columns_skipped_when_aggregate_is_set(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": 7}'));
+
+        // count() sets the aggregate — compileColumns must be a no-op
+        $count = SalesOrder::where('status', 'OPEN')->count();
+
+        $this->assertEquals(7, $count);
+
+        // The compiled URL must contain /count but must NOT contain 'properties='
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            return str_contains($sql, '/count') && ! str_contains($sql, 'properties=');
+        });
+    }
+
+    /**
+     * compileAdditionalProperties() with an empty array must return null so
+     * that no additionalProperties param appears in the compiled URL.
+     */
+    public function test_compile_additional_properties_empty_returns_no_param(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        // withProperties() with an empty list — no additionalProperties should appear
+        SalesOrder::withProperties()->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            return ! str_contains((string) $event->sql, 'additionalProperties');
+        });
+    }
+
+    /**
+     * whereNotIn() must compile to a `field-notin=[...]` query parameter.
+     */
+    public function test_where_not_in_compiles_correct_url(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->andReturn(new Response(200, [], '{"result": []}'));
+
+        SalesOrder::whereNotIn('status', ['CANCELLED', 'CLOSED'])->get();
+
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            $sql = (string) $event->sql;
+
+            return str_contains($sql, 'status-notin=') &&
+                   str_contains($sql, 'CANCELLED') &&
+                   str_contains($sql, 'CLOSED');
         });
     }
 }

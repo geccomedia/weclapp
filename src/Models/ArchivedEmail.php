@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 
 /**
  * @property string|null $subject
@@ -25,9 +26,7 @@ use Geccomedia\Weclapp\Model;
  */
 class ArchivedEmail extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * POST /removeReference
@@ -37,6 +36,6 @@ class ArchivedEmail extends Model
      */
     public function removeReference(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('removeReference', $params, 'POST');
+        return $this->callAction('removeReference', $params, 'POST');
     }
 }

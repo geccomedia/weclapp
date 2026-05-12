@@ -102,7 +102,7 @@ class PurchaseOrderRequest extends Model
      */
     public function createBlanketPurchaseOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createBlanketPurchaseOrder', $params, 'POST');
+        return $this->callAction('createBlanketPurchaseOrder', $params, 'POST');
     }
 
     /**
@@ -113,7 +113,7 @@ class PurchaseOrderRequest extends Model
      */
     public function createPurchaseOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPurchaseOrder', $params, 'POST');
+        return $this->callAction('createPurchaseOrder', $params, 'POST');
     }
 
     /**
@@ -124,7 +124,7 @@ class PurchaseOrderRequest extends Model
      */
     public function exportItemsAsCsv(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('exportItemsAsCsv', $params, 'POST');
+        return $this->callAction('exportItemsAsCsv', $params, 'POST');
     }
 
     /**
@@ -135,6 +135,6 @@ class PurchaseOrderRequest extends Model
      */
     public function pushPurchasePrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('pushPurchasePrices', $params, 'POST');
+        return $this->callAction('pushPurchasePrices', $params, 'POST');
     }
 }

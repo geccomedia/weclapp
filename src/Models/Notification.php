@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 
 /**
  * @property string|null $description
@@ -14,9 +15,7 @@ use Geccomedia\Weclapp\Model;
  */
 class Notification extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * POST /markRead
@@ -26,6 +25,6 @@ class Notification extends Model
      */
     public function markRead(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('markRead', $params, 'POST');
+        return $this->callAction('markRead', $params, 'POST');
     }
 }

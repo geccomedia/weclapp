@@ -43,7 +43,7 @@ class Calendar extends Model
      */
     public function deleteCalendarAndMoveEvents(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('deleteCalendarAndMoveEvents', $params, 'POST');
+        return $this->callAction('deleteCalendarAndMoveEvents', $params, 'POST');
     }
 
     /**
@@ -54,6 +54,6 @@ class Calendar extends Model
      */
     public function importiCal(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('importiCal', $params, 'POST');
+        return $this->callAction('importiCal', $params, 'POST');
     }
 }

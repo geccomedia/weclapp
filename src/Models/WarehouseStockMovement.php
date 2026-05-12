@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -39,9 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class WarehouseStockMovement extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * @var array<string, class-string|string>
@@ -121,9 +120,9 @@ class WarehouseStockMovement extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function bookDirectStockTransfer(array $params = []): ?array
+    public function bookDirectStockTransfer(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('bookDirectStockTransfer', $params, 'POST');
+        return $this->callAction('bookDirectStockTransfer', $params, 'POST');
     }
 
     /**
@@ -132,9 +131,9 @@ class WarehouseStockMovement extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function bookFromLoadingEquipmentPlace(array $params = []): ?array
+    public function bookFromLoadingEquipmentPlace(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('bookFromLoadingEquipmentPlace', $params, 'POST');
+        return $this->callAction('bookFromLoadingEquipmentPlace', $params, 'POST');
     }
 
     /**
@@ -143,9 +142,9 @@ class WarehouseStockMovement extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function bookIncomingMovement(array $params = []): ?array
+    public function bookIncomingMovement(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('bookIncomingMovement', $params, 'POST');
+        return $this->callAction('bookIncomingMovement', $params, 'POST');
     }
 
     /**
@@ -154,9 +153,9 @@ class WarehouseStockMovement extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function bookOntoInternalTransportReference(array $params = []): ?array
+    public function bookOntoInternalTransportReference(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('bookOntoInternalTransportReference', $params, 'POST');
+        return $this->callAction('bookOntoInternalTransportReference', $params, 'POST');
     }
 
     /**
@@ -165,9 +164,9 @@ class WarehouseStockMovement extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function bookOutgoingMovement(array $params = []): ?array
+    public function bookOutgoingMovement(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('bookOutgoingMovement', $params, 'POST');
+        return $this->callAction('bookOutgoingMovement', $params, 'POST');
     }
 
     /**
@@ -176,8 +175,8 @@ class WarehouseStockMovement extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function bookToLoadingEquipmentPlace(array $params = []): ?array
+    public function bookToLoadingEquipmentPlace(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('bookToLoadingEquipmentPlace', $params, 'POST');
+        return $this->callAction('bookToLoadingEquipmentPlace', $params, 'POST');
     }
 }

@@ -204,7 +204,7 @@ class PurchaseInvoice extends Model
      */
     public function cancel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('cancel', $params, 'POST');
+        return $this->callAction('cancel', $params, 'POST');
     }
 
     /**
@@ -215,7 +215,7 @@ class PurchaseInvoice extends Model
      */
     public function convertPurchaseInvoiceToCreditNote(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('convertPurchaseInvoiceToCreditNote', $params, 'POST');
+        return $this->callAction('convertPurchaseInvoiceToCreditNote', $params, 'POST');
     }
 
     /**
@@ -226,7 +226,7 @@ class PurchaseInvoice extends Model
      */
     public function createContract(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createContract', $params, 'POST');
+        return $this->callAction('createContract', $params, 'POST');
     }
 
     /**
@@ -237,7 +237,7 @@ class PurchaseInvoice extends Model
      */
     public function createCreditNote(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCreditNote', $params, 'POST');
+        return $this->callAction('createCreditNote', $params, 'POST');
     }
 
     /**
@@ -248,7 +248,7 @@ class PurchaseInvoice extends Model
      */
     public function downloadLatestPurchaseInvoiceDocument(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestPurchaseInvoiceDocument', $params, 'GET');
+        return $this->callAction('downloadLatestPurchaseInvoiceDocument', $params, 'GET');
     }
 
     /**
@@ -259,7 +259,7 @@ class PurchaseInvoice extends Model
      */
     public function printLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+        return $this->callAction('printLabel', $params, 'POST');
     }
 
     /**
@@ -270,7 +270,7 @@ class PurchaseInvoice extends Model
      */
     public function resetTaxes(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+        return $this->callAction('resetTaxes', $params, 'POST');
     }
 
     /**
@@ -281,7 +281,7 @@ class PurchaseInvoice extends Model
      */
     public function saveDuplicateInvoiceAsOriginal(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('saveDuplicateInvoiceAsOriginal', $params, 'POST');
+        return $this->callAction('saveDuplicateInvoiceAsOriginal', $params, 'POST');
     }
 
     /**
@@ -290,8 +290,8 @@ class PurchaseInvoice extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function startInvoiceDocumentProcessing(array $params = []): ?array
+    public function startInvoiceDocumentProcessing(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('startInvoiceDocumentProcessing', $params, 'POST');
+        return $this->callAction('startInvoiceDocumentProcessing', $params, 'POST');
     }
 }

@@ -1,28 +1,19 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Api;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\JobApi;
-use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class JobApiTest extends OrchestraTestCase
 {
-    /**
-     * Load package service provider
-     *
-     * @param  Application  $app
-     * @return array
-     */
-    protected function getPackageProviders($app)
-    {
-        return [ServiceProvider::class];
-    }
+    use MocksClient, UsesServiceProvider;
 
     // -------------------------------------------------------------------------
     // JobApi

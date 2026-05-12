@@ -287,6 +287,16 @@ class Article extends Model
         return $this->belongsTo(Warehouse::class, 'warehouseId');
     }
 
+    public function rating(): BelongsTo
+    {
+        return $this->belongsTo(ArticleRating::class, 'ratingId');
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(ArticleStatus::class, 'statusId');
+    }
+
     /**
      * POST /changeUnit
      *
@@ -295,7 +305,7 @@ class Article extends Model
      */
     public function changeUnit(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('changeUnit', $params, 'POST');
+        return $this->callAction('changeUnit', $params, 'POST');
     }
 
     /**
@@ -306,7 +316,7 @@ class Article extends Model
      */
     public function createDatasheetPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createDatasheetPdf', $params, 'POST');
+        return $this->callAction('createDatasheetPdf', $params, 'POST');
     }
 
     /**
@@ -317,7 +327,7 @@ class Article extends Model
      */
     public function createLabelPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createLabelPdf', $params, 'POST');
+        return $this->callAction('createLabelPdf', $params, 'POST');
     }
 
     /**
@@ -328,7 +338,7 @@ class Article extends Model
      */
     public function downloadArticleImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadArticleImage', $params, 'GET');
+        return $this->callAction('downloadArticleImage', $params, 'GET');
     }
 
     /**
@@ -339,7 +349,7 @@ class Article extends Model
      */
     public function downloadMainArticleImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadMainArticleImage', $params, 'GET');
+        return $this->callAction('downloadMainArticleImage', $params, 'GET');
     }
 
     /**
@@ -350,7 +360,7 @@ class Article extends Model
      */
     public function packagingUnitStructure(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('packagingUnitStructure', $params, 'GET');
+        return $this->callAction('packagingUnitStructure', $params, 'GET');
     }
 
     /**
@@ -361,6 +371,6 @@ class Article extends Model
      */
     public function uploadArticleImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('uploadArticleImage', $params, 'POST');
+        return $this->callAction('uploadArticleImage', $params, 'POST');
     }
 }

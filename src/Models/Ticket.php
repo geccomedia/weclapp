@@ -178,7 +178,7 @@ class Ticket extends Model
      */
     public function createPerformanceRecord(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+        return $this->callAction('createPerformanceRecord', $params, 'POST');
     }
 
     /**
@@ -189,7 +189,7 @@ class Ticket extends Model
      */
     public function createPublicPage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPublicPage', $params, 'POST');
+        return $this->callAction('createPublicPage', $params, 'POST');
     }
 
     /**
@@ -200,7 +200,7 @@ class Ticket extends Model
      */
     public function disablePublicPage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('disablePublicPage', $params, 'POST');
+        return $this->callAction('disablePublicPage', $params, 'POST');
     }
 
     /**
@@ -211,7 +211,7 @@ class Ticket extends Model
      */
     public function linkSalesOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('linkSalesOrder', $params, 'POST');
+        return $this->callAction('linkSalesOrder', $params, 'POST');
     }
 
     /**
@@ -222,6 +222,6 @@ class Ticket extends Model
      */
     public function unlinkSalesOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('unlinkSalesOrder', $params, 'POST');
+        return $this->callAction('unlinkSalesOrder', $params, 'POST');
     }
 }

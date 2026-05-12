@@ -115,6 +115,6 @@ class Opportunity extends Model
      */
     public function linkQuotation(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('linkQuotation', $params, 'POST');
+        return $this->callAction('linkQuotation', $params, 'POST');
     }
 }

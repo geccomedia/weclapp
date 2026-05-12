@@ -3,13 +3,12 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 
 /**
  * @property string|null $name
  */
 class InventoryGroup extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 }

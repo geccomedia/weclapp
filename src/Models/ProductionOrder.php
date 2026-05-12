@@ -84,7 +84,7 @@ class ProductionOrder extends Model
      */
     public function createPickingList(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPickingList', $params, 'POST');
+        return $this->callAction('createPickingList', $params, 'POST');
     }
 
     /**
@@ -95,7 +95,7 @@ class ProductionOrder extends Model
      */
     public function createPickingOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPickingOrder', $params, 'POST');
+        return $this->callAction('createPickingOrder', $params, 'POST');
     }
 
     /**
@@ -106,7 +106,7 @@ class ProductionOrder extends Model
      */
     public function downloadLatestProductionOrderPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestProductionOrderPdf', $params, 'GET');
+        return $this->callAction('downloadLatestProductionOrderPdf', $params, 'GET');
     }
 
     /**
@@ -115,8 +115,8 @@ class ProductionOrder extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function fastProductionBooking(array $params = []): ?array
+    public function fastProductionBooking(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('fastProductionBooking', $params, 'POST');
+        return $this->callAction('fastProductionBooking', $params, 'POST');
     }
 }

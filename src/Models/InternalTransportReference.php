@@ -47,7 +47,7 @@ class InternalTransportReference extends Model
      */
     public function createLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createLabel', $params, 'POST');
+        return $this->callAction('createLabel', $params, 'POST');
     }
 
     /**
@@ -58,6 +58,6 @@ class InternalTransportReference extends Model
      */
     public function downloadLatestLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestLabel', $params, 'GET');
+        return $this->callAction('downloadLatestLabel', $params, 'GET');
     }
 }

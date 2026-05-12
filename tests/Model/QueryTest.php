@@ -1,6 +1,6 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Model;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Connection;
@@ -8,25 +8,17 @@ use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\NotSupportedException;
-use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\Query\Grammars\Grammar;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelQueryTest extends OrchestraTestCase
+class QueryTest extends OrchestraTestCase
 {
-    /**
-     * Load package service provider
-     *
-     * @param  Application  $app
-     * @return array
-     */
-    protected function getPackageProviders($app)
-    {
-        return [ServiceProvider::class];
-    }
+    use MocksClient, UsesServiceProvider;
 
     public function test_api_get()
     {
@@ -223,11 +215,14 @@ class ModelQueryTest extends OrchestraTestCase
 
         $query = $connection->table('test');
 
-        $this->assertEquals('test', $query->toSql()->getUri()->getPath());
+        /** @var Grammar $grammar */
+        $grammar = $connection->getQueryGrammar();
+        $request = $grammar->buildSelectRequest($query);
 
-        $request = $connection->getQueryGrammar()->compileSelect($query);
+        $this->assertEquals('test', $request->getUri()->getPath());
 
-        $unit = $connection->selectOne($request);
+        $results = $connection->selectRequest($request);
+        $unit = $results[0] ?? null;
 
         $this->assertArrayHasKey('id', $unit);
     }

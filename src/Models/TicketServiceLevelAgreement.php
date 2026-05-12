@@ -18,4 +18,15 @@ use Geccomedia\Weclapp\SubModels\TicketServiceLevelAgreementTarget;
  * @property list<OnlyId>|null $types
  * @property bool|null $visible
  */
-class TicketServiceLevelAgreement extends Model {}
+class TicketServiceLevelAgreement extends Model
+{
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'categories' => OnlyId::class,
+        'customers' => OnlyId::class,
+        'targets' => TicketServiceLevelAgreementTarget::class,
+        'types' => OnlyId::class,
+    ];
+}

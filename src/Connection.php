@@ -7,53 +7,16 @@ use Geccomedia\Weclapp\Query\Builder as QueryBuilder;
 use Geccomedia\Weclapp\Query\Grammars\Grammar;
 use Geccomedia\Weclapp\Query\Processors\Processor;
 use GuzzleHttp\Psr7\Request;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\Connection as BaseConnection;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\QueryException;
+use Psr\Http\Message\ResponseInterface;
 
-class Connection implements ConnectionInterface
+class Connection extends BaseConnection
 {
     /**
      * @var Client
      */
     protected $client;
-
-    /**
-     * The query grammar implementation.
-     *
-     * @var \Illuminate\Database\Query\Grammars\Grammar
-     */
-    protected $queryGrammar;
-
-    /**
-     * The query post processor implementation.
-     *
-     * @var \Illuminate\Database\Query\Processors\Processor
-     */
-    protected $postProcessor;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var Dispatcher|null
-     */
-    protected $events;
-
-    /**
-     * All of the queries run against the connection.
-     *
-     * @var array
-     */
-    protected $queryLog = [];
-
-    /**
-     * Indicates whether queries are being logged.
-     *
-     * @var bool
-     */
-    protected $loggingQueries = false;
 
     /**
      * Create a new database connection instance.
@@ -63,28 +26,15 @@ class Connection implements ConnectionInterface
      */
     public function __construct($client)
     {
+        // Pass a lazy PDO closure — it is never invoked since we override all
+        // PDO-dependent methods to use our HTTP client instead.
+        parent::__construct(static fn (): \PDO => throw new \LogicException('PDO is not used by this connection'), 'weclapp_api');
+
         $this->client = $client;
 
-        // We need to initialize a query grammar and the query post processors
-        // which are both very important parts of the database abstractions
-        // so we initialize these to their default values while starting.
-        $this->useDefaultQueryGrammar();
-
-        $this->useDefaultPostProcessor();
-
         if (app()->bound('events')) {
-            $this->events = app()['events'];
+            $this->setEventDispatcher(app('events'));
         }
-    }
-
-    /**
-     * Set the query grammar to the default implementation.
-     *
-     * @return void
-     */
-    public function useDefaultQueryGrammar()
-    {
-        $this->queryGrammar = $this->getDefaultQueryGrammar();
     }
 
     /**
@@ -95,16 +45,6 @@ class Connection implements ConnectionInterface
     protected function getDefaultQueryGrammar()
     {
         return new Grammar;
-    }
-
-    /**
-     * Set the query post processor to the default implementation.
-     *
-     * @return void
-     */
-    public function useDefaultPostProcessor()
-    {
-        $this->postProcessor = $this->getDefaultPostProcessor();
     }
 
     /**
@@ -142,32 +82,16 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Run a select statement and return a single result.
+     * Execute a GET request and return the decoded result rows.
      *
-     * @param  Request  $query
-     * @param  array  $bindings
-     * @param  bool  $useReadPdo
-     * @return mixed
+     * This is the primary read path used by {@see QueryBuilder::runSelect()}.
+     *
+     * @return array<int, mixed>|null
      */
-    // @phpstan-ignore-next-line method.childParameterType
-    public function selectOne($query, $bindings = [], $useReadPdo = true)
+    public function selectRequest(Request $request): ?array
     {
-        $records = $this->select($query, $bindings, $useReadPdo);
-
-        return array_shift($records);
-    }
-
-    /**
-     * @param  Request  $query
-     * @param  array  $bindings
-     * @param  bool  $useReadPdo
-     * @return array|bool
-     */
-    // @phpstan-ignore-next-line method.childParameterType
-    public function select($query, $bindings = [], $useReadPdo = true, array $fetchUsing = [])
-    {
-        return $this->run($query, [], function ($query) {
-            $response = $this->client->send($query);
+        return $this->runRequest($request, [], function (Request $req) {
+            $response = $this->client->send($req);
             $items = json_decode($response->getBody(), true);
 
             if (! isset($items['result'])) {
@@ -185,18 +109,47 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Run an insert statement against the database.
+     * Execute a POST request and log the result.
      *
-     * @param  Request  $query
-     * @param  array  $bindings
-     * @return bool
+     * Used by {@see QueryBuilder::insert()}.
      */
-    // @phpstan-ignore-next-line method.childParameterType
-    public function insert($query, $bindings = [])
+    public function insertRequest(Request $request, array $bindings = []): bool
     {
-        return $this->run($query, $bindings, function ($query) {
-            return $this->client->send($query);
-        });
+        $this->runRequest($request, $bindings, fn (Request $req) => $this->client->send($req));
+
+        return true;
+    }
+
+    /**
+     * Execute an insert and return the raw HTTP response.
+     *
+     * Used by {@see Processor::processInsertGetId()}.
+     *
+     * @param  array<mixed>  $bindings
+     */
+    public function insertAndGetResponse(Request $request, array $bindings = []): ResponseInterface
+    {
+        return $this->runRequest($request, $bindings, fn (Request $req) => $this->client->send($req));
+    }
+
+    /**
+     * Execute a PUT request and log the result.
+     *
+     * Used by {@see QueryBuilder::update()}.
+     */
+    public function updateRequest(Request $request, array $bindings = []): bool
+    {
+        return (bool) $this->runRequest($request, $bindings, fn (Request $req) => $this->client->send($req)->getStatusCode() == 201);
+    }
+
+    /**
+     * Execute a DELETE request and log the result.
+     *
+     * Used by {@see QueryBuilder::delete()}.
+     */
+    public function deleteRequest(Request $request): bool
+    {
+        return (bool) $this->runRequest($request, [], fn (Request $req) => $this->client->send($req)->getStatusCode() == 204);
     }
 
     /**
@@ -206,8 +159,8 @@ class Connection implements ConnectionInterface
      */
     public function action(Request $query): ?array
     {
-        return $this->run($query, [], function ($query) {
-            $response = $this->client->send($query);
+        return $this->runRequest($query, [], function (Request $request) {
+            $response = $this->client->send($request);
             $body = json_decode((string) $response->getBody(), true);
 
             return $body ?? null;
@@ -215,174 +168,22 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Run an update statement against the database.
+     * Execute an HTTP request, log the query, and return the result.
      *
-     * @param  Request  $query
-     * @param  array  $bindings
-     * @return int
-     */
-    // @phpstan-ignore-next-line method.childParameterType
-    public function update($query, $bindings = [])
-    {
-        return $this->run($query, $bindings, function ($query) {
-            return $this->client->send($query)->getStatusCode() == 201;
-        });
-    }
-
-    /**
-     * Run a delete statement against the database.
-     *
-     * @param  Request  $query
-     * @param  array  $bindings
-     * @return int
-     */
-    // @phpstan-ignore-next-line method.childParameterType
-    public function delete($query, $bindings = [])
-    {
-        return $this->run($query, [], function ($query) {
-            return $this->client->send($query)->getStatusCode() == 204;
-        });
-    }
-
-    /**
-     * Get the query grammar used by the connection.
-     *
-     * @return \Illuminate\Database\Query\Grammars\Grammar
-     */
-    public function getQueryGrammar()
-    {
-        return $this->queryGrammar;
-    }
-
-    /**
-     * Run a SQL statement and log its execution context.
-     *
-     * @param  array  $bindings
+     * @param  array<mixed>  $bindings
      * @return mixed
-     *
-     * @throws QueryException
      */
-    protected function run(Request $query, $bindings, Closure $callback)
+    protected function runRequest(Request $query, array $bindings, Closure $callback)
     {
         $start = microtime(true);
 
-        $result = $callback($query, $bindings);
+        $result = $callback($query);
 
-        // Once we have run the query we will calculate the time that it took to run and
-        // then log the query, bindings, and execution time so we will report them on
-        // the event that the developer needs them. We'll log time in milliseconds.
         $this->logQuery(
             $query->getMethod().':'.$query->getUri(), $bindings, $this->getElapsedTime($start)
         );
 
         return $result;
-    }
-
-    /**
-     * Log a query in the connection's query log.
-     *
-     * @param  string  $query
-     * @param  array  $bindings
-     * @param  float|null  $time
-     * @return void
-     */
-    public function logQuery($query, $bindings, $time = null)
-    {
-        /** @phpstan-ignore argument.type */
-        $this->event(new QueryExecuted($query, $bindings, $time, $this));
-
-        if ($this->loggingQueries) {
-            $this->queryLog[] = compact('query', 'bindings', 'time');
-        }
-    }
-
-    /**
-     * Get the elapsed time since a given starting point.
-     *
-     * @param  float  $start
-     * @return float
-     */
-    protected function getElapsedTime($start)
-    {
-        return round((microtime(true) - $start) * 1000, 2);
-    }
-
-    /**
-     * Fire the given event if possible.
-     *
-     * @param  mixed  $event
-     * @return void
-     */
-    protected function event($event)
-    {
-        if (isset($this->events)) {
-            $this->events->dispatch($event);
-        }
-    }
-
-    /**
-     * Get the connection query log.
-     *
-     * @return array
-     */
-    public function getQueryLog()
-    {
-        return $this->queryLog;
-    }
-
-    /**
-     * Clear the query log.
-     *
-     * @return void
-     */
-    public function flushQueryLog()
-    {
-        $this->queryLog = [];
-    }
-
-    /**
-     * Enable the query log on the connection.
-     *
-     * @return void
-     */
-    public function enableQueryLog()
-    {
-        $this->loggingQueries = true;
-    }
-
-    /**
-     * Disable the query log on the connection.
-     *
-     * @return void
-     */
-    public function disableQueryLog()
-    {
-        $this->loggingQueries = false;
-    }
-
-    /**
-     * Determine whether we're logging queries.
-     *
-     * @return bool
-     */
-    public function logging()
-    {
-        return $this->loggingQueries;
-    }
-
-    /**
-     * Get the query post processor used by the connection.
-     *
-     * @return \Illuminate\Database\Query\Processors\Processor
-     */
-    public function getPostProcessor()
-    {
-        return $this->postProcessor;
-    }
-
-    public function getName()
-    {
-        return $this->getDatabaseName();
     }
 
     /**
@@ -395,7 +196,31 @@ class Connection implements ConnectionInterface
         return 'weclapp_api';
     }
 
-    // @codeCoverageIgnoreStart
+    public function select($query, $bindings = [], $useReadPdo = true, array $fetchUsing = [])
+    {
+        throw new NotSupportedException('Use selectRequest(Request) instead.');
+    }
+
+    public function selectOne($query, $bindings = [], $useReadPdo = true)
+    {
+        throw new NotSupportedException('Use selectRequest(Request) instead.');
+    }
+
+    public function insert($query, $bindings = [])
+    {
+        throw new NotSupportedException('Use insertRequest(Request) instead.');
+    }
+
+    public function update($query, $bindings = [])
+    {
+        throw new NotSupportedException('Use updateRequest(Request) instead.');
+    }
+
+    public function delete($query, $bindings = [])
+    {
+        throw new NotSupportedException('Use deleteRequest(Request) instead.');
+    }
+
     public function statement($query, $bindings = [])
     {
         throw new NotSupportedException('statements are not supported by weclapp');
@@ -431,7 +256,7 @@ class Connection implements ConnectionInterface
         throw new NotSupportedException('Transactions are not supported by weclapp');
     }
 
-    public function rollBack()
+    public function rollBack($toLevel = null)
     {
         throw new NotSupportedException('Transactions are not supported by weclapp');
     }
@@ -460,5 +285,4 @@ class Connection implements ConnectionInterface
     {
         throw new NotSupportedException('scalar not supported by weclapp');
     }
-    // @codeCoverageIgnoreEnd
 }

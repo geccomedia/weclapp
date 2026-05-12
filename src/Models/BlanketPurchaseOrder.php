@@ -175,7 +175,7 @@ class BlanketPurchaseOrder extends Model
      */
     public function downloadLatestBlanketPurchaseOrderPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestBlanketPurchaseOrderPdf', $params, 'GET');
+        return $this->callAction('downloadLatestBlanketPurchaseOrderPdf', $params, 'GET');
     }
 
     /**
@@ -186,6 +186,6 @@ class BlanketPurchaseOrder extends Model
      */
     public function generateReleases(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('generateReleases', $params, 'POST');
+        return $this->callAction('generateReleases', $params, 'POST');
     }
 }

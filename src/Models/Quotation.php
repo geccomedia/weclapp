@@ -237,7 +237,7 @@ class Quotation extends Model
      */
     public function accept(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('accept', $params, 'POST');
+        return $this->callAction('accept', $params, 'POST');
     }
 
     /**
@@ -248,7 +248,7 @@ class Quotation extends Model
      */
     public function addDefaultScalePricesToItems(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addDefaultScalePricesToItems', $params, 'POST');
+        return $this->callAction('addDefaultScalePricesToItems', $params, 'POST');
     }
 
     /**
@@ -259,7 +259,7 @@ class Quotation extends Model
      */
     public function calculateSalesPrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('calculateSalesPrices', $params, 'POST');
+        return $this->callAction('calculateSalesPrices', $params, 'POST');
     }
 
     /**
@@ -270,7 +270,7 @@ class Quotation extends Model
      */
     public function createNewVersion(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createNewVersion', $params, 'POST');
+        return $this->callAction('createNewVersion', $params, 'POST');
     }
 
     /**
@@ -281,7 +281,7 @@ class Quotation extends Model
      */
     public function createPublicPageLink(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPublicPageLink', $params, 'POST');
+        return $this->callAction('createPublicPageLink', $params, 'POST');
     }
 
     /**
@@ -292,7 +292,7 @@ class Quotation extends Model
      */
     public function createPurchaseOrderRequest(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPurchaseOrderRequest', $params, 'POST');
+        return $this->callAction('createPurchaseOrderRequest', $params, 'POST');
     }
 
     /**
@@ -303,7 +303,7 @@ class Quotation extends Model
      */
     public function createQuotationPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createQuotationPdf', $params, 'POST');
+        return $this->callAction('createQuotationPdf', $params, 'POST');
     }
 
     /**
@@ -314,7 +314,7 @@ class Quotation extends Model
      */
     public function disablePublicPageLink(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('disablePublicPageLink', $params, 'POST');
+        return $this->callAction('disablePublicPageLink', $params, 'POST');
     }
 
     /**
@@ -325,7 +325,7 @@ class Quotation extends Model
      */
     public function downloadLatestQuotationPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestQuotationPdf', $params, 'GET');
+        return $this->callAction('downloadLatestQuotationPdf', $params, 'GET');
     }
 
     /**
@@ -336,7 +336,7 @@ class Quotation extends Model
      */
     public function inquire(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('inquire', $params, 'POST');
+        return $this->callAction('inquire', $params, 'POST');
     }
 
     /**
@@ -347,7 +347,7 @@ class Quotation extends Model
      */
     public function printLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+        return $this->callAction('printLabel', $params, 'POST');
     }
 
     /**
@@ -358,7 +358,7 @@ class Quotation extends Model
      */
     public function printQuotationData(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printQuotationData', $params, 'GET');
+        return $this->callAction('printQuotationData', $params, 'GET');
     }
 
     /**
@@ -369,7 +369,7 @@ class Quotation extends Model
      */
     public function recalculateCosts(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('recalculateCosts', $params, 'POST');
+        return $this->callAction('recalculateCosts', $params, 'POST');
     }
 
     /**
@@ -380,7 +380,7 @@ class Quotation extends Model
      */
     public function resetTaxes(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+        return $this->callAction('resetTaxes', $params, 'POST');
     }
 
     /**
@@ -391,7 +391,7 @@ class Quotation extends Model
      */
     public function setCostsForItemsWithoutCost(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('setCostsForItemsWithoutCost', $params, 'POST');
+        return $this->callAction('setCostsForItemsWithoutCost', $params, 'POST');
     }
 
     /**
@@ -402,6 +402,6 @@ class Quotation extends Model
      */
     public function updatePrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('updatePrices', $params, 'POST');
+        return $this->callAction('updatePrices', $params, 'POST');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Swagger;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -18,7 +18,7 @@ use ReflectionClass;
  *   - Sub-model classes with no matching swagger definition are listed in
  *     SKIP_SUBMODELS and skipped silently.
  */
-class SwaggerSubModelTest extends TestCase
+class SubModelTest extends TestCase
 {
     private const SUBMODEL_NS = 'Geccomedia\\Weclapp\\SubModels\\';
 

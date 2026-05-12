@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\Traits\IsUpdatableOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,9 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SerialNumber extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsUpdatableOnly;
 
     /**
      * @var array<string, class-string|string>

@@ -98,7 +98,7 @@ class TransportationOrder extends Model
      */
     public function addPicks(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addPicks', $params, 'POST');
+        return $this->callAction('addPicks', $params, 'POST');
     }
 
     /**
@@ -109,7 +109,7 @@ class TransportationOrder extends Model
      */
     public function createPick(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPick', $params, 'POST');
+        return $this->callAction('createPick', $params, 'POST');
     }
 
     /**
@@ -120,7 +120,7 @@ class TransportationOrder extends Model
      */
     public function createPickingList(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPickingList', $params, 'POST');
+        return $this->callAction('createPickingList', $params, 'POST');
     }
 
     /**
@@ -131,7 +131,7 @@ class TransportationOrder extends Model
      */
     public function createTransportationOrderFromUnpickedRecords(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createTransportationOrderFromUnpickedRecords', $params, 'POST');
+        return $this->callAction('createTransportationOrderFromUnpickedRecords', $params, 'POST');
     }
 
     /**
@@ -142,7 +142,7 @@ class TransportationOrder extends Model
      */
     public function internalTransportReferencesForPickUp(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('internalTransportReferencesForPickUp', $params, 'GET');
+        return $this->callAction('internalTransportReferencesForPickUp', $params, 'GET');
     }
 
     /**
@@ -153,7 +153,7 @@ class TransportationOrder extends Model
      */
     public function pickPick(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('pickPick', $params, 'POST');
+        return $this->callAction('pickPick', $params, 'POST');
     }
 
     /**
@@ -164,6 +164,6 @@ class TransportationOrder extends Model
      */
     public function putDownInternalTransportReference(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('putDownInternalTransportReference', $params, 'POST');
+        return $this->callAction('putDownInternalTransportReference', $params, 'POST');
     }
 }

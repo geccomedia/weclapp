@@ -10,4 +10,12 @@ use Geccomedia\Weclapp\SubModels\OnlyId;
  * @property list<OnlyId>|null $loadingEquipmentArticles
  * @property string|null $name
  */
-class LoadingEquipmentIdentifier extends Model {}
+class LoadingEquipmentIdentifier extends Model
+{
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'loadingEquipmentArticles' => OnlyId::class,
+    ];
+}

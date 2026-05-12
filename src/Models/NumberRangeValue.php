@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -23,9 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class NumberRangeValue extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * @var array<string, class-string|string>

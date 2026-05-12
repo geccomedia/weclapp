@@ -228,7 +228,7 @@ class Shipment extends Model
      */
     public function createPickingList(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPickingList', $params, 'POST');
+        return $this->callAction('createPickingList', $params, 'POST');
     }
 
     /**
@@ -239,7 +239,7 @@ class Shipment extends Model
      */
     public function createPickingOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPickingOrder', $params, 'POST');
+        return $this->callAction('createPickingOrder', $params, 'POST');
     }
 
     /**
@@ -250,7 +250,7 @@ class Shipment extends Model
      */
     public function createReturnLabels(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createReturnLabels', $params, 'POST');
+        return $this->callAction('createReturnLabels', $params, 'POST');
     }
 
     /**
@@ -261,7 +261,7 @@ class Shipment extends Model
      */
     public function createSalesInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createSalesInvoice', $params, 'POST');
+        return $this->callAction('createSalesInvoice', $params, 'POST');
     }
 
     /**
@@ -272,7 +272,7 @@ class Shipment extends Model
      */
     public function createShippingLabelPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createShippingLabelPdf', $params, 'POST');
+        return $this->callAction('createShippingLabelPdf', $params, 'POST');
     }
 
     /**
@@ -283,7 +283,7 @@ class Shipment extends Model
      */
     public function createShippingLabels(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createShippingLabels', $params, 'POST');
+        return $this->callAction('createShippingLabels', $params, 'POST');
     }
 
     /**
@@ -294,7 +294,7 @@ class Shipment extends Model
      */
     public function downloadLatestDeliveryNotePdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestDeliveryNotePdf', $params, 'GET');
+        return $this->callAction('downloadLatestDeliveryNotePdf', $params, 'GET');
     }
 
     /**
@@ -305,7 +305,7 @@ class Shipment extends Model
      */
     public function downloadLatestPickingListPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestPickingListPdf', $params, 'GET');
+        return $this->callAction('downloadLatestPickingListPdf', $params, 'GET');
     }
 
     /**
@@ -316,7 +316,7 @@ class Shipment extends Model
      */
     public function downloadLatestShippingLabelPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestShippingLabelPdf', $params, 'GET');
+        return $this->callAction('downloadLatestShippingLabelPdf', $params, 'GET');
     }
 
     /**
@@ -327,6 +327,6 @@ class Shipment extends Model
      */
     public function printLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+        return $this->callAction('printLabel', $params, 'POST');
     }
 }

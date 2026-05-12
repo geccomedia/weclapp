@@ -10,4 +10,12 @@ use Geccomedia\Weclapp\SubModels\VariantArticleAttributeOption;
  * @property array|null $values
  * @property list<VariantArticleAttributeOption>|null $attributeOptions
  */
-class VariantArticleAttribute extends Model {}
+class VariantArticleAttribute extends Model
+{
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'attributeOptions' => VariantArticleAttributeOption::class,
+    ];
+}

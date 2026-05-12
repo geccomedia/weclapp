@@ -33,7 +33,7 @@ class SystemApi
      */
     public function permissions(): array
     {
-        $result = $this->connection->select(new Request('GET', 'system/permissions'));
+        $result = $this->connection->selectRequest(new Request('GET', 'system/permissions'));
 
         return is_array($result) ? $result : [];
     }
@@ -47,7 +47,7 @@ class SystemApi
      */
     public function licenses(): array
     {
-        $result = $this->connection->select(new Request('GET', 'system/licenses'));
+        $result = $this->connection->selectRequest(new Request('GET', 'system/licenses'));
 
         return is_array($result) ? $result : [];
     }

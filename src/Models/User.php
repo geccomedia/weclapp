@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\Traits\NoDelete;
 
 /**
  * @property string|null $username
@@ -29,7 +30,15 @@ use Geccomedia\Weclapp\SubModels\OnlyId;
  */
 class User extends Model
 {
-    protected bool $deletable = false;
+    use NoDelete;
+
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'userRoles' => OnlyId::class,
+    ];
 
     /**
      * POST /deleteMfaDevice
@@ -39,7 +48,7 @@ class User extends Model
      */
     public function deleteMfaDevice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('deleteMfaDevice', $params, 'POST');
+        return $this->callAction('deleteMfaDevice', $params, 'POST');
     }
 
     /**
@@ -50,7 +59,7 @@ class User extends Model
      */
     public function invite(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('invite', $params, 'POST');
+        return $this->callAction('invite', $params, 'POST');
     }
 
     /**
@@ -61,7 +70,7 @@ class User extends Model
      */
     public function readMfaDevices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('readMfaDevices', $params, 'GET');
+        return $this->callAction('readMfaDevices', $params, 'GET');
     }
 
     /**
@@ -72,7 +81,7 @@ class User extends Model
      */
     public function softDelete(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('softDelete', $params, 'POST');
+        return $this->callAction('softDelete', $params, 'POST');
     }
 
     /**
@@ -83,7 +92,7 @@ class User extends Model
      */
     public function userImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('userImage', $params, 'GET');
+        return $this->callAction('userImage', $params, 'GET');
     }
 
     /**
@@ -94,7 +103,7 @@ class User extends Model
      */
     public function userImageThumbnail(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('userImageThumbnail', $params, 'GET');
+        return $this->callAction('userImageThumbnail', $params, 'GET');
     }
 
     /**
@@ -103,8 +112,8 @@ class User extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function currentUser(array $params = []): ?array
+    public function currentUser(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('currentUser', $params, 'GET');
+        return $this->callAction('currentUser', $params, 'GET');
     }
 }

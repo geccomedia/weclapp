@@ -7,6 +7,7 @@ use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\ServiceQuotaRelationship;
 use Geccomedia\Weclapp\SubModels\ServiceQuotaStatusHistory;
+use Geccomedia\Weclapp\Traits\NoCreate;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ServiceQuota extends Model
 {
-    protected bool $creatable = false;
+    use NoCreate;
 
     /**
      * @var array<string, class-string|string>
@@ -61,7 +62,7 @@ class ServiceQuota extends Model
      */
     public function close(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('close', $params, 'POST');
+        return $this->callAction('close', $params, 'POST');
     }
 
     /**
@@ -72,7 +73,7 @@ class ServiceQuota extends Model
      */
     public function createPerformanceRecord(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+        return $this->callAction('createPerformanceRecord', $params, 'POST');
     }
 
     /**
@@ -83,6 +84,6 @@ class ServiceQuota extends Model
      */
     public function open(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('open', $params, 'POST');
+        return $this->callAction('open', $params, 'POST');
     }
 }

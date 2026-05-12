@@ -216,7 +216,7 @@ class Contract extends Model
      */
     public function createContractDocument(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createContractDocument', $params, 'POST');
+        return $this->callAction('createContractDocument', $params, 'POST');
     }
 
     /**
@@ -227,6 +227,6 @@ class Contract extends Model
      */
     public function downloadLatestContractDocumentPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestContractDocumentPdf', $params, 'GET');
+        return $this->callAction('downloadLatestContractDocumentPdf', $params, 'GET');
     }
 }

@@ -29,8 +29,8 @@ class Currency extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function companyCurrency(array $params = []): ?array
+    public function companyCurrency(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('companyCurrency', $params, 'GET');
+        return $this->callAction('companyCurrency', $params, 'GET');
     }
 }

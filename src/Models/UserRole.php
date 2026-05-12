@@ -14,14 +14,21 @@ use Geccomedia\Weclapp\SubModels\OnlyId;
 class UserRole extends Model
 {
     /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'includedUserRoles' => OnlyId::class,
+    ];
+
+    /**
      * POST /disableUserRolesDuringTrial
      *
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function disableUserRolesDuringTrial(array $params = []): ?array
+    public function disableUserRolesDuringTrial(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('disableUserRolesDuringTrial', $params, 'POST');
+        return $this->callAction('disableUserRolesDuringTrial', $params, 'POST');
     }
 
     /**
@@ -30,8 +37,8 @@ class UserRole extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function enableUserRolesDuringTrial(array $params = []): ?array
+    public function enableUserRolesDuringTrial(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('enableUserRolesDuringTrial', $params, 'POST');
+        return $this->callAction('enableUserRolesDuringTrial', $params, 'POST');
     }
 }

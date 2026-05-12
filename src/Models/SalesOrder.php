@@ -289,7 +289,7 @@ class SalesOrder extends Model
      */
     public function activateProjectView(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('activateProjectView', $params, 'POST');
+        return $this->callAction('activateProjectView', $params, 'POST');
     }
 
     /**
@@ -300,7 +300,7 @@ class SalesOrder extends Model
      */
     public function calculateSalesPrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('calculateSalesPrices', $params, 'POST');
+        return $this->callAction('calculateSalesPrices', $params, 'POST');
     }
 
     /**
@@ -311,7 +311,7 @@ class SalesOrder extends Model
      */
     public function cancelOrManuallyClose(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('cancelOrManuallyClose', $params, 'POST');
+        return $this->callAction('cancelOrManuallyClose', $params, 'POST');
     }
 
     /**
@@ -322,7 +322,7 @@ class SalesOrder extends Model
      */
     public function createAdvancePaymentRequest(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createAdvancePaymentRequest', $params, 'POST');
+        return $this->callAction('createAdvancePaymentRequest', $params, 'POST');
     }
 
     /**
@@ -333,7 +333,7 @@ class SalesOrder extends Model
      */
     public function createContract(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createContract', $params, 'POST');
+        return $this->callAction('createContract', $params, 'POST');
     }
 
     /**
@@ -344,7 +344,7 @@ class SalesOrder extends Model
      */
     public function createCustomerReturn(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCustomerReturn', $params, 'POST');
+        return $this->callAction('createCustomerReturn', $params, 'POST');
     }
 
     /**
@@ -355,7 +355,7 @@ class SalesOrder extends Model
      */
     public function createDropshipping(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createDropshipping', $params, 'POST');
+        return $this->callAction('createDropshipping', $params, 'POST');
     }
 
     /**
@@ -366,7 +366,7 @@ class SalesOrder extends Model
      */
     public function createPartPaymentInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPartPaymentInvoice', $params, 'POST');
+        return $this->callAction('createPartPaymentInvoice', $params, 'POST');
     }
 
     /**
@@ -377,7 +377,7 @@ class SalesOrder extends Model
      */
     public function createPerformanceRecord(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+        return $this->callAction('createPerformanceRecord', $params, 'POST');
     }
 
     /**
@@ -388,7 +388,7 @@ class SalesOrder extends Model
      */
     public function createPrepaymentFinalInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPrepaymentFinalInvoice', $params, 'POST');
+        return $this->callAction('createPrepaymentFinalInvoice', $params, 'POST');
     }
 
     /**
@@ -399,7 +399,7 @@ class SalesOrder extends Model
      */
     public function createProductionOrders(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createProductionOrders', $params, 'POST');
+        return $this->callAction('createProductionOrders', $params, 'POST');
     }
 
     /**
@@ -410,7 +410,7 @@ class SalesOrder extends Model
      */
     public function createPurchaseOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPurchaseOrder', $params, 'POST');
+        return $this->callAction('createPurchaseOrder', $params, 'POST');
     }
 
     /**
@@ -421,7 +421,7 @@ class SalesOrder extends Model
      */
     public function createPurchaseOrderRequest(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPurchaseOrderRequest', $params, 'POST');
+        return $this->callAction('createPurchaseOrderRequest', $params, 'POST');
     }
 
     /**
@@ -432,7 +432,7 @@ class SalesOrder extends Model
      */
     public function createReturnLabels(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createReturnLabels', $params, 'POST');
+        return $this->callAction('createReturnLabels', $params, 'POST');
     }
 
     /**
@@ -443,7 +443,7 @@ class SalesOrder extends Model
      */
     public function createSalesInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createSalesInvoice', $params, 'POST');
+        return $this->callAction('createSalesInvoice', $params, 'POST');
     }
 
     /**
@@ -454,7 +454,7 @@ class SalesOrder extends Model
      */
     public function createShipment(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createShipment', $params, 'POST');
+        return $this->callAction('createShipment', $params, 'POST');
     }
 
     /**
@@ -465,7 +465,7 @@ class SalesOrder extends Model
      */
     public function createShippingLabels(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createShippingLabels', $params, 'POST');
+        return $this->callAction('createShippingLabels', $params, 'POST');
     }
 
     /**
@@ -476,7 +476,7 @@ class SalesOrder extends Model
      */
     public function downloadLatestOrderConfirmationPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestOrderConfirmationPdf', $params, 'GET');
+        return $this->callAction('downloadLatestOrderConfirmationPdf', $params, 'GET');
     }
 
     /**
@@ -487,7 +487,7 @@ class SalesOrder extends Model
      */
     public function manuallyClose(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('manuallyClose', $params, 'POST');
+        return $this->callAction('manuallyClose', $params, 'POST');
     }
 
     /**
@@ -498,7 +498,7 @@ class SalesOrder extends Model
      */
     public function previewSalesOrderConfirmation(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('previewSalesOrderConfirmation', $params, 'GET');
+        return $this->callAction('previewSalesOrderConfirmation', $params, 'GET');
     }
 
     /**
@@ -509,7 +509,7 @@ class SalesOrder extends Model
      */
     public function printLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+        return $this->callAction('printLabel', $params, 'POST');
     }
 
     /**
@@ -520,7 +520,7 @@ class SalesOrder extends Model
      */
     public function printOrderData(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printOrderData', $params, 'GET');
+        return $this->callAction('printOrderData', $params, 'GET');
     }
 
     /**
@@ -531,7 +531,7 @@ class SalesOrder extends Model
      */
     public function recalculateCosts(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('recalculateCosts', $params, 'POST');
+        return $this->callAction('recalculateCosts', $params, 'POST');
     }
 
     /**
@@ -542,7 +542,7 @@ class SalesOrder extends Model
      */
     public function resetTaxes(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+        return $this->callAction('resetTaxes', $params, 'POST');
     }
 
     /**
@@ -553,7 +553,7 @@ class SalesOrder extends Model
      */
     public function setCostsForItemsWithoutCost(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('setCostsForItemsWithoutCost', $params, 'POST');
+        return $this->callAction('setCostsForItemsWithoutCost', $params, 'POST');
     }
 
     /**
@@ -564,7 +564,7 @@ class SalesOrder extends Model
      */
     public function shipOrderForExternalFulfillment(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('shipOrderForExternalFulfillment', $params, 'POST');
+        return $this->callAction('shipOrderForExternalFulfillment', $params, 'POST');
     }
 
     /**
@@ -575,7 +575,7 @@ class SalesOrder extends Model
      */
     public function toggleProjectTeam(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('toggleProjectTeam', $params, 'POST');
+        return $this->callAction('toggleProjectTeam', $params, 'POST');
     }
 
     /**
@@ -586,7 +586,7 @@ class SalesOrder extends Model
      */
     public function toggleServicesFinished(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('toggleServicesFinished', $params, 'POST');
+        return $this->callAction('toggleServicesFinished', $params, 'POST');
     }
 
     /**
@@ -597,7 +597,7 @@ class SalesOrder extends Model
      */
     public function updatePrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('updatePrices', $params, 'POST');
+        return $this->callAction('updatePrices', $params, 'POST');
     }
 
     /**
@@ -606,8 +606,8 @@ class SalesOrder extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function defaultValuesForCreate(array $params = []): ?array
+    public function defaultValuesForCreate(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('defaultValuesForCreate', $params, 'GET');
+        return $this->callAction('defaultValuesForCreate', $params, 'GET');
     }
 }

@@ -13,4 +13,13 @@ use Geccomedia\Weclapp\SubModels\ProductionWorkScheduleItem;
  * @property list<ProductionWorkScheduleItem>|null $workScheduleItems
  * @property string|null $workScheduleNumber
  */
-class ProductionWorkSchedule extends Model {}
+class ProductionWorkSchedule extends Model
+{
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'customAttributes' => CustomAttribute::class,
+        'workScheduleItems' => ProductionWorkScheduleItem::class,
+    ];
+}

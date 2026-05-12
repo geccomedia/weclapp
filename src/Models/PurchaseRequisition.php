@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\PurchaseRequisitionStatusHistory;
+use Geccomedia\Weclapp\Traits\IsUpdatableOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -30,9 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PurchaseRequisition extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsUpdatableOnly;
 
     /**
      * @var array<string, class-string|string>
@@ -98,7 +97,7 @@ class PurchaseRequisition extends Model
      */
     public function addToInternalShipment(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addToInternalShipment', $params, 'POST');
+        return $this->callAction('addToInternalShipment', $params, 'POST');
     }
 
     /**
@@ -109,7 +108,7 @@ class PurchaseRequisition extends Model
      */
     public function addToPurchaseOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addToPurchaseOrder', $params, 'POST');
+        return $this->callAction('addToPurchaseOrder', $params, 'POST');
     }
 
     /**
@@ -120,7 +119,7 @@ class PurchaseRequisition extends Model
      */
     public function createProductionOrder(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createProductionOrder', $params, 'POST');
+        return $this->callAction('createProductionOrder', $params, 'POST');
     }
 
     /**
@@ -129,9 +128,9 @@ class PurchaseRequisition extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function deleteAllRequisitions(array $params = []): ?array
+    public function deleteAllRequisitions(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('deleteAllRequisitions', $params, 'POST');
+        return $this->callAction('deleteAllRequisitions', $params, 'POST');
     }
 
     /**
@@ -140,8 +139,8 @@ class PurchaseRequisition extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function startMaterialPlanningRun(array $params = []): ?array
+    public function startMaterialPlanningRun(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('startMaterialPlanningRun', $params, 'POST');
+        return $this->callAction('startMaterialPlanningRun', $params, 'POST');
     }
 }

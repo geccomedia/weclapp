@@ -1,28 +1,22 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Model;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Models\Currency;
 use Geccomedia\Weclapp\Models\Customer;
 use Geccomedia\Weclapp\Models\SalesOrder;
 use Geccomedia\Weclapp\Models\Shipment;
-use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelRelationTest extends OrchestraTestCase
+class RelationTest extends OrchestraTestCase
 {
-    /**
-     * @param  Application  $app
-     */
-    protected function getPackageProviders($app): array
-    {
-        return [ServiceProvider::class];
-    }
+    use MocksClient, UsesServiceProvider;
 
     /**
      * with('relation') must issue exactly ONE batched request for the related

@@ -16,9 +16,9 @@ class Meta extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function legacyReferenceProperties(array $params = []): ?array
+    public function legacyReferenceProperties(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('legacyReferenceProperties', $params, 'GET');
+        return $this->callAction('legacyReferenceProperties', $params, 'GET');
     }
 
     /**
@@ -27,9 +27,9 @@ class Meta extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function queryFilterProperties(array $params = []): ?array
+    public function queryFilterProperties(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('queryFilterProperties', $params, 'GET');
+        return $this->callAction('queryFilterProperties', $params, 'GET');
     }
 
     /**
@@ -38,9 +38,9 @@ class Meta extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function querySortProperties(array $params = []): ?array
+    public function querySortProperties(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('querySortProperties', $params, 'GET');
+        return $this->callAction('querySortProperties', $params, 'GET');
     }
 
     /**
@@ -49,9 +49,9 @@ class Meta extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function resources(array $params = []): ?array
+    public function resources(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('resources', $params, 'GET');
+        return $this->callAction('resources', $params, 'GET');
     }
 
     /**
@@ -60,8 +60,8 @@ class Meta extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function validationErrorCodes(array $params = []): ?array
+    public function validationErrorCodes(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('validationErrorCodes', $params, 'GET');
+        return $this->callAction('validationErrorCodes', $params, 'GET');
     }
 }

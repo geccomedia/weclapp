@@ -11,6 +11,7 @@ use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\EmailAddresses;
 use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Geccomedia\Weclapp\SubModels\ReductionAdditionItem;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -63,9 +64,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BlanketSalesOrder extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * @var array<string, class-string|string>

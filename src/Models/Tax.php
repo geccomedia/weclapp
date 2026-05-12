@@ -73,9 +73,9 @@ class Tax extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function configurePurchaseTaxes(array $params = []): ?array
+    public function configurePurchaseTaxes(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('configurePurchaseTaxes', $params, 'POST');
+        return $this->callAction('configurePurchaseTaxes', $params, 'POST');
     }
 
     /**
@@ -84,9 +84,9 @@ class Tax extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function configureSalesTaxes(array $params = []): ?array
+    public function configureSalesTaxes(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('configureSalesTaxes', $params, 'POST');
+        return $this->callAction('configureSalesTaxes', $params, 'POST');
     }
 
     /**
@@ -95,9 +95,9 @@ class Tax extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function findPurchaseTax(array $params = []): ?array
+    public function findPurchaseTax(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('findPurchaseTax', $params, 'GET');
+        return $this->callAction('findPurchaseTax', $params, 'GET');
     }
 
     /**
@@ -106,9 +106,9 @@ class Tax extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function findSalesTax(array $params = []): ?array
+    public function findSalesTax(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('findSalesTax', $params, 'GET');
+        return $this->callAction('findSalesTax', $params, 'GET');
     }
 
     /**
@@ -117,8 +117,8 @@ class Tax extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function resetSystemTaxes(array $params = []): ?array
+    public function resetSystemTaxes(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('resetSystemTaxes', $params, 'POST');
+        return $this->callAction('resetSystemTaxes', $params, 'POST');
     }
 }

@@ -163,7 +163,7 @@ class IncomingGoods extends Model
      */
     public function addPurchaseOrders(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addPurchaseOrders', $params, 'POST');
+        return $this->callAction('addPurchaseOrders', $params, 'POST');
     }
 
     /**
@@ -174,7 +174,7 @@ class IncomingGoods extends Model
      */
     public function createCompensationShipment(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCompensationShipment', $params, 'POST');
+        return $this->callAction('createCompensationShipment', $params, 'POST');
     }
 
     /**
@@ -185,7 +185,7 @@ class IncomingGoods extends Model
      */
     public function createCreditNote(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCreditNote', $params, 'POST');
+        return $this->callAction('createCreditNote', $params, 'POST');
     }
 
     /**
@@ -196,7 +196,7 @@ class IncomingGoods extends Model
      */
     public function createPurchaseInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPurchaseInvoice', $params, 'POST');
+        return $this->callAction('createPurchaseInvoice', $params, 'POST');
     }
 
     /**
@@ -207,7 +207,7 @@ class IncomingGoods extends Model
      */
     public function createReturnLabels(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createReturnLabels', $params, 'POST');
+        return $this->callAction('createReturnLabels', $params, 'POST');
     }
 
     /**
@@ -218,7 +218,7 @@ class IncomingGoods extends Model
      */
     public function createSupplierReturn(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createSupplierReturn', $params, 'POST');
+        return $this->callAction('createSupplierReturn', $params, 'POST');
     }
 
     /**
@@ -229,7 +229,7 @@ class IncomingGoods extends Model
      */
     public function incomingBookings(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('incomingBookings', $params, 'GET');
+        return $this->callAction('incomingBookings', $params, 'GET');
     }
 
     /**
@@ -240,6 +240,6 @@ class IncomingGoods extends Model
      */
     public function updateIncomingBookings(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('updateIncomingBookings', $params, 'POST');
+        return $this->callAction('updateIncomingBookings', $params, 'POST');
     }
 }

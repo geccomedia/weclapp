@@ -21,9 +21,9 @@ class PropertyTranslation extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function readPropertyTranslations(array $params = []): ?array
+    public function readPropertyTranslations(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('readPropertyTranslations', $params, 'GET');
+        return $this->callAction('readPropertyTranslations', $params, 'GET');
     }
 
     /**
@@ -32,8 +32,8 @@ class PropertyTranslation extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function updatePropertyTranslations(array $params = []): ?array
+    public function updatePropertyTranslations(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('updatePropertyTranslations', $params, 'POST');
+        return $this->callAction('updatePropertyTranslations', $params, 'POST');
     }
 }

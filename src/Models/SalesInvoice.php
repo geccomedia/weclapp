@@ -257,7 +257,7 @@ class SalesInvoice extends Model
      */
     public function addSalesOrders(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addSalesOrders', $params, 'POST');
+        return $this->callAction('addSalesOrders', $params, 'POST');
     }
 
     /**
@@ -268,7 +268,7 @@ class SalesInvoice extends Model
      */
     public function calculateSalesPrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('calculateSalesPrices', $params, 'POST');
+        return $this->callAction('calculateSalesPrices', $params, 'POST');
     }
 
     /**
@@ -279,7 +279,7 @@ class SalesInvoice extends Model
      */
     public function cancel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('cancel', $params, 'POST');
+        return $this->callAction('cancel', $params, 'POST');
     }
 
     /**
@@ -290,7 +290,7 @@ class SalesInvoice extends Model
      */
     public function createContract(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createContract', $params, 'POST');
+        return $this->callAction('createContract', $params, 'POST');
     }
 
     /**
@@ -301,7 +301,7 @@ class SalesInvoice extends Model
      */
     public function createCreditNote(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCreditNote', $params, 'POST');
+        return $this->callAction('createCreditNote', $params, 'POST');
     }
 
     /**
@@ -312,7 +312,7 @@ class SalesInvoice extends Model
      */
     public function createCreditNoteOpenItem(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCreditNoteOpenItem', $params, 'POST');
+        return $this->callAction('createCreditNoteOpenItem', $params, 'POST');
     }
 
     /**
@@ -323,7 +323,7 @@ class SalesInvoice extends Model
      */
     public function downloadLatestSalesInvoicePdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestSalesInvoicePdf', $params, 'GET');
+        return $this->callAction('downloadLatestSalesInvoicePdf', $params, 'GET');
     }
 
     /**
@@ -334,7 +334,7 @@ class SalesInvoice extends Model
      */
     public function printLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+        return $this->callAction('printLabel', $params, 'POST');
     }
 
     /**
@@ -345,7 +345,7 @@ class SalesInvoice extends Model
      */
     public function recalculateCosts(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('recalculateCosts', $params, 'POST');
+        return $this->callAction('recalculateCosts', $params, 'POST');
     }
 
     /**
@@ -356,7 +356,7 @@ class SalesInvoice extends Model
      */
     public function resetTaxes(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+        return $this->callAction('resetTaxes', $params, 'POST');
     }
 
     /**
@@ -367,7 +367,7 @@ class SalesInvoice extends Model
      */
     public function setCostsForItemsWithoutCost(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('setCostsForItemsWithoutCost', $params, 'POST');
+        return $this->callAction('setCostsForItemsWithoutCost', $params, 'POST');
     }
 
     /**
@@ -378,6 +378,6 @@ class SalesInvoice extends Model
      */
     public function updatePrices(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('updatePrices', $params, 'POST');
+        return $this->callAction('updatePrices', $params, 'POST');
     }
 }

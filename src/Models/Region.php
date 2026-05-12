@@ -30,6 +30,6 @@ class Region extends Model
      */
     public function resetResponsiblePerson(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('resetResponsiblePerson', $params, 'POST');
+        return $this->callAction('resetResponsiblePerson', $params, 'POST');
     }
 }

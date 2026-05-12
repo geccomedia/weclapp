@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\OnlyId;
 use Geccomedia\Weclapp\SubModels\TicketPoolingGroupMember;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 
 /**
  * @property string|null $description
@@ -12,4 +13,15 @@ use Geccomedia\Weclapp\SubModels\TicketPoolingGroupMember;
  * @property list<OnlyId>|null $ticketCategories
  * @property list<TicketPoolingGroupMember>|null $ticketPoolingGroupMembers
  */
-class TicketPoolingGroup extends Model {}
+class TicketPoolingGroup extends Model
+{
+    use IsReadOnly;
+
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'ticketCategories' => OnlyId::class,
+        'ticketPoolingGroupMembers' => TicketPoolingGroupMember::class,
+    ];
+}

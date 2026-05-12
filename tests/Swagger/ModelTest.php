@@ -1,6 +1,6 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Swagger;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,7 +21,7 @@ use ReflectionClass;
  *     "customValue") are declared in DEFINITION_OVERRIDES below.
  *   - Meta has no swagger definition and is skipped via SKIP_MODELS.
  */
-class SwaggerModelTest extends TestCase
+class ModelTest extends TestCase
 {
     private const MODEL_NS = 'Geccomedia\\Weclapp\\Models\\';
 

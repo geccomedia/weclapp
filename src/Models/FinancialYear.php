@@ -16,6 +16,13 @@ use Geccomedia\Weclapp\SubModels\Period;
 class FinancialYear extends Model
 {
     /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'periods' => Period::class,
+    ];
+
+    /**
      * POST /generatePeriods
      *
      * @param  array<mixed>  $params  JSON body forwarded to the API.
@@ -23,6 +30,6 @@ class FinancialYear extends Model
      */
     public function generatePeriods(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('generatePeriods', $params, 'POST');
+        return $this->callAction('generatePeriods', $params, 'POST');
     }
 }

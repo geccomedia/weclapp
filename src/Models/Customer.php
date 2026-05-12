@@ -189,11 +189,6 @@ class Customer extends Model
         'topics' => OnlyId::class,
     ];
 
-    /**
-     * Customer constructor.
-     *
-     * @codeCoverageIgnore
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

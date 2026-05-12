@@ -219,7 +219,7 @@ class PurchaseOrder extends Model
      */
     public function cancelDropshippingShipments(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('cancelDropshippingShipments', $params, 'POST');
+        return $this->callAction('cancelDropshippingShipments', $params, 'POST');
     }
 
     /**
@@ -230,7 +230,7 @@ class PurchaseOrder extends Model
      */
     public function createCancellationSlipPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createCancellationSlipPdf', $params, 'POST');
+        return $this->callAction('createCancellationSlipPdf', $params, 'POST');
     }
 
     /**
@@ -241,7 +241,7 @@ class PurchaseOrder extends Model
      */
     public function createContract(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createContract', $params, 'POST');
+        return $this->callAction('createContract', $params, 'POST');
     }
 
     /**
@@ -252,7 +252,7 @@ class PurchaseOrder extends Model
      */
     public function createDropshippingDeliveryNotePdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createDropshippingDeliveryNotePdf', $params, 'POST');
+        return $this->callAction('createDropshippingDeliveryNotePdf', $params, 'POST');
     }
 
     /**
@@ -263,7 +263,7 @@ class PurchaseOrder extends Model
      */
     public function createIncomingGoods(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createIncomingGoods', $params, 'POST');
+        return $this->callAction('createIncomingGoods', $params, 'POST');
     }
 
     /**
@@ -274,7 +274,7 @@ class PurchaseOrder extends Model
      */
     public function createProductionOrders(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createProductionOrders', $params, 'POST');
+        return $this->callAction('createProductionOrders', $params, 'POST');
     }
 
     /**
@@ -285,7 +285,7 @@ class PurchaseOrder extends Model
      */
     public function createPurchaseInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPurchaseInvoice', $params, 'POST');
+        return $this->callAction('createPurchaseInvoice', $params, 'POST');
     }
 
     /**
@@ -296,7 +296,7 @@ class PurchaseOrder extends Model
      */
     public function createSupplierReturn(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createSupplierReturn', $params, 'POST');
+        return $this->callAction('createSupplierReturn', $params, 'POST');
     }
 
     /**
@@ -307,7 +307,7 @@ class PurchaseOrder extends Model
      */
     public function downloadLatestCancellationSlipPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestCancellationSlipPdf', $params, 'GET');
+        return $this->callAction('downloadLatestCancellationSlipPdf', $params, 'GET');
     }
 
     /**
@@ -318,7 +318,7 @@ class PurchaseOrder extends Model
      */
     public function downloadLatestDropshippingDeliveryNotePdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestDropshippingDeliveryNotePdf', $params, 'GET');
+        return $this->callAction('downloadLatestDropshippingDeliveryNotePdf', $params, 'GET');
     }
 
     /**
@@ -329,7 +329,7 @@ class PurchaseOrder extends Model
      */
     public function downloadLatestPurchaseOrderPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestPurchaseOrderPdf', $params, 'GET');
+        return $this->callAction('downloadLatestPurchaseOrderPdf', $params, 'GET');
     }
 
     /**
@@ -340,7 +340,7 @@ class PurchaseOrder extends Model
      */
     public function printLabel(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('printLabel', $params, 'POST');
+        return $this->callAction('printLabel', $params, 'POST');
     }
 
     /**
@@ -351,7 +351,7 @@ class PurchaseOrder extends Model
      */
     public function processDropshipping(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('processDropshipping', $params, 'POST');
+        return $this->callAction('processDropshipping', $params, 'POST');
     }
 
     /**
@@ -362,6 +362,6 @@ class PurchaseOrder extends Model
      */
     public function resetTaxes(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('resetTaxes', $params, 'POST');
+        return $this->callAction('resetTaxes', $params, 'POST');
     }
 }

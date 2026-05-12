@@ -98,46 +98,6 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * Whether new instances of this model can be created via the API.
-     * Set to false on models that are read-only at creation time.
-     */
-    protected bool $creatable = true;
-
-    /**
-     * Whether existing instances of this model can be deleted via the API.
-     * Set to false on models that are read-only for deletions.
-     */
-    protected bool $deletable = true;
-
-    /**
-     * Override Eloquent's insert path to enforce the $creatable guard.
-     *
-     * @throws NotSupportedException
-     */
-    protected function performInsert(\Illuminate\Database\Eloquent\Builder $query)
-    {
-        if (! $this->creatable) {
-            throw new NotSupportedException('Creating '.static::class.' is not supported by weclapp');
-        }
-
-        return parent::performInsert($query);
-    }
-
-    /**
-     * Override Eloquent's delete path to enforce the $deletable guard.
-     *
-     * @throws NotSupportedException
-     */
-    protected function performDeleteOnModel()
-    {
-        if (! $this->deletable) {
-            throw new NotSupportedException('Deleting '.static::class.' is not supported by weclapp');
-        }
-
-        parent::performDeleteOnModel();
-    }
-
-    /**
      * Derive the API resource name from the class name: lcfirst(ShortClassName).
      * This means no model subclass needs to declare $table explicitly.
      *
@@ -152,6 +112,39 @@ abstract class Model extends BaseModel
         $shortName = (new \ReflectionClass($this))->getShortName();
 
         return lcfirst($shortName);
+    }
+
+    /**
+     * Call a custom action endpoint, routing to the collection or instance
+     * endpoint depending on whether this model has been persisted.
+     *
+     * When called on a fresh (unsaved) instance — or via a static call forwarded
+     * through Eloquent's __callStatic magic — `$this->exists` is false, so the
+     * request goes to the collection-level path:
+     *
+     *   POST /document/copy
+     *
+     * When called on a retrieved instance (`$this->exists === true`), the
+     * request goes to the instance-level path:
+     *
+     *   POST /document/id/123/copy
+     *
+     * This means every action method on a model can be declared as a plain
+     * (non-static) method and works correctly in both calling contexts:
+     *
+     *   Document::copy($params)          // collection — POST /document/copy
+     *   $doc->copy($params)              // instance   — POST /document/id/123/copy
+     *
+     * @param  array<mixed>  $params  POST body or GET query parameters.
+     * @return array<mixed>|null
+     */
+    public function callAction(string $action, array $params = [], string $method = 'POST'): ?array
+    {
+        $builder = $this->newQuery();
+
+        return $this->exists
+            ? $builder->callAction($action, $params, $method)
+            : $builder->action($action, $params, $method);
     }
 
     /**
@@ -180,7 +173,6 @@ abstract class Model extends BaseModel
      *
      * @return Connection
      */
-    // @phpstan-ignore-next-line method.childReturnType
     public function getConnection()
     {
         return app(Connection::class);

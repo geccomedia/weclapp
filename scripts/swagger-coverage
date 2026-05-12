@@ -1,0 +1,425 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Swagger Coverage Report
+ *
+ * Measures how completely this library covers the live Weclapp API across six
+ * dimensions derived from the swagger spec.  Each dimension contributes equally
+ * to the overall percentage.
+ *
+ * Usage (from project root, via Docker per project rules):
+ *
+ *   docker run --rm -v "$(pwd):/app" -w /app composer:2 composer coverage
+ *
+ * Dimensions measured
+ * -------------------
+ *   1. CRUD roots        – CRUD path roots covered by a Model or utility class
+ *   2. Actions           – action endpoints with a named method on the class
+ *   3. Model properties  – swagger definition properties declared as @property
+ *   4. SubModel props    – swagger sub-definition properties declared as @property
+ *   5. Casts             – $ref-backed array properties with a $casts entry
+ *   6. FK relations      – *Id FK properties with a belongsTo() relation method
+ */
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Geccomedia\Weclapp\Tests\SwaggerSpec;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Returns FQCN of the class responsible for a given swagger root (mirrors SwaggerActionCoverageTest). */
+function classFqcnForRoot(string $root): ?string
+{
+    if (isset(SwaggerSpec::UTILITY_ROOTS[$root])) {
+        return SwaggerSpec::UTILITY_ROOTS[$root];
+    }
+    $canonical = SwaggerSpec::MODEL_NS . ucfirst($root);
+    if (class_exists($canonical)) {
+        return $canonical;
+    }
+    foreach (SwaggerSpec::modelShortNames() as $short) {
+        if (SwaggerSpec::rootFor($short) === $root) {
+            return SwaggerSpec::MODEL_NS . $short;
+        }
+    }
+    return null;
+}
+
+/** Returns all @property names from the docblock chain of a FQCN. */
+function docblockProperties(string $fqcn): array
+{
+    $props = [];
+    $rc = new ReflectionClass($fqcn);
+    do {
+        $doc = $rc->getDocComment();
+        if ($doc !== false) {
+            preg_match_all('/@property[^$]*\$(\w+)/', $doc, $m);
+            array_push($props, ...$m[1]);
+        }
+    } while ($rc = $rc->getParentClass());
+    return array_values(array_unique($props));
+}
+
+/** Returns the $casts array walking up the inheritance chain (skips abstract classes). */
+function resolvedCasts(string $fqcn): array
+{
+    $casts = [];
+    $rc    = new ReflectionClass($fqcn);
+    do {
+        if ($rc->isAbstract()) {
+            break;
+        }
+        if ($rc->hasProperty('casts')) {
+            $value = $rc->getProperty('casts')->getValue($rc->newInstanceWithoutConstructor());
+            $casts = array_merge((array) $value, $casts);
+        }
+    } while ($rc = $rc->getParentClass());
+    return $casts;
+}
+
+/** Definition overrides shared with SwaggerModelTest / SwaggerCastCoverageTest. */
+const DEFINITION_OVERRIDES = [
+    'ShipmentReturnAssessment'      => 'shipmentReturnDescription',
+    'ShipmentReturnError'           => 'shipmentReturnDescription',
+    'ShipmentReturnReason'          => 'shipmentReturnDescription',
+    'ShipmentReturnRectification'   => 'shipmentReturnDescription',
+    'ArticleAccountingCode'         => 'customValue',
+    'ArticleCategoryClassification' => 'customValue',
+    'ArticleRating'                 => 'customValue',
+    'ArticleStatus'                 => 'customValue',
+    'CompanySize'                   => 'customValue',
+    'ContractBillingGroup'          => 'customValue',
+    'ContractTerminationReason'     => 'customValue',
+    'CostCenterGroup'               => 'customValue',
+    'CrmCallCategory'               => 'customValue',
+    'CrmEventCategory'              => 'customValue',
+    'CustomerCategory'              => 'customValue',
+    'CustomerLeadLossReason'        => 'customValue',
+    'CustomerTopic'                 => 'customValue',
+    'CustomsTariffNumber'           => 'customValue',
+    'LeadRating'                    => 'customValue',
+    'LeadSource'                    => 'customValue',
+    'LegalForm'                     => 'customValue',
+    'OpportunityTopic'              => 'customValue',
+    'OpportunityWinLossReason'      => 'customValue',
+    'PartyRating'                   => 'customValue',
+    'PersonDepartment'              => 'customValue',
+    'PersonRole'                    => 'customValue',
+    'PersonalAccountingCode'        => 'customValue',
+    'PickCheckReason'               => 'customValue',
+    'PlaceOfService'                => 'customValue',
+    'Sector'                        => 'customValue',
+    'StoragePlaceBlockingReason'    => 'customValue',
+    'TicketChannel'                 => 'customValue',
+    'Title'                         => 'customValue',
+];
+
+function definitionFor(string $shortName): string
+{
+    return DEFINITION_OVERRIDES[$shortName] ?? SwaggerSpec::rootFor($shortName);
+}
+
+/** FK fields intentionally excluded from the belongsTo requirement (mirrors SwaggerRelationCoverageTest). */
+const FK_EXCLUDED = [
+    'weclappOsId',
+    'customerHabitualExporterLetterOfIntentId',
+    'variantArticleId',
+];
+
+// ─── Fetch spec ───────────────────────────────────────────────────────────────
+
+$jsonMode = in_array('--json', $argv ?? [], true);
+
+if (! $jsonMode) {
+    echo "Fetching swagger spec … ";
+    flush();
+}
+$paths      = SwaggerSpec::paths();
+$defs       = SwaggerSpec::definitions();
+$crudRoots  = SwaggerSpec::crudRoots();
+$modelNames = SwaggerSpec::modelShortNames();
+if (! $jsonMode) {
+    echo "done.\n\n";
+}
+
+// ─── Dimension 1: CRUD roots ──────────────────────────────────────────────────
+
+$coveredRoots = array_unique(array_merge(
+    array_map(fn ($s) => SwaggerSpec::rootFor($s), $modelNames),
+    array_keys(SwaggerSpec::UTILITY_ROOTS)
+));
+$dim1Total   = count($crudRoots);
+$dim1Covered = count(array_intersect(array_keys($crudRoots), $coveredRoots));
+$dim1Missing = array_values(array_diff(array_keys($crudRoots), $coveredRoots));
+
+// ─── Dimension 2: Action methods ─────────────────────────────────────────────
+
+$dim2Total   = 0;
+$dim2Covered = 0;
+$dim2Missing = [];
+
+foreach (array_keys($paths) as $path) {
+    $parts = explode('/', ltrim($path, '/'));
+    $isCollAction = count($parts) === 2 && $parts[1] !== 'count';
+    $isInstAction = count($parts) === 4 && $parts[1] === 'id' && $parts[2] === '{id}';
+    if (! $isCollAction && ! $isInstAction) {
+        continue;
+    }
+    $action = $parts[count($parts) - 1];
+    if ($action === 'count') {
+        continue;
+    }
+    $fqcn = classFqcnForRoot($parts[0]);
+    if ($fqcn === null || ! class_exists($fqcn)) {
+        continue;
+    }
+    $dim2Total++;
+    if (method_exists($fqcn, $action)) {
+        $dim2Covered++;
+    } else {
+        $dim2Missing[] = "{$parts[0]}::{$action}()";
+    }
+}
+
+// ─── Dimension 3: Model @property annotations ─────────────────────────────────
+
+$dim3Total   = 0;
+$dim3Covered = 0;
+$dim3Missing = [];
+
+foreach ($modelNames as $short) {
+    if ($short === 'Meta') {
+        continue;
+    }
+    // Party subtypes share the definition; checked via Party only.
+    if (isset(SwaggerSpec::TABLE_OVERRIDES[$short]) && $short !== 'Party') {
+        continue;
+    }
+    $defName = definitionFor($short);
+    if (! isset($defs[$defName])) {
+        continue;
+    }
+    $fqcn        = SwaggerSpec::MODEL_NS . $short;
+    $declared    = array_flip(docblockProperties($fqcn));
+    $specProps   = array_keys($defs[$defName]['properties'] ?? []);
+    foreach ($specProps as $prop) {
+        $dim3Total++;
+        if (isset($declared[$prop])) {
+            $dim3Covered++;
+        } else {
+            $dim3Missing[] = "{$short}::\${$prop}";
+        }
+    }
+}
+
+// ─── Dimension 4: SubModel @property annotations ──────────────────────────────
+
+$dim4Total   = 0;
+$dim4Covered = 0;
+$dim4Missing = [];
+
+foreach (glob(__DIR__ . '/../src/SubModels/*.php') ?: [] as $file) {
+    $short   = basename($file, '.php');
+    $defName = lcfirst($short);
+    if (! isset($defs[$defName])) {
+        continue;
+    }
+    $fqcn      = 'Geccomedia\\Weclapp\\SubModels\\' . $short;
+    $declared  = array_flip(docblockProperties($fqcn));
+    $specProps = array_keys($defs[$defName]['properties'] ?? []);
+    foreach ($specProps as $prop) {
+        $dim4Total++;
+        if (isset($declared[$prop])) {
+            $dim4Covered++;
+        } else {
+            $dim4Missing[] = "{$short}::\${$prop}";
+        }
+    }
+}
+
+// ─── Dimension 5: $casts for $ref-backed array properties ─────────────────────
+
+$dim5Total   = 0;
+$dim5Covered = 0;
+$dim5Missing = [];
+
+foreach ($modelNames as $short) {
+    if ($short === 'Meta') {
+        continue;
+    }
+    if (isset(SwaggerSpec::TABLE_OVERRIDES[$short]) && $short !== 'Party') {
+        continue;
+    }
+    $defName = definitionFor($short);
+    if (! isset($defs[$defName])) {
+        continue;
+    }
+    $fqcn  = SwaggerSpec::MODEL_NS . $short;
+    $casts = resolvedCasts($fqcn);
+    foreach ($defs[$defName]['properties'] ?? [] as $propName => $propDef) {
+        if (($propDef['type'] ?? '') !== 'array') {
+            continue;
+        }
+        if (! isset($propDef['items']['$ref'])) {
+            continue;
+        }
+        $dim5Total++;
+        if (isset($casts[$propName])) {
+            $dim5Covered++;
+        } else {
+            $dim5Missing[] = "{$short}::\${$propName}";
+        }
+    }
+}
+
+// ─── Dimension 6: FK belongsTo relations ─────────────────────────────────────
+
+$dim6Total   = 0;
+$dim6Covered = 0;
+$dim6Missing = [];
+
+foreach ($modelNames as $short) {
+    if (isset(SwaggerSpec::TABLE_OVERRIDES[$short]) && $short !== 'Party') {
+        continue;
+    }
+    $defName = isset(SwaggerSpec::TABLE_OVERRIDES[$short])
+        ? SwaggerSpec::TABLE_OVERRIDES[$short]
+        : lcfirst($short);
+    if (! isset($defs[$defName])) {
+        continue;
+    }
+    $fqcn = SwaggerSpec::MODEL_NS . $short;
+    foreach (array_keys($defs[$defName]['properties'] ?? []) as $prop) {
+        if (! str_ends_with($prop, 'Id')) {
+            continue;
+        }
+        if (in_array($prop, FK_EXCLUDED, true)) {
+            continue;
+        }
+        $relationName = substr($prop, 0, -2);
+        $targetFqcn   = SwaggerSpec::MODEL_NS . ucfirst($relationName);
+        if (! class_exists($targetFqcn)) {
+            continue;
+        }
+        $dim6Total++;
+        if (method_exists($fqcn, $relationName)) {
+            $dim6Covered++;
+        } else {
+            $dim6Missing[] = "{$short}::{$relationName}()";
+        }
+    }
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+
+function pct(int $covered, int $total): float
+{
+    return $total === 0 ? 100.0 : round($covered / $total * 100, 1);
+}
+
+function bar(float $pct, int $width = 24): string
+{
+    $filled = (int) round($pct / 100 * $width);
+    return '[' . str_repeat('█', $filled) . str_repeat('░', $width - $filled) . ']';
+}
+
+function color(float $pct): string
+{
+    if ($pct >= 95) return "\033[32m"; // green
+    if ($pct >= 75) return "\033[33m"; // yellow
+    return "\033[31m";                 // red
+}
+
+const RESET = "\033[0m";
+
+$dimensions = [
+    ['CRUD roots covered',       $dim1Covered, $dim1Total, $dim1Missing],
+    ['Action methods present',   $dim2Covered, $dim2Total, $dim2Missing],
+    ['Model @property complete', $dim3Covered, $dim3Total, $dim3Missing],
+    ['SubModel @property complete', $dim4Covered, $dim4Total, $dim4Missing],
+    ['Array prop $casts present',$dim5Covered, $dim5Total, $dim5Missing],
+    ['FK belongsTo relations',   $dim6Covered, $dim6Total, $dim6Missing],
+];
+
+$totalCovered = array_sum(array_column($dimensions, 1));
+$totalItems   = array_sum(array_column($dimensions, 2));
+$overall      = pct($totalCovered, $totalItems);
+
+if ($jsonMode) {
+    // Machine-readable output for CI — just the numbers.
+    $out = ['overall' => $overall, 'dimensions' => []];
+    foreach ($dimensions as [$label, $covered, $total, $missing]) {
+        $out['dimensions'][] = [
+            'label'   => $label,
+            'covered' => $covered,
+            'total'   => $total,
+            'pct'     => pct($covered, $total),
+            'missing' => $missing,
+        ];
+    }
+    echo json_encode($out, JSON_PRETTY_PRINT) . "\n";
+    exit(0);
+}
+
+// Header
+echo "┌─────────────────────────────────────────────────────────────────────────┐\n";
+echo "│                     Weclapp Swagger Coverage Report                     │\n";
+echo "├──────────────────────────────┬────────┬────────────────────────────┬────┤\n";
+echo "│ Dimension                    │  Score │ Progress                   │  % │\n";
+echo "├──────────────────────────────┼────────┼────────────────────────────┼────┤\n";
+
+foreach ($dimensions as [$label, $covered, $total, $_missing]) {
+    $p    = pct($covered, $total);
+    $col  = color($p);
+    $b    = bar($p);
+    printf(
+        "│ %-28s │ %3d/%-3d│ %s%s%s │%3.0f%%│\n",
+        $label,
+        $covered,
+        $total,
+        $col,
+        $b,
+        RESET,
+        $p
+    );
+}
+
+echo "├──────────────────────────────┼────────┼────────────────────────────┼────┤\n";
+$col = color($overall);
+printf(
+    "│ %-28s │ %3d/%-3d│ %s%s%s │%3.0f%%│\n",
+    'OVERALL',
+    $totalCovered,
+    $totalItems,
+    $col,
+    bar($overall),
+    RESET,
+    $overall
+);
+echo "└──────────────────────────────┴────────┴────────────────────────────┴────┘\n";
+
+// Missing items detail
+$anyMissing = false;
+foreach ($dimensions as [$label, $_c, $_t, $missing]) {
+    if (count($missing) > 0) {
+        $anyMissing = true;
+        break;
+    }
+}
+
+if ($anyMissing) {
+    echo "\n";
+    foreach ($dimensions as [$label, $_c, $_t, $missing]) {
+        if (count($missing) === 0) {
+            continue;
+        }
+        echo "\033[31mMissing – {$label}:\033[0m\n";
+        foreach ($missing as $item) {
+            echo "  • {$item}\n";
+        }
+    }
+}
+
+echo "\n";
+exit($overall < 100.0 ? 1 : 0);

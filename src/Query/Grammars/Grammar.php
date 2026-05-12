@@ -35,7 +35,7 @@ class Grammar extends BaseGrammar
         $this->operators = array_keys($this->operatorMappingTable);
     }
 
-    private function getOperator($operator)
+    private function getOperator(string $operator): string
     {
         return $this->operatorMappingTable[strtolower($operator)];
     }
@@ -65,10 +65,9 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile a select query into SQL.
+     * Build a PSR-7 GET request for a select query.
      */
-    /** @phpstan-ignore method.childReturnType */
-    public function compileSelect(Builder $query): Request
+    public function buildSelectRequest(Builder $query): Request
     {
         // If the query does not have any columns set, we'll set the columns to the
         // * character to just get all of the columns from the database. Then we
@@ -82,7 +81,7 @@ class Grammar extends BaseGrammar
         // To compile the query, we'll spin through each component of the query and
         // see if that component exists. If it does we'll just call the compiler
         // function for the component which is responsible for making the SQL.
-        $components = $this->compileComponents($query);
+        $components = $this->buildComponents($query);
         $baseUri = $components['from'];
         unset($components['from']);
         if (isset($components['aggregate'])) {
@@ -105,9 +104,11 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile the components necessary for a select clause.
+     * Build the components necessary for a select clause.
+     *
+     * @return array<string, mixed>
      */
-    protected function compileComponents(Builder $query): array
+    protected function buildComponents(Builder $query): array
     {
         $sql = [];
 
@@ -116,7 +117,7 @@ class Grammar extends BaseGrammar
             // see if that component exists. If it does we'll just call the compiler
             // function for the component which is responsible for making the SQL.
             if (isset($query->$component)) {
-                $method = 'compile'.ucfirst($component);
+                $method = 'build'.ucfirst($component);
 
                 $part = $this->$method($query, $query->$component);
                 if (! is_null($part)) {
@@ -129,41 +130,40 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile an aggregated select clause.
+     * Build an aggregated select clause.
      *
      * @param  array  $aggregate
      */
-    protected function compileAggregate(Builder $query, $aggregate): string
+    protected function buildAggregate(Builder $query, $aggregate): string
     {
         return '/count';
     }
 
     /**
-     * Compile the "select *" portion of the query.
+     * Build the "select *" portion of the query.
      *
      * @param  array  $columns
-     * @return array|void
+     * @return array<string>|null
      */
-    // @phpstan-ignore-next-line method.childReturnType
-    protected function compileColumns(Builder $query, $columns)
+    protected function buildColumns(Builder $query, $columns): ?array
     {
         // If the query is actually performing an aggregating select, we will let that
         // compiler handle the building of the select clauses, as it will need some
         // more syntax that is best handled by that function to keep things neat.
         if (! is_null($query->aggregate) || in_array('*', $columns)) {
-            return;
+            return null;
         }
 
         return ['properties', $this->columnize($columns)];
     }
 
     /**
-     * Compile the "additionalProperties" portion of the query.
+     * Build the "additionalProperties" portion of the query.
      *
      * @param  array<string>  $additionalProperties
      * @return array<string>|null
      */
-    protected function compileAdditionalProperties(Builder $query, $additionalProperties): ?array
+    protected function buildAdditionalProperties(Builder $query, $additionalProperties): ?array
     {
         if (empty($additionalProperties)) {
             return null;
@@ -173,20 +173,21 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile the "from" portion of the query.
+     * Build the "from" portion of the query.
      *
      * @param  string  $table
      */
-    protected function compileFrom(Builder $query, $table): string
+    protected function buildFrom(Builder $query, $table): string
     {
         return $table;
     }
 
     /**
-     * Compile the "where" portions of the query.
+     * Build the "where" portions of the query.
+     *
+     * @return array<int, mixed>
      */
-    /** @phpstan-ignore method.childReturnType */
-    public function compileWheres(Builder $query): array
+    public function buildWheres(Builder $query): array
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
             // Normalise PHP booleans to their string equivalents before any
@@ -215,17 +216,17 @@ class Grammar extends BaseGrammar
                 $where['type'] = 'NotIn';
             }
 
-            return $this->{"where{$where['type']}"}($query, $where);
+            return $this->{"build{$where['type']}Where"}($query, $where);
         })->all();
     }
 
     /**
-     * Compile a basic where clause.
+     * Build a basic where clause.
      *
-     * @param  array  $where
+     * @param  array<string, mixed>  $where
+     * @return array<int, mixed>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function whereBasic(Builder $query, $where): array
+    protected function buildBasicWhere(Builder $query, array $where): array
     {
         return [
             $where['column'].'-'.$this->getOperator($where['operator']),
@@ -234,10 +235,13 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile a "where entity" clause.
+     * Build a "where entity" clause.
      * See https://github.com/geccomedia/weclapp/issues/22
+     *
+     * @param  array<string, mixed>  $where
+     * @return array<int, mixed>
      */
-    protected function whereEntity(Builder $query, array $where): array
+    protected function buildEntityWhere(Builder $query, array $where): array
     {
         return [
             $where['column'],
@@ -246,81 +250,82 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile a "where null" clause.
+     * Build a "where null" clause.
      *
-     * @param  array  $where
+     * @param  array<string, mixed>  $where
+     * @return array<int, mixed>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function whereNull(Builder $query, $where): array
+    protected function buildNullWhere(Builder $query, array $where): array
     {
         $where['value'] = '';
         $where['operator'] = 'null';
 
-        return $this->whereBasic($query, $where);
+        return $this->buildBasicWhere($query, $where);
     }
 
     /**
-     * Compile a "where not null" clause.
+     * Build a "where not null" clause.
      *
-     * @param  array  $where
+     * @param  array<string, mixed>  $where
+     * @return array<int, mixed>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function whereNotNull(Builder $query, $where): array
+    protected function buildNotNullWhere(Builder $query, array $where): array
     {
         $where['value'] = '';
         $where['operator'] = 'not_null';
 
-        return $this->whereBasic($query, $where);
+        return $this->buildBasicWhere($query, $where);
     }
 
     /**
-     * Compile a "where in" clause.
+     * Build a "where in" clause.
      *
-     * @param  array  $where
+     * @param  array<string, mixed>  $where
+     * @return array<int, mixed>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function whereIn(Builder $query, $where): array
+    protected function buildInWhere(Builder $query, array $where): array
     {
         $where['value'] = json_encode($where['values']);
         $where['operator'] = 'in';
 
-        return $this->whereBasic($query, $where);
+        return $this->buildBasicWhere($query, $where);
     }
 
     /**
-     * Compile a "where not in" clause.
+     * Build a "where not in" clause.
      *
-     * @param  array  $where
+     * @param  array<string, mixed>  $where
+     * @return array<int, mixed>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function whereNotIn(Builder $query, $where): array
+    protected function buildNotInWhere(Builder $query, array $where): array
     {
         $where['value'] = json_encode($where['values']);
         $where['operator'] = 'not_in';
 
-        return $this->whereBasic($query, $where);
+        return $this->buildBasicWhere($query, $where);
     }
 
     /**
-     * Compile the "order by" portions of the query.
+     * Build the "order by" portions of the query.
      *
-     * @param  array  $orders
+     * @param  array<int, mixed>  $orders
+     * @return array<int, string>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function compileOrders(Builder $query, $orders): array
+    protected function buildOrders(Builder $query, array $orders): array
     {
         return [
             'sort',
-            implode(',', $this->compileOrdersToArray($query, $orders)),
+            implode(',', $this->buildOrdersToArray($query, $orders)),
         ];
     }
 
     /**
-     * Compile the query orders to an array.
+     * Build the query orders to an array.
      *
-     * @param  array  $orders
+     * @param  array<int, mixed>  $orders
+     * @return array<int, string>
      */
-    protected function compileOrdersToArray(Builder $query, $orders): array
+    protected function buildOrdersToArray(Builder $query, array $orders): array
     {
         return array_map(function ($order) {
             return ($order['direction'] == 'desc' ? '-' : '').$order['column'];
@@ -328,55 +333,39 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile the "limit" portions of the query.
+     * Build the "limit" portions of the query.
      *
-     * @param  int  $limit
+     * @return array<int, int|string>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function compileLimit(Builder $query, $limit): array
+    protected function buildLimit(Builder $query, int $limit): array
     {
         return ['pageSize', (int) $limit];
     }
 
     /**
-     * Compile the "offset" portions of the query.
+     * Build the "offset" portions of the query.
      *
-     * @param  int  $offset
+     * @return array<int, int|string>
      */
-    /** @phpstan-ignore method.childReturnType */
-    protected function compileOffset(Builder $query, $offset): array
+    protected function buildOffset(Builder $query, int $offset): array
     {
         return ['page', (int) ($offset / $query->limit + 1)];
     }
 
     /**
-     * Compile an insert statement into SQL.
+     * Build a PSR-7 POST request for an insert statement.
      */
-    /** @phpstan-ignore method.childReturnType */
-    public function compileInsert(Builder $query, array $values): Request
+    public function buildInsertRequest(Builder $query, array $values): Request
     {
         return new Request('POST', $query->from, [], json_encode($values));
     }
 
     /**
-     * Compile an insert and get ID statement into SQL.
-     *
-     * @param  array  $values
-     * @param  string  $sequence
-     */
-    /** @phpstan-ignore method.childReturnType */
-    public function compileInsertGetId(Builder $query, $values, $sequence): Request
-    {
-        return $this->compileInsert($query, $values);
-    }
-
-    /**
-     * Compile a delete statement into SQL.
+     * Build a PSR-7 DELETE request for a delete statement.
      *
      * @throws NotSupportedException
      */
-    /** @phpstan-ignore method.childReturnType */
-    public function compileDelete(Builder $query): Request
+    public function buildDeleteRequest(Builder $query): Request
     {
         if (count($query->wheres) != 1 || $query->wheres[0]['column'] != 'id' || $query->wheres[0]['type'] != 'Basic') {
             throw new NotSupportedException('Only single delete by id is supported by weclapp.');
@@ -387,12 +376,11 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile an update statement into SQL.
+     * Build a PSR-7 PUT request for an update statement.
      *
      * @throws NotSupportedException
      */
-    /** @phpstan-ignore method.childReturnType */
-    public function compileUpdate(Builder $query, array $values): Request
+    public function buildUpdateRequest(Builder $query, array $values): Request
     {
         if (count($query->wheres) != 1 || $query->wheres[0]['column'] != 'id' || $query->wheres[0]['type'] != 'Basic') {
             throw new NotSupportedException('Only single update by id is supported by weclapp.');
@@ -450,7 +438,6 @@ class Grammar extends BaseGrammar
         return $this->operators;
     }
 
-    // @codeCoverageIgnoreStart
     public function supportsSavepoints(): bool
     {
         return false;
@@ -459,7 +446,7 @@ class Grammar extends BaseGrammar
     /**
      * @throws NotSupportedException
      */
-    public function compileInsertUsing(Builder $query, array $columns, string $sql)
+    public function compileInsertUsing(Builder $query, array $columns, string $sql): string
     {
         throw new NotSupportedException('Inserting using sub queries is not supported by weclapp.');
     }
@@ -467,7 +454,7 @@ class Grammar extends BaseGrammar
     /**
      * @throws NotSupportedException
      */
-    public function compileInsertOrIgnore(Builder $query, array $values)
+    public function compileInsertOrIgnore(Builder $query, array $values): string
     {
         throw new NotSupportedException('Inserting while ignoring errors is not supported by weclapp.');
     }
@@ -475,9 +462,8 @@ class Grammar extends BaseGrammar
     /**
      * @throws NotSupportedException
      */
-    protected function compileJoins(Builder $query, $joins)
+    protected function compileJoins(Builder $query, $joins): string
     {
         throw new NotSupportedException('Joins not supported by weclapp.');
     }
-    // @codeCoverageIgnoreEnd
 }

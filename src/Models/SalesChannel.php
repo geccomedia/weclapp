@@ -18,9 +18,9 @@ class SalesChannel extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function activeSalesChannels(array $params = []): ?array
+    public function activeSalesChannels(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('activeSalesChannels', $params, 'GET');
+        return $this->callAction('activeSalesChannels', $params, 'GET');
     }
 
     /**
@@ -29,8 +29,8 @@ class SalesChannel extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function salesChannelUsage(array $params = []): ?array
+    public function salesChannelUsage(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('salesChannelUsage', $params, 'GET');
+        return $this->callAction('salesChannelUsage', $params, 'GET');
     }
 }

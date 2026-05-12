@@ -3,15 +3,14 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 
 /**
  * @property string|null $type
  */
 class NumberRange extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * GET /missingNumberRanges
@@ -19,8 +18,8 @@ class NumberRange extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function missingNumberRanges(array $params = []): ?array
+    public function missingNumberRanges(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('missingNumberRanges', $params, 'GET');
+        return $this->callAction('missingNumberRanges', $params, 'GET');
     }
 }

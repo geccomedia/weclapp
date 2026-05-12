@@ -4,6 +4,8 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Traits\NoCreate;
+use Geccomedia\Weclapp\Traits\NoUpdate;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BankTransaction extends Model
 {
-    protected bool $creatable = false;
+    use NoCreate, NoUpdate;
 
     /**
      * @return BelongsTo

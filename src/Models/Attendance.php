@@ -27,9 +27,9 @@ class Attendance extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function currentAttendance(array $params = []): ?array
+    public function currentAttendance(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('currentAttendance', $params, 'GET');
+        return $this->callAction('currentAttendance', $params, 'GET');
     }
 
     /**
@@ -38,9 +38,9 @@ class Attendance extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function logOff(array $params = []): ?array
+    public function logOff(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('logOff', $params, 'POST');
+        return $this->callAction('logOff', $params, 'POST');
     }
 
     /**
@@ -49,8 +49,8 @@ class Attendance extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function logOn(array $params = []): ?array
+    public function logOn(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('logOn', $params, 'POST');
+        return $this->callAction('logOn', $params, 'POST');
     }
 }

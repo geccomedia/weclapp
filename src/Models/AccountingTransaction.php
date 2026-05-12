@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\AccountingTransactionDetail;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -25,9 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AccountingTransaction extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * @var array<string, class-string|string>
@@ -50,8 +49,8 @@ class AccountingTransaction extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function batchBooking(array $params = []): ?array
+    public function batchBooking(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('batchBooking', $params, 'POST');
+        return $this->callAction('batchBooking', $params, 'POST');
     }
 }

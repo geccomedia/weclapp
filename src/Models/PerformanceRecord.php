@@ -116,7 +116,7 @@ class PerformanceRecord extends Model
      */
     public function addToPerformanceRecord(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('addToPerformanceRecord', $params, 'POST');
+        return $this->callAction('addToPerformanceRecord', $params, 'POST');
     }
 
     /**
@@ -127,7 +127,7 @@ class PerformanceRecord extends Model
      */
     public function createInvoice(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createInvoice', $params, 'POST');
+        return $this->callAction('createInvoice', $params, 'POST');
     }
 
     /**
@@ -138,7 +138,7 @@ class PerformanceRecord extends Model
      */
     public function downloadLatestPerformanceRecordPdf(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadLatestPerformanceRecordPdf', $params, 'GET');
+        return $this->callAction('downloadLatestPerformanceRecordPdf', $params, 'GET');
     }
 
     /**
@@ -149,7 +149,7 @@ class PerformanceRecord extends Model
      */
     public function downloadSignature(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadSignature', $params, 'GET');
+        return $this->callAction('downloadSignature', $params, 'GET');
     }
 
     /**
@@ -160,7 +160,7 @@ class PerformanceRecord extends Model
      */
     public function performServiceQuotaAssignmentForTimeRecords(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('performServiceQuotaAssignmentForTimeRecords', $params, 'POST');
+        return $this->callAction('performServiceQuotaAssignmentForTimeRecords', $params, 'POST');
     }
 
     /**
@@ -171,7 +171,7 @@ class PerformanceRecord extends Model
      */
     public function recalculateQuantities(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('recalculateQuantities', $params, 'POST');
+        return $this->callAction('recalculateQuantities', $params, 'POST');
     }
 
     /**
@@ -182,7 +182,7 @@ class PerformanceRecord extends Model
      */
     public function removeSignature(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('removeSignature', $params, 'POST');
+        return $this->callAction('removeSignature', $params, 'POST');
     }
 
     /**
@@ -193,7 +193,7 @@ class PerformanceRecord extends Model
      */
     public function uploadSignature(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('uploadSignature', $params, 'POST');
+        return $this->callAction('uploadSignature', $params, 'POST');
     }
 
     /**
@@ -202,8 +202,8 @@ class PerformanceRecord extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function startConfiguredMassPerformanceRecordCreation(array $params = []): ?array
+    public function startConfiguredMassPerformanceRecordCreation(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('startConfiguredMassPerformanceRecordCreation', $params, 'POST');
+        return $this->callAction('startConfiguredMassPerformanceRecordCreation', $params, 'POST');
     }
 }

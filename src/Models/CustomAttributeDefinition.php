@@ -40,14 +40,23 @@ use Geccomedia\Weclapp\SubModels\CustomAttributeDefinitionTranslation;
 class CustomAttributeDefinition extends Model
 {
     /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'attributeLabels' => CustomAttributeDefinitionTranslation::class,
+        'permissions' => CustomAttributeDefinitionPermission::class,
+        'selectableValues' => CustomAttributeDefinitionListValue::class,
+    ];
+
+    /**
      * GET /readOrder
      *
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function readOrder(array $params = []): ?array
+    public function readOrder(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('readOrder', $params, 'GET');
+        return $this->callAction('readOrder', $params, 'GET');
     }
 
     /**
@@ -56,8 +65,8 @@ class CustomAttributeDefinition extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function updateOrder(array $params = []): ?array
+    public function updateOrder(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('updateOrder', $params, 'POST');
+        return $this->callAction('updateOrder', $params, 'POST');
     }
 }

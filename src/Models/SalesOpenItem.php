@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\PaymentApplication;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -21,9 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SalesOpenItem extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * @var array<string, class-string|string>
@@ -48,7 +47,7 @@ class SalesOpenItem extends Model
      */
     public function createPaymentApplication(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPaymentApplication', $params, 'POST');
+        return $this->callAction('createPaymentApplication', $params, 'POST');
     }
 
     /**
@@ -59,6 +58,6 @@ class SalesOpenItem extends Model
      */
     public function updatePaymentState(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('updatePaymentState', $params, 'POST');
+        return $this->callAction('updatePaymentState', $params, 'POST');
     }
 }

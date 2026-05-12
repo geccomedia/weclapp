@@ -71,7 +71,7 @@ class ArticleCategory extends Model
      */
     public function downloadImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadImage', $params, 'GET');
+        return $this->callAction('downloadImage', $params, 'GET');
     }
 
     /**
@@ -82,6 +82,6 @@ class ArticleCategory extends Model
      */
     public function uploadImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('uploadImage', $params, 'POST');
+        return $this->callAction('uploadImage', $params, 'POST');
     }
 }

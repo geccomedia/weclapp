@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Models;
 use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\OnlyId;
 use Geccomedia\Weclapp\SubModels\PackagingUnit;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -29,9 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class WarehouseStock extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * @var array<string, class-string|string>

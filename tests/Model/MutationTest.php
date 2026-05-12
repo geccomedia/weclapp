@@ -1,30 +1,25 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Model;
 
 use Geccomedia\Weclapp\Client;
+use Geccomedia\Weclapp\Connection;
 use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\NotSupportedException;
-use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\Query\Builder;
+use Geccomedia\Weclapp\Query\Grammars\Grammar;
+use Geccomedia\Weclapp\Query\Processors\Processor;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelMutationTest extends OrchestraTestCase
+class MutationTest extends OrchestraTestCase
 {
-    /**
-     * Load package service provider
-     *
-     * @param  Application  $app
-     * @return array
-     */
-    protected function getPackageProviders($app)
-    {
-        return [ServiceProvider::class];
-    }
+    use MocksClient, UsesServiceProvider;
 
     public function test_api_delete()
     {
@@ -42,7 +37,7 @@ class ModelMutationTest extends OrchestraTestCase
             return (string) $event->sql == 'DELETE:unit/id/1';
         });
 
-        $this->assertTrue($deleted);
+        $this->assertEquals(1, $deleted);
 
         $this->expectException(NotSupportedException::class);
 
@@ -166,11 +161,48 @@ class ModelMutationTest extends OrchestraTestCase
         $this->assertTrue($unit->isClean());
     }
 
-    public function test_api_update_not_supported()
+    public function test_api_update_not_supported(): void
     {
         $this->expectException(NotSupportedException::class);
 
         Unit::whereNull('this')
             ->update(['this' => 'that']);
+    }
+
+    public function test_delete_with_id_parameter_issues_correct_request(): void
+    {
+        // Builder::delete($id) must add a where clause for `table.id` before
+        // delegating to the connection. Verify this by confirming the where is
+        // present (the grammar then throws because the column is qualified, but
+        // that is independent of the branch under test).
+        $builder = new Builder(app(Connection::class), new Grammar, new Processor);
+        $builder->from('unit');
+
+        // Capture the state *before* deletion reaches the grammar by catching
+        // the expected NotSupportedException from buildDeleteRequest.
+        try {
+            $builder->delete(42);
+        } catch (NotSupportedException $e) {
+            // The where clause must have been added before the grammar was called.
+            $this->assertNotEmpty($builder->wheres);
+            $this->assertSame('unit.id', $builder->wheres[0]['column']);
+            $this->assertSame(42, $builder->wheres[0]['value']);
+
+            return;
+        }
+
+        $this->fail('Expected NotSupportedException was not thrown.');
+    }
+
+    public function test_process_insert_get_id_returns_null_when_sql_is_not_a_request(): void
+    {
+        // The Processor returns null when $sql is not a GuzzleHttp\Psr7\Request
+        // instance, exercising the fallback branch on line 28 of Processor.php.
+        $processor = new Processor;
+        $builder = new Builder(app(Connection::class), new Grammar, $processor);
+
+        $result = $processor->processInsertGetId($builder, 'not-a-request', [], null);
+
+        $this->assertNull($result);
     }
 }

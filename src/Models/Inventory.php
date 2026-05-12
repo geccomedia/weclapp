@@ -62,7 +62,7 @@ class Inventory extends Model
      */
     public function bookInventory(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('bookInventory', $params, 'POST');
+        return $this->callAction('bookInventory', $params, 'POST');
     }
 
     /**
@@ -71,8 +71,8 @@ class Inventory extends Model
      * @param  array<mixed>  $params  JSON body forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function create(array $params = []): ?array
+    public function create(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('create', $params, 'POST');
+        return $this->callAction('create', $params, 'POST');
     }
 }

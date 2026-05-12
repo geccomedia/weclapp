@@ -3,6 +3,7 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\Traits\IsReadOnly;
 
 /**
  * @property string|null $connectionType
@@ -10,9 +11,7 @@ use Geccomedia\Weclapp\Model;
  */
 class ExternalConnection extends Model
 {
-    protected bool $creatable = false;
-
-    protected bool $deletable = false;
+    use IsReadOnly;
 
     /**
      * POST /startArticleSynchronization
@@ -22,7 +21,7 @@ class ExternalConnection extends Model
      */
     public function startArticleSynchronization(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('startArticleSynchronization', $params, 'POST');
+        return $this->callAction('startArticleSynchronization', $params, 'POST');
     }
 
     /**
@@ -33,7 +32,7 @@ class ExternalConnection extends Model
      */
     public function startEbayListingSynchronization(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('startEbayListingSynchronization', $params, 'POST');
+        return $this->callAction('startEbayListingSynchronization', $params, 'POST');
     }
 
     /**
@@ -44,6 +43,6 @@ class ExternalConnection extends Model
      */
     public function startOrderSynchronization(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('startOrderSynchronization', $params, 'POST');
+        return $this->callAction('startOrderSynchronization', $params, 'POST');
     }
 }

@@ -134,7 +134,7 @@ class Task extends Model
      */
     public function createPerformanceRecord(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPerformanceRecord', $params, 'POST');
+        return $this->callAction('createPerformanceRecord', $params, 'POST');
     }
 
     /**
@@ -145,7 +145,7 @@ class Task extends Model
      */
     public function updateBillingData(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('updateBillingData', $params, 'POST');
+        return $this->callAction('updateBillingData', $params, 'POST');
     }
 
     /**
@@ -154,8 +154,8 @@ class Task extends Model
      * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
      * @return array<mixed>|null
      */
-    public static function fromTemplate(array $params = []): ?array
+    public function fromTemplate(array $params = []): ?array
     {
-        return (new self)->newQuery()->action('fromTemplate', $params, 'GET');
+        return $this->callAction('fromTemplate', $params, 'GET');
     }
 }

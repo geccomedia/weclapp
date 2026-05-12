@@ -416,7 +416,7 @@ class Party extends Model
      */
     public function createPublicPage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('createPublicPage', $params, 'POST');
+        return $this->callAction('createPublicPage', $params, 'POST');
     }
 
     /**
@@ -427,7 +427,7 @@ class Party extends Model
      */
     public function downloadImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('downloadImage', $params, 'GET');
+        return $this->callAction('downloadImage', $params, 'GET');
     }
 
     /**
@@ -438,7 +438,7 @@ class Party extends Model
      */
     public function startTransferAddressesToOpenRecords(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('startTransferAddressesToOpenRecords', $params, 'POST');
+        return $this->callAction('startTransferAddressesToOpenRecords', $params, 'POST');
     }
 
     /**
@@ -449,7 +449,7 @@ class Party extends Model
      */
     public function startTransferEmailAddressesToOpenRecords(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('startTransferEmailAddressesToOpenRecords', $params, 'POST');
+        return $this->callAction('startTransferEmailAddressesToOpenRecords', $params, 'POST');
     }
 
     /**
@@ -460,6 +460,6 @@ class Party extends Model
      */
     public function uploadImage(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('uploadImage', $params, 'POST');
+        return $this->callAction('uploadImage', $params, 'POST');
     }
 }

@@ -26,6 +26,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class TermOfPayment extends Model
 {
+    /**
+     * @var array<string, class-string|string>
+     */
+    protected $casts = [
+        'conditions' => TermOfPaymentCondition::class,
+    ];
+
     public function salesOrders(): HasMany
     {
         return $this->hasMany(SalesOrder::class, 'termOfPaymentId');

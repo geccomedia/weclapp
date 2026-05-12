@@ -1,28 +1,22 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Model;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Models\SalesOrder;
-use Geccomedia\Weclapp\ServiceProvider;
 use Geccomedia\Weclapp\SubModel;
 use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Geccomedia\Weclapp\SubModels\SalesOrderItem;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelSubModelTest extends OrchestraTestCase
+class SubModelTest extends OrchestraTestCase
 {
-    /**
-     * @param  Application  $app
-     */
-    protected function getPackageProviders($app): array
-    {
-        return [ServiceProvider::class];
-    }
+    use MocksClient, UsesServiceProvider;
 
     public function test_sub_model_list_is_hydrated_on_fetch(): void
     {
@@ -342,5 +336,68 @@ class ModelSubModelTest extends OrchestraTestCase
         $item = new SalesOrderItem(['articleId' => 'A1', 'quantity' => '3']);
 
         $this->assertSame(['articleId' => 'A1', 'quantity' => '3'], $item->toArray());
+    }
+
+    /**
+     * Writing via magic property setter (__set) must persist to the attributes.
+     */
+    public function test_sub_model_magic_set(): void
+    {
+        $item = new SalesOrderItem(['articleId' => 'A1']);
+        $item->quantity = '7';
+
+        $this->assertEquals('7', $item->quantity);
+        $this->assertEquals('7', $item['quantity']);
+    }
+
+    /**
+     * isset($item->foo) must return true for present non-null attributes and
+     * false for absent or null-valued attributes (__isset).
+     */
+    public function test_sub_model_magic_isset(): void
+    {
+        $item = new SalesOrderItem(['articleId' => 'A1', 'quantity' => null]);
+
+        $this->assertTrue(isset($item->articleId));
+        $this->assertFalse(isset($item->quantity));    // null → not set
+        $this->assertFalse(isset($item->nonExistent));
+    }
+
+    /**
+     * unset($item->foo) must remove the attribute from the SubModel (__unset).
+     */
+    public function test_sub_model_magic_unset(): void
+    {
+        $item = new SalesOrderItem(['articleId' => 'A1', 'quantity' => '2']);
+        unset($item->quantity);
+
+        $this->assertFalse(isset($item->quantity));
+        $this->assertArrayNotHasKey('quantity', $item->toArray());
+    }
+
+    /**
+     * $item[] = 'value' (append / null-offset) must push the value onto the
+     * internal attributes array (offsetSet with null offset).
+     */
+    public function test_sub_model_offset_set_with_null_offset(): void
+    {
+        $item = new SalesOrderItem([]);
+        $item[] = 'appended';
+
+        $this->assertContains('appended', $item->toArray());
+        $this->assertCount(1, $item);
+    }
+
+    /**
+     * SubModelCast::set() with a null value must return null without touching
+     * the data (the early-return branch).
+     */
+    public function test_sub_model_cast_set_null_returns_null(): void
+    {
+        $cast = SalesOrderItem::castUsing([]);
+
+        $result = $cast->set(new SalesOrder, 'orderItems', null, []);
+
+        $this->assertNull($result);
     }
 }

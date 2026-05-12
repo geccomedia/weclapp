@@ -105,7 +105,7 @@ class Warehouse extends Model
      */
     public function activate(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('activate', $params, 'POST');
+        return $this->callAction('activate', $params, 'POST');
     }
 
     /**
@@ -116,6 +116,6 @@ class Warehouse extends Model
      */
     public function deactivate(array $params = []): ?array
     {
-        return $this->newQuery()->callAction('deactivate', $params, 'POST');
+        return $this->callAction('deactivate', $params, 'POST');
     }
 }

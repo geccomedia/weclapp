@@ -1,6 +1,6 @@
 # Laravel Weclapp
 
-[![Latest Stable Version](https://poser.pugx.org/geccomedia/weclapp/v/stable)](https://packagist.org/packages/geccomedia/weclapp) [![Total Downloads](https://poser.pugx.org/geccomedia/weclapp/downloads)](https://packagist.org/packages/geccomedia/weclapp) [![License](https://poser.pugx.org/geccomedia/weclapp/license)](https://packagist.org/packages/geccomedia/weclapp)
+[![Latest Stable Version](https://poser.pugx.org/geccomedia/weclapp/v/stable)](https://packagist.org/packages/geccomedia/weclapp) [![Total Downloads](https://poser.pugx.org/geccomedia/weclapp/downloads)](https://packagist.org/packages/geccomedia/weclapp) [![License](https://poser.pugx.org/geccomedia/weclapp/license)](https://packagist.org/packages/geccomedia/weclapp) [![Unit Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/geccomedia/15992a93ee1252679856fc32687873a7/raw/weclapp-unit-coverage.json)](https://github.com/geccomedia/weclapp/actions/workflows/php.yml) [![Swagger Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/geccomedia/15992a93ee1252679856fc32687873a7/raw/weclapp-swagger-coverage.json)](https://github.com/geccomedia/weclapp/actions/workflows/swagger-coverage.yml)
 
 This repo implements most of the Laravel Eloquent Model for the Weclapp web api.
 
@@ -209,17 +209,15 @@ Some Weclapp endpoints are read-only (no create or delete). Attempting to
 `save()` a new instance or `delete()` an existing one on these models will
 throw a `NotSupportedException` immediately, without making an HTTP request.
 
-Non-creatable models (no `POST`):
-`AccountingTransaction`, `ArchivedEmail`, `BankTransaction`, `BlanketSalesOrder`,
-`CommercialLanguage`, `ContractAuthorizationUnit`, `Document`, `ExternalConnection`,
-`FulfillmentProvider`, `InventoryGroup`, `Notification`, `NumberRange`,
-`NumberRangeValue`, `PaymentRun`, `Pick`, `PurchaseOpenItem`, `PurchaseRequisition`,
-`SalesOpenItem`, `ServiceQuota`, `VariantArticleVariant`, `WarehouseStock`,
-`WarehouseStockMovement`.
+Mutation restrictions are expressed via three composable traits:
 
-Non-deletable models (no `DELETE`):
-`CashAccount`, `InventoryTransportReference`, `SerialNumber`,
-`User`, `WarehouseStock`, `WarehouseStockMovement`.
+| Trait | Blocks | Swagger condition |
+|---|---|---|
+| `NoCreate` | `save()` on new instances | No `POST /resource` endpoint |
+| `NoUpdate` | `save()` on existing instances | No `PUT /resource/id/{id}` endpoint |
+| `NoDelete` | `delete()` | No `DELETE /resource/id/{id}` endpoint |
+
+`IsReadOnly` (`use NoCreate, NoUpdate, NoDelete`) and `IsUpdatableOnly` (`use NoCreate, NoDelete`) are convenience aliases for common combinations.
 
 ## Embedded Sub-Objects
 
