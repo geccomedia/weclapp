@@ -81,7 +81,7 @@ jobs:
             }
             echo \$total > 0 ? round(\$covered / \$total * 100) : 0;
           ")
-          echo "pct=\$PCT" >> \$GITHUB_OUTPUT
+          echo "pct=$PCT" >> $GITHUB_OUTPUT
 
       - name: Update badge
         uses: schneegans/dynamic-badges-action@v1.8.0
