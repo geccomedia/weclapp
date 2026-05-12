@@ -2,18 +2,36 @@
 
 namespace Geccomedia\Weclapp\Tests;
 
+use Geccomedia\Weclapp\Models\AccountingTransaction;
 use Geccomedia\Weclapp\Models\ArchivedEmail;
 use Geccomedia\Weclapp\Models\Article;
 use Geccomedia\Weclapp\Models\ArticleCategory;
+use Geccomedia\Weclapp\Models\ArticleItemGroup;
 use Geccomedia\Weclapp\Models\ArticlePrice;
 use Geccomedia\Weclapp\Models\ArticleSupplySource;
+use Geccomedia\Weclapp\Models\Attendance;
+use Geccomedia\Weclapp\Models\BankAccount;
+use Geccomedia\Weclapp\Models\BankTransaction;
 use Geccomedia\Weclapp\Models\BatchNumber;
+use Geccomedia\Weclapp\Models\BlanketPurchaseOrder;
+use Geccomedia\Weclapp\Models\BlanketSalesOrder;
+use Geccomedia\Weclapp\Models\Calendar;
+use Geccomedia\Weclapp\Models\CalendarEvent;
 use Geccomedia\Weclapp\Models\Campaign;
 use Geccomedia\Weclapp\Models\CampaignParticipant;
+use Geccomedia\Weclapp\Models\CashAccount;
+use Geccomedia\Weclapp\Models\CashAccountSheet;
+use Geccomedia\Weclapp\Models\CashAccountTransaction;
 use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\CommercialLanguage;
 use Geccomedia\Weclapp\Models\CompanySize;
 use Geccomedia\Weclapp\Models\Contact;
+use Geccomedia\Weclapp\Models\Contract;
+use Geccomedia\Weclapp\Models\ContractAuthorizationUnit;
+use Geccomedia\Weclapp\Models\ContractType;
+use Geccomedia\Weclapp\Models\CostCenter;
+use Geccomedia\Weclapp\Models\CostType;
+use Geccomedia\Weclapp\Models\CrmEvent;
 use Geccomedia\Weclapp\Models\Currency;
 use Geccomedia\Weclapp\Models\CustomAttributeDefinition;
 use Geccomedia\Weclapp\Models\Customer;
@@ -22,37 +40,99 @@ use Geccomedia\Weclapp\Models\CustomerLeadLossReason;
 use Geccomedia\Weclapp\Models\CustomerTopic;
 use Geccomedia\Weclapp\Models\CustomsTariffNumber;
 use Geccomedia\Weclapp\Models\Document;
+use Geccomedia\Weclapp\Models\ExternalConnection;
+use Geccomedia\Weclapp\Models\FinancialYear;
 use Geccomedia\Weclapp\Models\FulfillmentProvider;
 use Geccomedia\Weclapp\Models\IncomingGoods;
+use Geccomedia\Weclapp\Models\InternalTransportReference;
+use Geccomedia\Weclapp\Models\Inventory;
+use Geccomedia\Weclapp\Models\InventoryGroup;
+use Geccomedia\Weclapp\Models\InventoryItem;
+use Geccomedia\Weclapp\Models\InventoryTransportReference;
 use Geccomedia\Weclapp\Models\Lead;
 use Geccomedia\Weclapp\Models\LeadSource;
+use Geccomedia\Weclapp\Models\LedgerAccount;
+use Geccomedia\Weclapp\Models\LoadingEquipmentIdentifier;
+use Geccomedia\Weclapp\Models\MailTemplate;
 use Geccomedia\Weclapp\Models\Manufacturer;
+use Geccomedia\Weclapp\Models\Notification;
+use Geccomedia\Weclapp\Models\NumberRange;
+use Geccomedia\Weclapp\Models\NumberRangeValue;
 use Geccomedia\Weclapp\Models\Opportunity;
 use Geccomedia\Weclapp\Models\OpportunityWinLossReason;
 use Geccomedia\Weclapp\Models\Party;
 use Geccomedia\Weclapp\Models\PaymentMethod;
+use Geccomedia\Weclapp\Models\PaymentRun;
+use Geccomedia\Weclapp\Models\PaymentRunItem;
+use Geccomedia\Weclapp\Models\PerformanceRecord;
+use Geccomedia\Weclapp\Models\Pick;
+use Geccomedia\Weclapp\Models\PriceCalculationParameter;
 use Geccomedia\Weclapp\Models\ProductionOrder;
+use Geccomedia\Weclapp\Models\ProductionWorkSchedule;
+use Geccomedia\Weclapp\Models\ProductionWorkScheduleAssignment;
+use Geccomedia\Weclapp\Models\ProjectOrderStatusPage;
+use Geccomedia\Weclapp\Models\PurchaseInvoice;
+use Geccomedia\Weclapp\Models\PurchaseOpenItem;
 use Geccomedia\Weclapp\Models\PurchaseOrder;
+use Geccomedia\Weclapp\Models\PurchaseOrderRequest;
+use Geccomedia\Weclapp\Models\PurchaseRequisition;
 use Geccomedia\Weclapp\Models\Quotation;
+use Geccomedia\Weclapp\Models\Rebate;
+use Geccomedia\Weclapp\Models\RecordEmailingRule;
+use Geccomedia\Weclapp\Models\Region;
+use Geccomedia\Weclapp\Models\Reminder;
+use Geccomedia\Weclapp\Models\RemotePrintJob;
 use Geccomedia\Weclapp\Models\SalesChannel;
 use Geccomedia\Weclapp\Models\SalesInvoice;
+use Geccomedia\Weclapp\Models\SalesOpenItem;
 use Geccomedia\Weclapp\Models\SalesOrder;
 use Geccomedia\Weclapp\Models\SalesStage;
+use Geccomedia\Weclapp\Models\SalesTeam;
 use Geccomedia\Weclapp\Models\Sector;
+use Geccomedia\Weclapp\Models\SepaDirectDebitMandate;
 use Geccomedia\Weclapp\Models\SerialNumber;
+use Geccomedia\Weclapp\Models\ServiceQuota;
+use Geccomedia\Weclapp\Models\Shelf;
 use Geccomedia\Weclapp\Models\Shipment;
 use Geccomedia\Weclapp\Models\ShipmentMethod;
+use Geccomedia\Weclapp\Models\ShipmentReturnAssessment;
+use Geccomedia\Weclapp\Models\ShipmentReturnError;
+use Geccomedia\Weclapp\Models\ShipmentReturnReason;
+use Geccomedia\Weclapp\Models\ShipmentReturnRectification;
+use Geccomedia\Weclapp\Models\ShippingCarrier;
+use Geccomedia\Weclapp\Models\StorageLocation;
+use Geccomedia\Weclapp\Models\StoragePlace;
+use Geccomedia\Weclapp\Models\StoragePlaceSize;
 use Geccomedia\Weclapp\Models\Supplier;
+use Geccomedia\Weclapp\Models\Tag;
+use Geccomedia\Weclapp\Models\Task;
+use Geccomedia\Weclapp\Models\TaskList;
+use Geccomedia\Weclapp\Models\TaskTemplate;
 use Geccomedia\Weclapp\Models\Tax;
+use Geccomedia\Weclapp\Models\TaxDeterminationRule;
 use Geccomedia\Weclapp\Models\TermOfPayment;
+use Geccomedia\Weclapp\Models\Ticket;
+use Geccomedia\Weclapp\Models\TicketAssignmentRule;
+use Geccomedia\Weclapp\Models\TicketCategory;
+use Geccomedia\Weclapp\Models\TicketFaq;
+use Geccomedia\Weclapp\Models\TicketPoolingGroup;
+use Geccomedia\Weclapp\Models\TicketServiceLevelAgreement;
+use Geccomedia\Weclapp\Models\TicketStatus;
+use Geccomedia\Weclapp\Models\TicketType;
+use Geccomedia\Weclapp\Models\TimeRecord;
+use Geccomedia\Weclapp\Models\Translation;
+use Geccomedia\Weclapp\Models\TransportationOrder;
 use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\Models\User;
+use Geccomedia\Weclapp\Models\UserRole;
 use Geccomedia\Weclapp\Models\VariantArticle;
 use Geccomedia\Weclapp\Models\VariantArticleAttribute;
 use Geccomedia\Weclapp\Models\VariantArticleVariant;
 use Geccomedia\Weclapp\Models\Warehouse;
 use Geccomedia\Weclapp\Models\WarehouseStock;
 use Geccomedia\Weclapp\Models\WarehouseStockMovement;
+use Geccomedia\Weclapp\Models\Webhook;
+use Geccomedia\Weclapp\Models\WeclappOs;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -114,6 +194,89 @@ class SwaggerDefinitionsTest extends TestCase
         'warehouse' => [Warehouse::class],
         'warehouseStock' => [WarehouseStock::class],
         'warehouseStockMovement' => [WarehouseStockMovement::class],
+        'accountingTransaction' => [AccountingTransaction::class],
+        'articleItemGroup' => [ArticleItemGroup::class],
+        'attendance' => [Attendance::class],
+        'bankAccount' => [BankAccount::class],
+        'bankTransaction' => [BankTransaction::class],
+        'blanketPurchaseOrder' => [BlanketPurchaseOrder::class],
+        'blanketSalesOrder' => [BlanketSalesOrder::class],
+        'calendar' => [Calendar::class],
+        'calendarEvent' => [CalendarEvent::class],
+        'cashAccount' => [CashAccount::class],
+        'cashAccountSheet' => [CashAccountSheet::class],
+        'cashAccountTransaction' => [CashAccountTransaction::class],
+        'contract' => [Contract::class],
+        'contractAuthorizationUnit' => [ContractAuthorizationUnit::class],
+        'contractType' => [ContractType::class],
+        'costCenter' => [CostCenter::class],
+        'costType' => [CostType::class],
+        'crmEvent' => [CrmEvent::class],
+        'externalConnection' => [ExternalConnection::class],
+        'financialYear' => [FinancialYear::class],
+        'internalTransportReference' => [InternalTransportReference::class],
+        'inventory' => [Inventory::class],
+        'inventoryGroup' => [InventoryGroup::class],
+        'inventoryItem' => [InventoryItem::class],
+        'inventoryTransportReference' => [InventoryTransportReference::class],
+        'ledgerAccount' => [LedgerAccount::class],
+        'loadingEquipmentIdentifier' => [LoadingEquipmentIdentifier::class],
+        'mailTemplate' => [MailTemplate::class],
+        'notification' => [Notification::class],
+        'numberRange' => [NumberRange::class],
+        'numberRangeValue' => [NumberRangeValue::class],
+        'paymentRun' => [PaymentRun::class],
+        'paymentRunItem' => [PaymentRunItem::class],
+        'performanceRecord' => [PerformanceRecord::class],
+        'pick' => [Pick::class],
+        'priceCalculationParameter' => [PriceCalculationParameter::class],
+        'productionWorkSchedule' => [ProductionWorkSchedule::class],
+        'productionWorkScheduleAssignment' => [ProductionWorkScheduleAssignment::class],
+        'projectOrderStatusPage' => [ProjectOrderStatusPage::class],
+        'purchaseInvoice' => [PurchaseInvoice::class],
+        'purchaseOpenItem' => [PurchaseOpenItem::class],
+        'purchaseOrderRequest' => [PurchaseOrderRequest::class],
+        'purchaseRequisition' => [PurchaseRequisition::class],
+        'rebate' => [Rebate::class],
+        'recordEmailingRule' => [RecordEmailingRule::class],
+        'region' => [Region::class],
+        'reminder' => [Reminder::class],
+        'remotePrintJob' => [RemotePrintJob::class],
+        'salesOpenItem' => [SalesOpenItem::class],
+        'salesTeam' => [SalesTeam::class],
+        'sepaDirectDebitMandate' => [SepaDirectDebitMandate::class],
+        'serviceQuota' => [ServiceQuota::class],
+        'shelf' => [Shelf::class],
+        // Four endpoints share the shipmentReturnDescription definition.
+        'shipmentReturnDescription' => [
+            ShipmentReturnAssessment::class,
+            ShipmentReturnError::class,
+            ShipmentReturnReason::class,
+            ShipmentReturnRectification::class,
+        ],
+        'shippingCarrier' => [ShippingCarrier::class],
+        'storageLocation' => [StorageLocation::class],
+        'storagePlace' => [StoragePlace::class],
+        'storagePlaceSize' => [StoragePlaceSize::class],
+        'tag' => [Tag::class],
+        'task' => [Task::class],
+        'taskList' => [TaskList::class],
+        'taskTemplate' => [TaskTemplate::class],
+        'taxDeterminationRule' => [TaxDeterminationRule::class],
+        'ticket' => [Ticket::class],
+        'ticketAssignmentRule' => [TicketAssignmentRule::class],
+        'ticketCategory' => [TicketCategory::class],
+        'ticketFaq' => [TicketFaq::class],
+        'ticketPoolingGroup' => [TicketPoolingGroup::class],
+        'ticketServiceLevelAgreement' => [TicketServiceLevelAgreement::class],
+        'ticketStatus' => [TicketStatus::class],
+        'ticketType' => [TicketType::class],
+        'timeRecord' => [TimeRecord::class],
+        'translation' => [Translation::class],
+        'transportationOrder' => [TransportationOrder::class],
+        'userRole' => [UserRole::class],
+        'webhook' => [Webhook::class],
+        'weclappOs' => [WeclappOs::class],
         // Several distinct model classes share the single "party" swagger definition.
         'party' => [
             Party::class,
