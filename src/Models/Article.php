@@ -3,13 +3,374 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\ArticleAlternativeQuantity;
+use Geccomedia\Weclapp\SubModels\ArticleCalculationPrice;
+use Geccomedia\Weclapp\SubModels\ArticleImage;
+use Geccomedia\Weclapp\SubModels\ArticlePriceWithoutArticleReference;
+use Geccomedia\Weclapp\SubModels\BillOfMaterial;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
+use Geccomedia\Weclapp\SubModels\CustomerSpecificArticleAttributes;
+use Geccomedia\Weclapp\SubModels\OnlyId;
+use Geccomedia\Weclapp\SubModels\QuantityConversion;
+use Geccomedia\Weclapp\SubModels\SalesBillOfMaterialArticleItem;
+use Geccomedia\Weclapp\SubModels\SupplySource;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property string|null $articleNumber
+ * @property string|null $name
+ * @property string|null $description
+ * @property string|null $shortDescription1
+ * @property string|null $shortDescription2
+ * @property string|null $articleType
+ * @property string|null $unitId
+ * @property string|null $unitName
+ * @property string|null $taxId
+ * @property string|null $taxName
+ * @property string|null $manufacturerId
+ * @property string|null $manufacturerName
+ * @property string|null $manufacturerPartNumber
+ * @property string|null $ean
+ * @property string|null $customsTariffNumberId
+ * @property string|null $countryOfOriginCode
+ * @property string|null $warehouseId
+ * @property string|null $warehouseName
+ * @property float|null $sellPrice
+ * @property float|null $purchasePrice
+ * @property float|null $netWeight
+ * @property float|null $grossWeight
+ * @property bool|null $active
+ * @property bool|null $serialNumberRequired
+ * @property bool|null $batchNumberRequired
+ * @property array|null $articleCategories
+ * @property list<ArticlePriceWithoutArticleReference>|null $articlePrices
+ * @property array|null $articleSupplySources
+ * @property string|null $accountId
+ * @property string|null $accountingCodeId
+ * @property bool|null $applyCashDiscount
+ * @property list<ArticleAlternativeQuantity>|null $articleAlternativeQuantities
+ * @property list<ArticleCalculationPrice>|null $articleCalculationPrices
+ * @property string|null $articleCategoryId
+ * @property float|null $articleGrossWeight
+ * @property float|null $articleHeight
+ * @property list<ArticleImage>|null $articleImages
+ * @property float|null $articleLength
+ * @property float|null $articleNetWeight
+ * @property float|null $articleWidth
+ * @property array|null $availableForSalesChannels
+ * @property bool|null $availableInSale
+ * @property int|null $averageDeliveryTime
+ * @property string|null $barcode
+ * @property bool|null $billOfMaterialPartDeliveryPossible
+ * @property string|null $catalogCode
+ * @property float|null $commissionRate
+ * @property string|null $contractBillingCycle
+ * @property string|null $contractBillingMode
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property list<CustomerSpecificArticleAttributes>|null $customerArticleNumbers
+ * @property string|null $customsDescription
+ * @property string|null $defaultLoadingEquipmentIdentifierId
+ * @property string|null $defaultPriceCalculationType
+ * @property list<OnlyId>|null $defaultStoragePlaces
+ * @property bool|null $defineIndividualTaskTemplates
+ * @property string|null $expenseAccountId
+ * @property int|null $expirationDays
+ * @property float|null $fixedPurchaseQuantity
+ * @property string|null $internalNote
+ * @property string|null $invoicingType
+ * @property string|null $launchDate
+ * @property string|null $loadingEquipmentArticleId
+ * @property string|null $longText
+ * @property int|null $lowLevelCode
+ * @property string|null $marginCalculationPriceType
+ * @property string|null $matchCode
+ * @property float|null $minimumPurchaseQuantity
+ * @property float|null $minimumStockQuantity
+ * @property float|null $packagingQuantity
+ * @property string|null $packagingUnitBaseArticleId
+ * @property string|null $packagingUnitParentArticleId
+ * @property float|null $plannedWorkingTimePerUnit
+ * @property string|null $primarySupplySourceId
+ * @property int|null $procurementLeadDays
+ * @property string|null $producerType
+ * @property bool|null $productionArticle
+ * @property list<BillOfMaterial>|null $productionBillOfMaterialItems
+ * @property string|null $productionConfigurationRule
+ * @property string|null $purchaseCostCenterId
+ * @property list<QuantityConversion>|null $quantityConversions
+ * @property string|null $ratingId
+ * @property string|null $recordItemGroupName
+ * @property int|null $safetyStockDays
+ * @property list<SalesBillOfMaterialArticleItem>|null $salesBillOfMaterialItems
+ * @property string|null $salesCostCenterId
+ * @property string|null $sellByDate
+ * @property string|null $sellFromDate
+ * @property string|null $serviceArticleForServiceQuotaBookingId
+ * @property float|null $serviceQuotaQuantity
+ * @property bool|null $showOnDeliveryNote
+ * @property string|null $statusId
+ * @property list<SupplySource>|null $supplySources
+ * @property string|null $supportUntilDate
+ * @property string|null $systemCode
+ * @property array|null $tags
+ * @property float|null $targetStockQuantity
+ * @property string|null $taxRateType
+ * @property bool|null $useAvailableForSalesChannels
+ * @property bool|null $useSalesBillOfMaterialItemPrices
+ * @property bool|null $useSalesBillOfMaterialItemPricesForPurchase
+ * @property bool|null $useSalesBillOfMaterialSubitemCosts
+ */
 class Article extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * @var array<string, class-string|string>
      */
-    protected $table = 'article';
+    protected $casts = [
+        'articleAlternativeQuantities' => ArticleAlternativeQuantity::class,
+        'articleCalculationPrices' => ArticleCalculationPrice::class,
+        'articleImages' => ArticleImage::class,
+        'articlePrices' => ArticlePriceWithoutArticleReference::class,
+        'customAttributes' => CustomAttribute::class,
+        'customerArticleNumbers' => CustomerSpecificArticleAttributes::class,
+        'defaultStoragePlaces' => OnlyId::class,
+        'productionBillOfMaterialItems' => BillOfMaterial::class,
+        'quantityConversions' => QuantityConversion::class,
+        'salesBillOfMaterialItems' => SalesBillOfMaterialArticleItem::class,
+        'supplySources' => SupplySource::class,
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function account()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'accountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function articleCategory()
+    {
+        return $this->belongsTo(ArticleCategory::class, 'articleCategoryId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function customsTariffNumber()
+    {
+        return $this->belongsTo(CustomsTariffNumber::class, 'customsTariffNumberId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function defaultLoadingEquipmentIdentifier()
+    {
+        return $this->belongsTo(LoadingEquipmentIdentifier::class, 'defaultLoadingEquipmentIdentifierId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function expenseAccount()
+    {
+        return $this->belongsTo(LedgerAccount::class, 'expenseAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function loadingEquipmentArticle()
+    {
+        return $this->belongsTo(Article::class, 'loadingEquipmentArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturer::class, 'manufacturerId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function packagingUnitBaseArticle()
+    {
+        return $this->belongsTo(Article::class, 'packagingUnitBaseArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function packagingUnitParentArticle()
+    {
+        return $this->belongsTo(Article::class, 'packagingUnitParentArticleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function primarySupplySource()
+    {
+        return $this->belongsTo(ArticleSupplySource::class, 'primarySupplySourceId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function purchaseCostCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'purchaseCostCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesCostCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'salesCostCenterId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function serviceArticleForServiceQuotaBooking()
+    {
+        return $this->belongsTo(Article::class, 'serviceArticleForServiceQuotaBookingId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unitId');
+    }
+
+    public function articlePrices(): HasMany
+    {
+        return $this->hasMany(ArticlePrice::class, 'articleId');
+    }
+
+    public function articleSupplySources(): HasMany
+    {
+        return $this->hasMany(ArticleSupplySource::class, 'articleId');
+    }
+
+    public function batchNumbers(): HasMany
+    {
+        return $this->hasMany(BatchNumber::class, 'articleId');
+    }
+
+    public function serialNumbers(): HasMany
+    {
+        return $this->hasMany(SerialNumber::class, 'articleId');
+    }
+
+    public function warehouseStock(): HasMany
+    {
+        return $this->hasMany(WarehouseStock::class, 'articleId');
+    }
+
+    public function tax(): BelongsTo
+    {
+        return $this->belongsTo(Tax::class, 'taxId');
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+
+    public function rating(): BelongsTo
+    {
+        return $this->belongsTo(ArticleRating::class, 'ratingId');
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(ArticleStatus::class, 'statusId');
+    }
+
+    /**
+     * POST /changeUnit
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function changeUnit(array $params = []): ?array
+    {
+        return $this->callAction('changeUnit', $params, 'POST');
+    }
+
+    /**
+     * POST /createDatasheetPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createDatasheetPdf(array $params = []): ?array
+    {
+        return $this->callAction('createDatasheetPdf', $params, 'POST');
+    }
+
+    /**
+     * POST /createLabelPdf
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function createLabelPdf(array $params = []): ?array
+    {
+        return $this->callAction('createLabelPdf', $params, 'POST');
+    }
+
+    /**
+     * GET /downloadArticleImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadArticleImage(array $params = []): ?array
+    {
+        return $this->callAction('downloadArticleImage', $params, 'GET');
+    }
+
+    /**
+     * GET /downloadMainArticleImage
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadMainArticleImage(array $params = []): ?array
+    {
+        return $this->callAction('downloadMainArticleImage', $params, 'GET');
+    }
+
+    /**
+     * GET /packagingUnitStructure
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function packagingUnitStructure(array $params = []): ?array
+    {
+        return $this->callAction('packagingUnitStructure', $params, 'GET');
+    }
+
+    /**
+     * POST /uploadArticleImage
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function uploadArticleImage(array $params = []): ?array
+    {
+        return $this->callAction('uploadArticleImage', $params, 'POST');
+    }
 }

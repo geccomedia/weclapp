@@ -6,6 +6,7 @@ use Geccomedia\Weclapp\Models\ArchivedEmail;
 use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\Document;
 use Geccomedia\Weclapp\Query\Builder as QueryBuilder;
+use Geccomedia\Weclapp\Query\Grammars\Grammar;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder as BaseBuilder;
 use Illuminate\Database\Eloquent\Model;
@@ -80,6 +81,64 @@ class Builder extends BaseBuilder
         $this->query->wheres[] = ['type' => 'Entity', 'column' => 'entityId', 'value' => $id];
 
         return $this;
+    }
+
+    /**
+     * Request extra computed fields via the `additionalProperties` query parameter.
+     *
+     * @param  string|array<string>  ...$properties
+     */
+    public function withProperties(string|array ...$properties): static
+    {
+        $flat = array_merge(...array_map(
+            fn ($p) => is_array($p) ? $p : [$p],
+            $properties
+        ));
+
+        /** @var QueryBuilder $query */
+        $query = $this->query;
+        $query->additionalProperties = array_merge(
+            $query->additionalProperties ?? [],
+            $flat
+        );
+
+        return $this;
+    }
+
+    /**
+     * Call a collection-level custom action endpoint.
+     *
+     * @param  array<mixed>  $params  For POST: JSON body. For GET: query parameters.
+     * @return array<mixed>|null
+     */
+    public function action(string $action, array $params = [], string $method = 'POST'): ?array
+    {
+        /** @var QueryBuilder $query */
+        $query = $this->query;
+        /** @var Grammar $grammar */
+        $grammar = $query->grammar;
+        $request = $grammar->compileAction($query, $action, $params, null, $method);
+
+        return app(Connection::class)->action($request);
+    }
+
+    /**
+     * Call an instance-level custom action endpoint on an existing record.
+     *
+     * @param  array<mixed>  $params  For POST: JSON body. For GET: query parameters.
+     * @return array<mixed>|null
+     */
+    public function callAction(string $action, array $params = [], string $method = 'POST'): ?array
+    {
+        $id = (string) $this->model->getKey();
+
+        /** @var QueryBuilder $query */
+        $query = $this->query;
+        /** @var Grammar $grammar */
+        $grammar = $query->grammar;
+        $request = $grammar->compileAction($query, $action, $params, $id, $method);
+
+        return app(Connection::class)->action($request);
     }
 
     /**

@@ -42,7 +42,58 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Run test suite
-        run: composer run-script test
+        run: vendor/bin/phpunit --testsuite unit
+
+  coverage:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    container: chialab/php-pcov:8.3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run unit tests with coverage
+        run: |
+          mkdir -p build
+          vendor/bin/phpunit --testsuite unit --coverage-clover build/coverage.xml
+
+      - name: Extract coverage percentage
+        id: cov
+        run: |
+          PCT=$(php -r "
+            \$xml = simplexml_load_file('build/coverage.xml');
+            \$metrics = \$xml->xpath('//metrics');
+            \$total = \$covered = 0;
+            foreach (\$metrics as \$m) {
+              \$total   += (int) \$m['statements'];
+              \$covered += (int) \$m['coveredstatements'];
+            }
+            echo \$total > 0 ? round(\$covered / \$total * 100) : 0;
+          ")
+          echo "pct=\$PCT" >> \$GITHUB_OUTPUT
+
+      - name: Update badge
+        uses: schneegans/dynamic-badges-action@v1.8.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: ${{ secrets.COVERAGE_GIST_ID }}
+          filename: weclapp-unit-coverage.json
+          label: unit coverage
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 50
+          maxColorRange: 100
 
   analyse:
     runs-on: ubuntu-latest

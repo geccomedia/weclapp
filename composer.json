@@ -44,6 +44,7 @@
         "test": "vendor/bin/phpunit",
         "analyse": "vendor/bin/phpstan analyse",
         "lint": "vendor/bin/pint",
-        "lint:check": "vendor/bin/pint --test"
+        "lint:check": "vendor/bin/pint --test",
+        "coverage": "php scripts/swagger-coverage"
     }
 }

@@ -3,13 +3,19 @@
 namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\VariantArticleAttributeOption;
 
+/**
+ * @property string|null $name
+ * @property array|null $values
+ * @property list<VariantArticleAttributeOption>|null $attributeOptions
+ */
 class VariantArticleAttribute extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * @var array<string, class-string|string>
      */
-    protected $table = 'variantArticleAttribute';
+    protected $casts = [
+        'attributeOptions' => VariantArticleAttributeOption::class,
+    ];
 }

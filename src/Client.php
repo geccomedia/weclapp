@@ -2,11 +2,14 @@
 
 namespace Geccomedia\Weclapp;
 
-use GuzzleHttp\Client as BaseClient;
+use GuzzleHttp\Client as GuzzleClient;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-/** @phpstan-ignore class.extendsFinalByPhpDoc */
-class Client extends BaseClient
+class Client
 {
+    private GuzzleClient $http;
+
     public function __construct(array $config = [])
     {
         $weclapp_config = [
@@ -18,6 +21,11 @@ class Client extends BaseClient
             ],
         ];
         $config = array_merge($config, $weclapp_config);
-        parent::__construct($config);
+        $this->http = new GuzzleClient($config);
+    }
+
+    public function send(RequestInterface $request, array $options = []): ResponseInterface
+    {
+        return $this->http->send($request, $options);
     }
 }

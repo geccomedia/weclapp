@@ -4,12 +4,10 @@ namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 
-class Sector extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'sector';
-}
+/**
+ * @property string|null $name
+ * @property string|null $description
+ * @property bool|null $active
+ * @property int|null $positionNumber
+ */
+class Sector extends Model {}

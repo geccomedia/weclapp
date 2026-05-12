@@ -1,92 +1,24 @@
 <?php
 
-namespace Geccomedia\Weclapp\Tests;
+namespace Geccomedia\Weclapp\Tests\Model;
 
 use Geccomedia\Weclapp\Client;
 use Geccomedia\Weclapp\Connection;
-use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\Models\Comment;
 use Geccomedia\Weclapp\Models\Customer;
-use Geccomedia\Weclapp\Models\SalesInvoice;
 use Geccomedia\Weclapp\Models\Unit;
 use Geccomedia\Weclapp\NotSupportedException;
-use Geccomedia\Weclapp\ServiceProvider;
+use Geccomedia\Weclapp\Query\Grammars\Grammar;
+use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
+use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class ModelTest extends OrchestraTestCase
+class QueryTest extends OrchestraTestCase
 {
-    /**
-     * Load package service provider
-     *
-     * @param  Application  $app
-     * @return array
-     */
-    protected function getPackageProviders($app)
-    {
-        return [ServiceProvider::class];
-    }
-
-    /**
-     * @var Model
-     */
-    private $model;
-
-    protected function setUp(): void
-    {
-        $this->model = new Unit;
-        parent::setUp();
-    }
-
-    public function test_date_format_on_base_model()
-    {
-        $this->assertTrue($this->model->getDateFormat() == 'Uv');
-    }
-
-    public function test_created_at_const()
-    {
-        $this->assertTrue(Model::CREATED_AT == 'createdDate');
-    }
-
-    public function test_updated_at_const()
-    {
-        $this->assertTrue(Model::UPDATED_AT == 'lastModifiedDate');
-    }
-
-    public function test_date_conversion()
-    {
-        Event::fake();
-
-        $now = now();
-
-        $this->assertEquals($now->format('Uv'), $this->model->fromDateTime($now->format('Uv')));
-        $this->assertEquals($now->format('Uv'), $this->model->fromDateTime($now));
-
-        $this->mock(Client::class)
-            ->shouldReceive('send')
-            ->once()
-            ->andReturn(new Response(
-                200,
-                [],
-                '{"result": [{"id": 1, "invoiceDate": '.$now->format('Uv').'}]}'
-            ));
-
-        $invoice = SalesInvoice::find(1);
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:salesInvoice?id-eq=1&pageSize=1';
-        });
-
-        $this->assertEquals($now->format('Uv'), $invoice->invoiceDate->format('Uv'));
-
-        $new_invoice = new SalesInvoice;
-        $new_invoice->invoiceDate = $now->toDateString();
-        $this->assertEquals($now->startOfDay(), $new_invoice->invoiceDate);
-    }
+    use MocksClient, UsesServiceProvider;
 
     public function test_api_get()
     {
@@ -269,154 +201,6 @@ class ModelTest extends OrchestraTestCase
         $this->assertEquals(1, $units->first()->id);
     }
 
-    public function test_api_delete()
-    {
-        Event::fake();
-
-        $this->mock(Client::class)
-            ->shouldReceive('send')
-            ->once()
-            ->andReturn(new Response(204));
-
-        $deleted = Unit::whereKey(1)
-            ->delete();
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'DELETE:unit/id/1';
-        });
-
-        $this->assertTrue($deleted);
-
-        $this->expectException(NotSupportedException::class);
-
-        Unit::where('this', 'that')
-            ->delete();
-    }
-
-    public function test_api_insert()
-    {
-        Event::fake();
-
-        $this->mock(Client::class)
-            ->shouldReceive('send')
-            ->andReturn(new Response(
-                201,
-                [],
-                '{"id": 1, "test": "bla", "remote": "test"}'
-            ));
-
-        $unit = new Unit;
-        $unit->test = 'bla';
-        $unit->save();
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ['test' => 'bla'];
-        });
-
-        $this->assertTrue($unit->exists);
-        $this->assertEquals(1, $unit->id);
-        $this->assertEquals('bla', $unit->test);
-        $this->assertEquals('test', $unit->remote);
-
-        Unit::insert(['test' => 1]);
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ['test' => 1];
-        });
-    }
-
-    public function test_api_multi_insert()
-    {
-        Event::fake();
-
-        $this->mock(Client::class)
-            ->shouldReceive('send')
-            ->andReturn(
-                new Response(
-                    201,
-                    [],
-                    '{"id": 1, "test": "1", "remote": "test"}'
-                ),
-                new Response(
-                    201,
-                    [],
-                    '{"id": 2, "test": "2", "remote": "test"}'
-                )
-            );
-
-        Unit::insert([
-            ['test' => 1],
-            ['test' => 2],
-        ]);
-
-        Event::assertDispatched(QueryExecuted::class, 2);
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ['test' => 1];
-        });
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'POST:unit' &&
-                $event->bindings == ['test' => 2];
-        });
-    }
-
-    public function test_api_update()
-    {
-        Event::fake();
-
-        $name = Str::random();
-
-        $this->mock(Client::class)
-            ->shouldReceive('send')
-            ->twice()
-            ->andReturn(
-                new Response(
-                    200,
-                    [],
-                    '{"result": [{"id": 1}]}'
-                ),
-                new Response(
-                    200,
-                    [],
-                    '{"result": [{"id": 1, "name": '.$name.'}]}'
-                )
-            );
-
-        $unit = Unit::find(1);
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:unit?id-eq=1&pageSize=1';
-        });
-
-        $this->assertTrue($unit->exists);
-        $this->assertEquals(1, $unit->id);
-
-        $unit->name = $name;
-
-        $this->assertTrue($unit->isDirty());
-
-        $unit->save();
-
-        Event::assertDispatched(QueryExecuted::class, function ($event) use ($unit) {
-            return (string) $event->sql == 'PUT:unit/id/1' &&
-                $event->bindings == $unit->getAttributes();
-        });
-
-        $this->assertTrue($unit->isClean());
-    }
-
-    public function test_api_update_not_supported()
-    {
-        $this->expectException(NotSupportedException::class);
-
-        Unit::whereNull('this')
-            ->update(['this' => 'that']);
-    }
-
     public function test_connection()
     {
         $this->mock(Client::class)
@@ -431,11 +215,14 @@ class ModelTest extends OrchestraTestCase
 
         $query = $connection->table('test');
 
-        $this->assertEquals('test', $query->toSql()->getUri()->getPath());
+        /** @var Grammar $grammar */
+        $grammar = $connection->getQueryGrammar();
+        $request = $grammar->buildSelectRequest($query);
 
-        $request = $connection->getQueryGrammar()->compileSelect($query);
+        $this->assertEquals('test', $request->getUri()->getPath());
 
-        $unit = $connection->selectOne($request);
+        $results = $connection->selectRequest($request);
+        $unit = $results[0] ?? null;
 
         $this->assertArrayHasKey('id', $unit);
     }
@@ -483,15 +270,15 @@ class ModelTest extends OrchestraTestCase
         Event::assertDispatched(QueryExecuted::class, 3);
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=1&pageSize=2';
+            return (string) $event->sql == 'GET:party?test-eq=this&customer-eq=true&sort=id&page=1&pageSize=2';
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=2&pageSize=2';
+            return (string) $event->sql == 'GET:party?test-eq=this&customer-eq=true&sort=id&page=2&pageSize=2';
         });
 
         Event::assertDispatched(QueryExecuted::class, function ($event) {
-            return (string) $event->sql == 'GET:customer?test-eq=this&sort=id&page=3&pageSize=2';
+            return (string) $event->sql == 'GET:party?test-eq=this&customer-eq=true&sort=id&page=3&pageSize=2';
         });
 
         // assert that we returned from the loop

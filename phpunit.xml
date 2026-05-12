@@ -8,13 +8,19 @@
          failOnWarning="true"
          processIsolation="false"
          stopOnFailure="false"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.0/phpunit.xsd"
          cacheDirectory=".phpunit.cache"
          backupStaticProperties="false">
   <coverage/>
   <testsuites>
-    <testsuite name="Weclapp Model Test Suite">
-      <directory>./tests/</directory>
+    <testsuite name="unit">
+      <directory>./tests/NotSupported/</directory>
+      <directory>./tests/Model/</directory>
+      <directory>./tests/Api/</directory>
+    </testsuite>
+    <testsuite name="swagger">
+      <directory>./tests/Swagger/</directory>
+      <exclude>./tests/Swagger/Spec.php</exclude>
     </testsuite>
   </testsuites>
   <php>

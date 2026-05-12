@@ -4,12 +4,10 @@ namespace Geccomedia\Weclapp\Models;
 
 use Geccomedia\Weclapp\Model;
 
-class CustomerCategory extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'customerCategory';
-}
+/**
+ * @property string|null $name
+ * @property string|null $description
+ * @property bool|null $active
+ * @property int|null $positionNumber
+ */
+class CustomerCategory extends Model {}
