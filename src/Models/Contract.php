@@ -79,6 +79,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $salesChannel
  * @property EmailAddresses|null $salesInvoiceEmailAddresses
  * @property EmailAddresses|null $salesOrderEmailAddresses
+ * @property string|null $sepaDirectDebitMandateId
  * @property bool|null $sentToRecipient
  * @property Carbon|null $startDate
  * @property array|null $tags
@@ -182,6 +183,14 @@ class Contract extends Model
     public function responsibleUser()
     {
         return $this->belongsTo(User::class, 'responsibleUserId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function sepaDirectDebitMandate()
+    {
+        return $this->belongsTo(SepaDirectDebitMandate::class, 'sepaDirectDebitMandateId');
     }
 
     /**

@@ -164,7 +164,7 @@ class ModelTest extends TestCase
     {
         $cases = [];
 
-        foreach (glob(__DIR__.'/../src/Models/*.php') ?: [] as $file) {
+        foreach (glob(__DIR__.'/../../src/Models/*.php') ?: [] as $file) {
             $shortName = basename($file, '.php');
 
             if (in_array($shortName, self::SKIP_MODELS, true)) {
