@@ -364,4 +364,15 @@ class PurchaseOrder extends Model
     {
         return $this->callAction('resetTaxes', $params, 'POST');
     }
+
+    /**
+     * POST /manuallyClose
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function manuallyClose(array $params = []): ?array
+    {
+        return $this->callAction('manuallyClose', $params, 'POST');
+    }
 }

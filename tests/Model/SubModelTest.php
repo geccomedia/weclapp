@@ -150,9 +150,12 @@ class SubModelTest extends OrchestraTestCase
 
         $result = $cast->set(new SalesOrder, 'orderItems', [$item], []);
 
-        $this->assertIsArray($result);
-        $this->assertIsArray($result[0]);
-        $this->assertEquals('X', $result[0]['articleId']);
+        // Must be wrapped as ['orderItems' => [...]] so Eloquent's
+        // normalizeCastClassResponse() stores it under the correct key.
+        $this->assertArrayHasKey('orderItems', $result);
+        $this->assertIsArray($result['orderItems']);
+        $this->assertIsArray($result['orderItems'][0]);
+        $this->assertEquals('X', $result['orderItems'][0]['articleId']);
     }
 
     /**
@@ -389,8 +392,8 @@ class SubModelTest extends OrchestraTestCase
     }
 
     /**
-     * SubModelCast::set() with a null value must return null without touching
-     * the data (the early-return branch).
+     * SubModelCast::set() with a null value must still return the key-wrapped
+     * form ['orderItems' => null] so Eloquent stores null under the right key.
      */
     public function test_sub_model_cast_set_null_returns_null(): void
     {
@@ -398,6 +401,46 @@ class SubModelTest extends OrchestraTestCase
 
         $result = $cast->set(new SalesOrder, 'orderItems', null, []);
 
-        $this->assertNull($result);
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('orderItems', $result);
+        $this->assertNull($result['orderItems']);
+    }
+
+    /**
+     * Regression: when inserting a model that has sub-model list attributes,
+     * the sub-model data must appear in the POST body under the correct key.
+     *
+     * Before the fix, SubModelCast::set() returned a bare PHP array which
+     * Eloquent's normalizeCastClassResponse() spread into the attribute bag
+     * under the sub-model's own keys, silently dropping the attribute name
+     * (e.g. "orderItems") from the inserted payload.
+     */
+    public function test_sub_model_key_preserved_on_insert(): void
+    {
+        Event::fake();
+
+        $this->mock(Client::class)
+            ->shouldReceive('send')
+            ->once()
+            ->andReturn(new Response(
+                201,
+                [],
+                '{"id": "99", "orderItems": [{"articleId": "A1", "quantity": "2"}]}'
+            ));
+
+        $order = new SalesOrder;
+        $order->orderItems = [new SalesOrderItem(['articleId' => 'A1', 'quantity' => '2'])];
+        $order->save();
+
+        // The POST bindings must include the 'orderItems' key with a plain-array value.
+        Event::assertDispatched(QueryExecuted::class, function ($event) {
+            if (! str_starts_with((string) $event->sql, 'POST:salesOrder')) {
+                return false;
+            }
+            $items = $event->bindings['orderItems'] ?? null;
+
+            return is_array($items) && isset($items[0]) && is_array($items[0])
+                && ($items[0]['articleId'] ?? null) === 'A1';
+        });
     }
 }

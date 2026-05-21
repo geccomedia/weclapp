@@ -63,22 +63,31 @@ class SubModelCast implements CastsAttributes
      * $model->getAttributes() always contains raw arrays — keeping all
      * existing PUT / POST serialisation completely unchanged.
      *
+     * The return value MUST be wrapped as [$key => $serialised] rather than
+     * a bare array.  Eloquent's normalizeCastClassResponse() does:
+     *
+     *     is_array($value) ? $value : [$key => $value]
+     *
+     * A bare array is therefore spread directly into the model's attribute bag
+     * under its *own* keys, silently dropping the attribute name (e.g.
+     * "orderItems") and losing all sub-model data on insert.
+     *
      * @param  T|list<T>|array<string,mixed>|list<array<string,mixed>>|null  $value
-     * @return array<string,mixed>|list<array<string,mixed>>|null
+     * @return array<string, array<string,mixed>|list<array<string,mixed>>|null>
      */
-    public function set(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function set(Model $model, string $key, mixed $value, array $attributes): array
     {
         if ($value === null) {
-            return null;
+            return [$key => null];
         }
 
         if (array_is_list((array) $value)) {
-            return array_map(
+            return [$key => array_map(
                 static fn (mixed $item) => $item instanceof SubModel ? $item->toArray() : (array) $item,
                 (array) $value,
-            );
+            )];
         }
 
-        return $value instanceof SubModel ? $value->toArray() : (array) $value;
+        return [$key => $value instanceof SubModel ? $value->toArray() : (array) $value];
     }
 }

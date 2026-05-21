@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $ticketChannelId
  * @property string|null $ticketPriorityId
  * @property string|null $ticketTypeId
+ * @property string|null $workScheduleProfileId
  */
 class TicketAssignmentRule extends Model
 {
@@ -82,5 +83,15 @@ class TicketAssignmentRule extends Model
     public function ticketChannel(): BelongsTo
     {
         return $this->belongsTo(TicketChannel::class, 'ticketChannelId');
+    }
+
+    public function ticketPriority(): BelongsTo
+    {
+        return $this->belongsTo(TicketPriority::class, 'ticketPriorityId');
+    }
+
+    public function workScheduleProfile(): BelongsTo
+    {
+        return $this->belongsTo(WorkScheduleProfile::class, 'workScheduleProfileId');
     }
 }

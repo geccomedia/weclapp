@@ -16,5 +16,6 @@ use Geccomedia\Weclapp\SubModel;
  * @property bool|null $sendEscalationEmail
  * @property int|null $solutionTimeQuantity
  * @property string|null $solutionTimeUnit
+ * @property string|null $workScheduleProfileId
  */
 class TicketServiceLevelAgreementTarget extends SubModel {}

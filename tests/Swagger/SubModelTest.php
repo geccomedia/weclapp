@@ -118,7 +118,7 @@ class SubModelTest extends TestCase
     {
         $result = [];
 
-        foreach (glob(__DIR__.'/../src/SubModels/*.php') ?: [] as $file) {
+        foreach (glob(__DIR__.'/../../src/SubModels/*.php') ?: [] as $file) {
             $shortName = basename($file, '.php');
 
             if (in_array($shortName, self::SKIP_SUBMODELS, true)) {
@@ -173,7 +173,7 @@ class SubModelTest extends TestCase
 
         // Build a set of top-level model definition names (by scanning Models/).
         $topLevelDefs = [];
-        foreach (glob(__DIR__.'/../src/Models/*.php') ?: [] as $file) {
+        foreach (glob(__DIR__.'/../../src/Models/*.php') ?: [] as $file) {
             $shortName = basename($file, '.php');
             $fqcn = 'Geccomedia\\Weclapp\\Models\\'.$shortName;
             if (class_exists($fqcn) && ! (new ReflectionClass($fqcn))->isAbstract()) {

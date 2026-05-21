@@ -17,6 +17,7 @@ use Geccomedia\Weclapp\SubModel;
  * @property int|null $height
  * @property int|null $lastModifiedDate
  * @property int|null $length
+ * @property int|null $packagingWeight
  * @property int|null $positionNumber
  * @property string|null $reference
  * @property bool|null $saturdayDelivery

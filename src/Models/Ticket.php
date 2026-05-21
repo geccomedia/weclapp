@@ -170,6 +170,11 @@ class Ticket extends Model
         return $this->belongsTo(TicketChannel::class, 'ticketChannelId');
     }
 
+    public function ticketPriority(): BelongsTo
+    {
+        return $this->belongsTo(TicketPriority::class, 'ticketPriorityId');
+    }
+
     /**
      * POST /createPerformanceRecord
      *
