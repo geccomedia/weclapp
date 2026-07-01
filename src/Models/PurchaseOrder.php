@@ -85,6 +85,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $supplierQuotationNumber
  * @property array|null $tags
  * @property string|null $costCenterId
+ * @property string|null $blanketSalesOrderId
  */
 class PurchaseOrder extends Model
 {
@@ -103,9 +104,11 @@ class PurchaseOrder extends Model
         'statusHistory' => PurchaseOrderStatusHistory::class,
     ];
 
-    /**
-     * @return BelongsTo
-     */
+    public function blanketSalesOrder(): BelongsTo
+    {
+        return $this->belongsTo(BlanketSalesOrder::class, 'blanketSalesOrderId');
+    }
+
     /**
      * @return BelongsTo
      */
@@ -386,5 +389,16 @@ class PurchaseOrder extends Model
     public function manuallyClose(array $params = []): ?array
     {
         return $this->callAction('manuallyClose', $params, 'POST');
+    }
+
+    /**
+     * POST /updateStatus
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updateStatus(array $params = []): ?array
+    {
+        return $this->callAction('updateStatus', $params, 'POST');
     }
 }

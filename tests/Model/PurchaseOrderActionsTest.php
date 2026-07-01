@@ -5,6 +5,7 @@ namespace Geccomedia\Weclapp\Tests\Model;
 use Geccomedia\Weclapp\Models\PurchaseOrder;
 use Geccomedia\Weclapp\Tests\Concerns\MocksClient;
 use Geccomedia\Weclapp\Tests\Concerns\UsesServiceProvider;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -140,5 +141,18 @@ class PurchaseOrderActionsTest extends OrchestraTestCase
         $this->mockClient();
         $this->makeOrder()->manuallyClose();
         Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:purchaseOrder/id/1/manuallyClose'));
+    }
+
+    public function test_update_status_action(): void
+    {
+        Event::fake();
+        $this->mockClient();
+        $this->makeOrder()->updateStatus();
+        Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:purchaseOrder/id/1/updateStatus'));
+    }
+
+    public function test_blanket_sales_order_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new PurchaseOrder)->blanketSalesOrder());
     }
 }

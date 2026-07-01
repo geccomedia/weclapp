@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $expirationDate
  * @property Carbon|null $productionDate
  * @property list<CustomAttribute>|null $customAttributes
+ * @property string|null $ddsNumber
  */
 class BatchNumber extends Model
 {

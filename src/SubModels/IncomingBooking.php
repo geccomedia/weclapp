@@ -16,6 +16,8 @@ use Geccomedia\Weclapp\SubModel;
  * @property int|null $confirmedDateDeprecated
  * @property string|null $confirmedQuantityDeprecated
  * @property int|null $createdDate
+ * @property list<CustomAttribute>|null $customAttributes
+ * @property string|null $ddsNumber
  * @property int|null $expirationDate
  * @property string|null $incomingGoodsItemId
  * @property string|null $internalTransportReferenceId

@@ -168,4 +168,13 @@ class PurchaseInvoiceTest extends OrchestraTestCase
         $this->makePurchaseInvoice()->startInvoiceDocumentProcessing();
         Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:purchaseInvoice/id/1/startInvoiceDocumentProcessing'));
     }
+
+    public function test_update_status_action(): void
+    {
+        Event::fake();
+        $this->mock(Client::class)->shouldReceive('send')->once()
+            ->andReturn(new Response(200, [], '{}'));
+        $this->makePurchaseInvoice()->updateStatus();
+        Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:purchaseInvoice/id/1/updateStatus'));
+    }
 }

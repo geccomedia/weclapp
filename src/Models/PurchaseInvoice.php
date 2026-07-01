@@ -294,4 +294,15 @@ class PurchaseInvoice extends Model
     {
         return $this->callAction('startInvoiceDocumentProcessing', $params, 'POST');
     }
+
+    /**
+     * POST /updateStatus
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updateStatus(array $params = []): ?array
+    {
+        return $this->callAction('updateStatus', $params, 'POST');
+    }
 }
