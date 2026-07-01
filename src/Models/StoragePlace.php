@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $fieldNumber
  * @property int|null $levelNumber
  * @property string|null $name
+ * @property int|null $pickSequence
  * @property string|null $shelfId
  * @property string|null $shelfStorageLocationId
  * @property string|null $storageLocationId

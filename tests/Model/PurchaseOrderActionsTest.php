@@ -133,4 +133,12 @@ class PurchaseOrderActionsTest extends OrchestraTestCase
         $this->makeOrder()->resetTaxes();
         Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:purchaseOrder/id/1/resetTaxes'));
     }
+
+    public function test_manually_close_action(): void
+    {
+        Event::fake();
+        $this->mockClient();
+        $this->makeOrder()->manuallyClose();
+        Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:purchaseOrder/id/1/manuallyClose'));
+    }
 }

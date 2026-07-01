@@ -6,6 +6,7 @@ use Closure;
 use Geccomedia\Weclapp\Query\Builder as QueryBuilder;
 use Geccomedia\Weclapp\Query\Grammars\Grammar;
 use Geccomedia\Weclapp\Query\Processors\Processor;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Connection as BaseConnection;
 use Illuminate\Database\Query\Builder;
@@ -177,7 +178,11 @@ class Connection extends BaseConnection
     {
         $start = microtime(true);
 
-        $result = $callback($query);
+        try {
+            $result = $callback($query);
+        } catch (RequestException $e) {
+            throw new WeclappApiException($query, $e->getResponse(), $e);
+        }
 
         $this->logQuery(
             $query->getMethod().':'.$query->getUri(), $bindings, $this->getElapsedTime($start)

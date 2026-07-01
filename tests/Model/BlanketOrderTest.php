@@ -86,6 +86,45 @@ class BlanketOrderTest extends OrchestraTestCase
         $this->assertInstanceOf(BelongsTo::class, (new BlanketSalesOrder)->warehouse());
     }
 
+    public function test_bso_creator_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new BlanketSalesOrder)->creator());
+    }
+
+    // -------------------------------------------------------------------------
+    // BlanketSalesOrder actions
+    // -------------------------------------------------------------------------
+
+    public function test_bso_download_latest_blanket_sales_order_pdf_action(): void
+    {
+        Event::fake();
+        $this->mock(Client::class)->shouldReceive('send')->once()
+            ->andReturn(new Response(200, [], '{}'));
+        $model = $this->makeInstance(BlanketSalesOrder::class);
+        $model->downloadLatestBlanketSalesOrderPdf();
+        $this->assertSql('GET:blanketSalesOrder/id/1/downloadLatestBlanketSalesOrderPdf');
+    }
+
+    public function test_bso_generate_releases_action(): void
+    {
+        Event::fake();
+        $this->mock(Client::class)->shouldReceive('send')->once()
+            ->andReturn(new Response(200, [], '{}'));
+        $model = $this->makeInstance(BlanketSalesOrder::class);
+        $model->generateReleases();
+        $this->assertSql('POST:blanketSalesOrder/id/1/generateReleases');
+    }
+
+    public function test_bso_update_status_action(): void
+    {
+        Event::fake();
+        $this->mock(Client::class)->shouldReceive('send')->once()
+            ->andReturn(new Response(200, [], '{}'));
+        $model = $this->makeInstance(BlanketSalesOrder::class);
+        $model->updateStatus();
+        $this->assertSql('POST:blanketSalesOrder/id/1/updateStatus');
+    }
+
     // -------------------------------------------------------------------------
     // BlanketPurchaseOrder relations
     // -------------------------------------------------------------------------

@@ -7,6 +7,7 @@ use Geccomedia\Weclapp\Model;
 use Geccomedia\Weclapp\SubModels\CommissionSalesPartner;
 use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\EmailAddresses;
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Geccomedia\Weclapp\SubModels\QuotationItem;
 use Geccomedia\Weclapp\SubModels\QuotationShippingCostItem;
 use Geccomedia\Weclapp\SubModels\QuotationStatusHistory;
@@ -86,6 +87,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property list<QuotationShippingCostItem>|null $shippingCostItems
  * @property list<QuotationStatusHistory>|null $statusHistory
  * @property array|null $tags
+ * @property string|null $ccMailReminder
+ * @property list<OnlyId>|null $ccUserReminder
+ * @property int|null $dateReminder
+ * @property bool|null $followupAutomaticInquire
+ * @property bool|null $followupCompleted
+ * @property string|null $followupType
+ * @property bool|null $internalReminder
+ * @property string|null $reminderCalculationType
+ * @property int|null $reminderDateCalculationQuantity
+ * @property string|null $reminderDateCalculationUnit
+ * @property string|null $reminderSendType
+ * @property string|null $taskTemplateId
+ * @property string|null $templateLabel
  * @property bool|null $template
  * @property string|null $validFrom
  * @property string|null $validTo
@@ -97,6 +111,7 @@ class Quotation extends Model
      * @var array<string, class-string|string>
      */
     protected $casts = [
+        'ccUserReminder' => OnlyId::class,
         'commissionSalesPartners' => CommissionSalesPartner::class,
         'customAttributes' => CustomAttribute::class,
         'deliveryAddress' => RecordAddress::class,
@@ -206,6 +221,17 @@ class Quotation extends Model
     public function shipmentMethod()
     {
         return $this->belongsTo(ShipmentMethod::class, 'shipmentMethodId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    /**
+     * @return BelongsTo
+     */
+    public function taskTemplate()
+    {
+        return $this->belongsTo(TaskTemplate::class, 'taskTemplateId');
     }
 
     /**

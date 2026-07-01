@@ -17,6 +17,7 @@
       <directory>./tests/NotSupported/</directory>
       <directory>./tests/Model/</directory>
       <directory>./tests/Api/</directory>
+      <directory>./tests/Exception/</directory>
     </testsuite>
     <testsuite name="swagger">
       <directory>./tests/Swagger/</directory>

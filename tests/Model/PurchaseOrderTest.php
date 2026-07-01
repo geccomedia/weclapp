@@ -80,4 +80,9 @@ class PurchaseOrderTest extends OrchestraTestCase
     {
         $this->assertInstanceOf(BelongsTo::class, (new PurchaseOrder)->currency());
     }
+
+    public function test_cost_center_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new PurchaseOrder)->costCenter());
+    }
 }

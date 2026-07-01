@@ -115,6 +115,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property list<SalesOrderStatusHistory>|null $statusHistory
  * @property array|null $tags
  * @property bool|null $template
+ * @property string|null $costCenterId
+ * @property string|null $templateLabel
  */
 class SalesOrder extends Model
 {
@@ -144,6 +146,14 @@ class SalesOrder extends Model
     public function cashAccount()
     {
         return $this->belongsTo(CashAccount::class, 'cashAccountId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'costCenterId');
     }
 
     /**

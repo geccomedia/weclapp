@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $currencyId
  * @property list<CustomAttribute>|null $customAttributes
  * @property bool|null $customer
+ * @property bool|null $customerActive
  * @property bool|null $customerAllowDropshippingOrderCreation
  * @property float|null $customerAmountInsured
  * @property float|null $customerAnnualRevenue

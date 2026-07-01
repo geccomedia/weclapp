@@ -18,6 +18,7 @@ use Geccomedia\Weclapp\SubModel;
  * @property int|null $lastModifiedDate
  * @property int|null $levelNumber
  * @property string|null $name
+ * @property int|null $pickSequence
  * @property string|null $storagePlaceSizeId
  * @property string|null $storagePlaceType
  */

@@ -85,6 +85,11 @@ class TicketTest extends OrchestraTestCase
         $this->assertInstanceOf(BelongsTo::class, (new Ticket)->ticketChannel());
     }
 
+    public function test_ticket_priority_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new Ticket)->ticketPriority());
+    }
+
     // -------------------------------------------------------------------------
     // Instance-level actions (POST, exists=true)
     // -------------------------------------------------------------------------

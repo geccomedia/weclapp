@@ -45,4 +45,14 @@ class TicketAssignmentRuleTest extends OrchestraTestCase
     {
         $this->assertInstanceOf(BelongsTo::class, (new TicketAssignmentRule)->ticketChannel());
     }
+
+    public function test_ticket_assignment_rule_ticket_priority_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new TicketAssignmentRule)->ticketPriority());
+    }
+
+    public function test_ticket_assignment_rule_work_schedule_profile_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new TicketAssignmentRule)->workScheduleProfile());
+    }
 }
