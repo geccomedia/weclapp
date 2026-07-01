@@ -2,6 +2,7 @@
 
 namespace Geccomedia\Weclapp;
 
+use Geccomedia\Weclapp\SubModels\OnlyId;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -83,11 +84,37 @@ class SubModelCast implements CastsAttributes
 
         if (array_is_list((array) $value)) {
             return [$key => array_map(
-                static fn (mixed $item) => $item instanceof SubModel ? $item->toArray() : (array) $item,
+                fn (mixed $item) => $this->normalise($item),
                 (array) $value,
             )];
         }
 
-        return [$key => $value instanceof SubModel ? $value->toArray() : (array) $value];
+        return [$key => $this->normalise($value)];
+    }
+
+    /**
+     * Coerce a single item to a plain array suitable for the API payload.
+     *
+     * When the target cast is OnlyId and the supplied value is a full Model
+     * instance, only the primary key is extracted — i.e. the model is
+     * automatically reduced to ["id" => $model->id] so callers can pass
+     * relationship models directly without manually wrapping them:
+     *
+     *   $customer->contacts = [$contact, $otherContact];
+     *   // serialises as [{"id": "1"}, {"id": "2"}] — no extra wrapping needed
+     *
+     * @return array<string, mixed>
+     */
+    private function normalise(mixed $item): array
+    {
+        if ($item instanceof SubModel) {
+            return $item->toArray();
+        }
+
+        if ($this->subModelClass === OnlyId::class && $item instanceof Model) {
+            return ['id' => $item->getKey()];
+        }
+
+        return (array) $item;
     }
 }

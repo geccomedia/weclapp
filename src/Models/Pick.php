@@ -4,6 +4,7 @@ namespace Geccomedia\Weclapp\Models;
 
 use Carbon\Carbon;
 use Geccomedia\Weclapp\Model;
+use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $sourceStoragePlaceId
  * @property string|null $storagePlaceId
  * @property string|null $transportationOrderId
+ * @property list<CustomAttribute>|null $customAttributes
  */
 class Pick extends Model
 {
@@ -40,6 +42,7 @@ class Pick extends Model
         'confirmedDate' => 'datetime',
         'createdDate' => 'datetime',
         'lastModifiedDate' => 'datetime',
+        'customAttributes' => CustomAttribute::class,
     ];
 
     /**

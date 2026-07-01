@@ -63,6 +63,22 @@ class AttendanceCalendarTest extends OrchestraTestCase
         Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:attendance/id/1/logOn'));
     }
 
+    public function test_attendance_start_break_action(): void
+    {
+        Event::fake();
+        $this->mockClient();
+        (new Attendance)->startBreak();
+        Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:attendance/startBreak'));
+    }
+
+    public function test_attendance_end_break_action(): void
+    {
+        Event::fake();
+        $this->mockClient();
+        (new Attendance)->endBreak();
+        Event::assertDispatched(QueryExecuted::class, fn ($e) => str_contains((string) $e->sql, 'POST:attendance/endBreak'));
+    }
+
     // -------------------------------------------------------------------------
     // Calendar – relations
     // -------------------------------------------------------------------------

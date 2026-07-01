@@ -134,6 +134,11 @@ class BlanketOrderTest extends OrchestraTestCase
         $this->assertInstanceOf(BelongsTo::class, (new BlanketPurchaseOrder)->article());
     }
 
+    public function test_bpo_blanket_sales_order_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new BlanketPurchaseOrder)->blanketSalesOrder());
+    }
+
     public function test_bpo_creator_relation(): void
     {
         $this->assertInstanceOf(BelongsTo::class, (new BlanketPurchaseOrder)->creator());

@@ -14,5 +14,7 @@ use Geccomedia\Weclapp\SubModel;
  * @property int|null $plannedShippingDate
  * @property int|null $positionNumber
  * @property string|null $releasedQuantity
+ * @property string|null $servicePeriodFrom
+ * @property string|null $servicePeriodTo
  */
 class BlanketSalesOrderItem extends SubModel {}

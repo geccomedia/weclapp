@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property string|null $articleId
  * @property string|null $blanketPurchaseOrderNumber
+ * @property string|null $blanketSalesOrderId
  * @property string|null $calculationMode
  * @property string|null $commercialLanguage
  * @property string|null $confirmationNumber
@@ -85,6 +86,14 @@ class BlanketPurchaseOrder extends Model
     public function article()
     {
         return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function blanketSalesOrder()
+    {
+        return $this->belongsTo(BlanketSalesOrder::class, 'blanketSalesOrderId');
     }
 
     /**

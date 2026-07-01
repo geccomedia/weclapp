@@ -12,6 +12,7 @@ use Geccomedia\Weclapp\SubModel;
  * @property string|null $confirmedByUserId
  * @property int|null $confirmedDate
  * @property int|null $createdDate
+ * @property list<CustomAttribute>|null $customAttributes
  * @property string|null $internalTransportReferenceId
  * @property int|null $lastModifiedDate
  * @property string|null $orderItemId
