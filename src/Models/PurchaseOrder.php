@@ -84,6 +84,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $supplierHabitualExporterLetterOfIntentId
  * @property string|null $supplierQuotationNumber
  * @property array|null $tags
+ * @property string|null $costCenterId
  */
 class PurchaseOrder extends Model
 {
@@ -101,6 +102,17 @@ class PurchaseOrder extends Model
         'shippingCostItems' => PurchaseOrderShippingCostItem::class,
         'statusHistory' => PurchaseOrderStatusHistory::class,
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    /**
+     * @return BelongsTo
+     */
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class, 'costCenterId');
+    }
 
     /**
      * @return BelongsTo

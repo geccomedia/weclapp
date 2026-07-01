@@ -11,6 +11,7 @@ use Geccomedia\Weclapp\SubModel;
  * @property string|null $articleId
  * @property array|null $commissionSalesPartners
  * @property string|null $contractChargeId
+ * @property list<CostCenterWithDistributionPercentage>|null $costCenterItems
  * @property int|null $createdDate
  * @property array|null $customAttributes
  * @property string|null $description

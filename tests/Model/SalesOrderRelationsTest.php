@@ -106,4 +106,9 @@ class SalesOrderRelationsTest extends OrchestraTestCase
     {
         $this->assertInstanceOf(HasMany::class, (new SalesOrder)->salesInvoices());
     }
+
+    public function test_cost_center_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new SalesOrder)->costCenter());
+    }
 }

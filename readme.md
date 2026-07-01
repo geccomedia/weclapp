@@ -22,6 +22,7 @@ This repo implements most of the Laravel Eloquent Model for the Weclapp web api.
 - [Read-only Models](#read-only-models)
 - [Embedded Sub-Objects](#embedded-sub-objects)
 - [Sub Entities](#sub-entities)
+- [Error Handling](#error-handling)
 - [Logging](#logging)
 - [Party-type Models](#party-type-models)
   - [leadStatus values](#leadstatus-values)
@@ -250,6 +251,34 @@ $comments = Comment::whereEntity('customer', 123)->orderBy('id')->get();
 
 Without the call to `whereEntity` the API will return an error.
 See [#22](https://github.com/geccomedia/weclapp/issues/22) for more information.
+
+## Error Handling
+
+Every failed HTTP call (4xx or 5xx response) throws `Geccomedia\Weclapp\WeclappApiException`.
+
+```php
+use Geccomedia\Weclapp\WeclappApiException;
+
+try {
+    $invoice->save();
+} catch (WeclappApiException $e) {
+    // Plain string message — safe to log
+    Log::error($e->getMessage());
+
+    // Scalar context is available if you need it
+    $e->getRequestMethod();  // e.g. 'POST'
+    $e->getRequestUri();     // e.g. 'https://...weclapp.com/webapp/api/v1/salesInvoice'
+    $e->getResponseStatus(); // e.g. 422
+    $e->getResponseBody();   // raw response body string
+}
+```
+
+`WeclappApiException` extends `\RuntimeException`. It intentionally does **not**
+implement PSR-18's `Psr\Http\Client\RequestExceptionInterface`, which is on
+Laravel's internal suppression list (`internalDontReport`). Had we wrapped or
+re-thrown Guzzle's own `RequestException` directly, Laravel would silently
+discard it and nothing would appear in your logs. `WeclappApiException` is
+reported normally by Laravel's exception handler, including in queue jobs.
 
 ## Logging
 

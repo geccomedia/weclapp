@@ -13,6 +13,7 @@ use Geccomedia\Weclapp\SubModel;
  * @property array|null $batchSerialNumbers
  * @property string|null $blanketPurchaseOrderId
  * @property string|null $blanketPurchaseOrderReleaseId
+ * @property list<CostCenterWithDistributionPercentage>|null $costCenterItems
  * @property int|null $createdDate
  * @property array|null $customAttributes
  * @property string|null $description

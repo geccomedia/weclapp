@@ -85,4 +85,9 @@ class QuotationTest extends OrchestraTestCase
     {
         $this->assertInstanceOf(BelongsTo::class, (new Quotation)->currency());
     }
+
+    public function test_task_template_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new Quotation)->taskTemplate());
+    }
 }

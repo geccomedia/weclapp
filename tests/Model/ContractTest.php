@@ -80,6 +80,11 @@ class ContractTest extends OrchestraTestCase
         $this->assertInstanceOf(BelongsTo::class, (new Contract)->ticketServiceLevelAgreement());
     }
 
+    public function test_sepa_direct_debit_mandate_relation(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, (new Contract)->sepaDirectDebitMandate());
+    }
+
     // -------------------------------------------------------------------------
     // Actions  (POST /contract/id/{id}/…)
     // -------------------------------------------------------------------------

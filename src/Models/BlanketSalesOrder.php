@@ -11,11 +11,14 @@ use Geccomedia\Weclapp\SubModels\CustomAttribute;
 use Geccomedia\Weclapp\SubModels\EmailAddresses;
 use Geccomedia\Weclapp\SubModels\RecordAddress;
 use Geccomedia\Weclapp\SubModels\ReductionAdditionItem;
-use Geccomedia\Weclapp\Traits\IsReadOnly;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string|null $articleId
+ * @property string|null $creatorId
+ * @property Carbon|null $currencyConversionDate
+ * @property bool|null $currencyConversionLocked
+ * @property string|null $currencyConversionRate
  * @property string|null $blanketSalesOrderNumber
  * @property string|null $calculationMode
  * @property string|null $commercialLanguage
@@ -59,13 +62,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property array|null $tags
  * @property string|null $taxId
  * @property string|null $termOfPaymentId
+ * @property string|null $recordComment
+ * @property string|null $recordFreeText
+ * @property string|null $recordOpening
+ * @property float|null $residualQuantity
  * @property float|null $unitPrice
  * @property string|null $warehouseId
  */
 class BlanketSalesOrder extends Model
 {
-    use IsReadOnly;
-
     /**
      * @var array<string, class-string|string>
      */
@@ -89,6 +94,14 @@ class BlanketSalesOrder extends Model
     public function article()
     {
         return $this->belongsTo(Article::class, 'articleId');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creatorId');
     }
 
     /**
@@ -185,5 +198,38 @@ class BlanketSalesOrder extends Model
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class, 'warehouseId');
+    }
+
+    /**
+     * GET /downloadLatestBlanketSalesOrderPdf
+     *
+     * @param  array<string,mixed>  $params  Query parameters forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function downloadLatestBlanketSalesOrderPdf(array $params = []): ?array
+    {
+        return $this->callAction('downloadLatestBlanketSalesOrderPdf', $params, 'GET');
+    }
+
+    /**
+     * POST /generateReleases
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function generateReleases(array $params = []): ?array
+    {
+        return $this->callAction('generateReleases', $params, 'POST');
+    }
+
+    /**
+     * POST /updateStatus
+     *
+     * @param  array<mixed>  $params  JSON body forwarded to the API.
+     * @return array<mixed>|null
+     */
+    public function updateStatus(array $params = []): ?array
+    {
+        return $this->callAction('updateStatus', $params, 'POST');
     }
 }
