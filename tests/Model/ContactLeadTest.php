@@ -28,6 +28,11 @@ class ContactLeadTest extends OrchestraTestCase
         $this->assertSame('party', (new Contact)->getTable());
     }
 
+    public function test_contact_party_type_defaults_to_person(): void
+    {
+        $this->assertSame('PERSON', (new Contact)->partyType);
+    }
+
     /** Contact re-declares all shared BelongsTo methods. */
     public function test_contact_commercial_language_relation(): void
     {

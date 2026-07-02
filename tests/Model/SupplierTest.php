@@ -22,6 +22,16 @@ class SupplierTest extends OrchestraTestCase
         $this->assertSame('party', (new Supplier)->getTable());
     }
 
+    public function test_supplier_flag_defaults_to_true(): void
+    {
+        $this->assertTrue((new Supplier)->supplier);
+    }
+
+    public function test_supplier_party_type_defaults_to_organization(): void
+    {
+        $this->assertSame('ORGANIZATION', (new Supplier)->partyType);
+    }
+
     // -------------------------------------------------------------------------
     // Shared BelongsTo (re-declared on Supplier)
     // -------------------------------------------------------------------------

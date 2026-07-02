@@ -160,6 +160,14 @@ class Contact extends Model
 {
     protected $table = 'party';
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        if (! in_array('partyType', array_keys($attributes))) {
+            $this->partyType = 'PERSON';
+        }
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new ContactScope);
