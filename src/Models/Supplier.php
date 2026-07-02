@@ -162,6 +162,17 @@ class Supplier extends Model
 {
     protected $table = 'party';
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        if (! in_array('partyType', array_keys($attributes))) {
+            $this->partyType = 'ORGANIZATION';
+        }
+        if (! in_array('supplier', array_keys($attributes))) {
+            $this->supplier = true;
+        }
+    }
+
     protected static function booted(): void
     {
         static::addGlobalScope(new SupplierScope);

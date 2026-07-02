@@ -19,6 +19,20 @@ class CustomerTest extends OrchestraTestCase
     use UsesServiceProvider;
 
     // -------------------------------------------------------------------------
+    // Constructor defaults
+    // -------------------------------------------------------------------------
+
+    public function test_customer_flag_defaults_to_true(): void
+    {
+        $this->assertTrue((new Customer)->customer);
+    }
+
+    public function test_party_type_defaults_to_organization(): void
+    {
+        $this->assertSame('ORGANIZATION', (new Customer)->partyType);
+    }
+
+    // -------------------------------------------------------------------------
     // Structural / table
     // -------------------------------------------------------------------------
 

@@ -196,6 +196,9 @@ class Customer extends Model
         if (! in_array('partyType', array_keys($attributes))) {
             $this->partyType = 'ORGANIZATION';
         }
+        if (! in_array('customer', array_keys($attributes))) {
+            $this->customer = true;
+        }
     }
 
     /**
