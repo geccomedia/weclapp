@@ -84,7 +84,7 @@ jobs:
           echo "pct=$PCT" >> $GITHUB_OUTPUT
 
       - name: Update badge
-        uses: schneegans/dynamic-badges-action@v1.8.0
+        uses: schneegans/dynamic-badges-action@v1.9.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: ${{ secrets.COVERAGE_GIST_ID }}
